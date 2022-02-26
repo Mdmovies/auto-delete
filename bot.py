@@ -24,7 +24,7 @@ Bot = Client(session_name="auto-delete",
 
 @Bot.on_message(filters.command('start') & filters.private)
 async def start(bot, cmd):
-    await cmd.reply(START_MSG.format(message.from_user.mention))
+    await cmd.reply(START_MSG.format(cmd.from_user.mention))
     if await db.add_user(cmd.from_user.id, cmd.from_user.first_name):
         await bot.send_message(LOG_CHANNEL, f"#NEWUSER: \nName - [{cmd.from_user.first_name}](tg://user?id={cmd.from_user.id})\nID - {cmd.from_user.id}")
 
