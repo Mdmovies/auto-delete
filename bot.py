@@ -28,7 +28,7 @@ async def start(bot, cmd):
     if await db.add_user(cmd.from_user.id, cmd.from_user.first_name):
         await bot.send_message(LOG_CHANNEL, f"#NEWUSER: \nName - [{cmd.from_user.first_name}](tg://user?id={cmd.from_user.id})\nID - {cmd.from_user.id}")
 
-@Bot.on_message(filters.group & filters.incoming & filters.text)
+@User.on_message(filters.group & filters.incoming & filters.text)
 async def delete(user, message):
     if await db.add_chat(message.chat.id, message.chat.title):
        total=await user.get_chat_members_count(message.chat.id)
