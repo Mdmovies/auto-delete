@@ -2,6 +2,7 @@ import asyncio
 from os import environ 
 from database import db
 from pyrogram import Client, filters, idle
+from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from configs import API_ID, API_HASH, BOT_TOKEN, SESSION,  DATABASE, LOG_CHANNEL
 
 START_MSG = "<b>Hai {},\nI'm a simple bot to delete group messages after a specific time</b>"
