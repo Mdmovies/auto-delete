@@ -105,7 +105,7 @@ async def new_chat(c: Client, m: Message):
         pass
     else:
         await db.add_served_chat(chat_id)
-   return await m.relpy_text(f"welcome to {m.chat.title}")
+    return await m.relpy_text(f"welcome to {m.chat.title}")
 
 User.start()
 print("User Started!")
