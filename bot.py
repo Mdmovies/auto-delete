@@ -42,7 +42,7 @@ async def delete(user, message):
     except Exception as e:
        print(e)
   
-@Client.on_message(filters.command("settings") & filters.group)
+@Bot.on_message(filters.command("settings") & filters.group)
 async def withcmd(bot, message):
    chat = message.chat.id
    user = message.from_user.id
@@ -53,7 +53,7 @@ async def withcmd(bot, message):
       return await k.delete(True)
    await message.reply_text("<b>change your group setting using below buttons</b>", reply_markup=await buttons(chat))
   
-@Client.on_callback_query(filters.regex(r"^done"))
+@Bot.on_callback_query(filters.regex(r"^done"))
 async def settings_query(bot, msg):
    int, type, value = msg.data.split('#')
    group = msg.message.chat.id
