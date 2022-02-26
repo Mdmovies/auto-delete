@@ -1,18 +1,8 @@
 import asyncio
-from os import environ
+from os import environ 
+from database import db
 from pyrogram import Client, filters, idle
-
-API_ID = int(environ.get("API_ID"))
-API_HASH = environ.get("API_HASH")
-BOT_TOKEN = environ.get("BOT_TOKEN")
-SESSION = environ.get("SESSION")
-TIME = int(environ.get("TIME"))
-GROUPS = []
-for grp in environ.get("GROUPS").split():
-    GROUPS.append(int(grp))
-ADMINS = []
-for usr in environ.get("ADMINS").split():
-    ADMINS.append(int(usr))
+from configs import API_ID, API_HASH, BOT_TOKEN, DATABASE, LOG_CHANNEL
 
 START_MSG = "<b>Hai {},\nI'm a simple bot to delete group messages after a specific time</b>"
 
@@ -33,10 +23,12 @@ Bot = Client(session_name="auto-delete",
 
 
 @Bot.on_message(filters.command('start') & filters.private)
-async def start(bot, message):
-    await message.reply(START_MSG.format(message.from_user.mention))
+async def start(bot, cmd):
+    await cmd.reply(START_MSG.format(message.from_user.mention))
+    if await db.add_user(cmd.from_user.id, cmd.from_user.first_name):
+        await bot.send_message(LOG_CHANNEL, f"#NEWUSER: \nName - [{cmd.from_user.first_name}](tg://user?id={cmd.from_user.id})\nID - {cmd.from_user.id}")
 
-@User.on_message(filters.chat(GROUPS))
+@User.on_message(filters.group & filters.incoming & filters.text)
 async def delete(user, message):
     try:
        if message.from_user.id in ADMINS:
