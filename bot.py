@@ -87,7 +87,26 @@ async def buttons(chat):
          InlineKeyboardButton(f'Ignore admins 👱', callback_data =f"done#admins#{settings['admins']}"), InlineKeyboardButton('OFF ❌' if not settings['admins'] else 'ON ✅', callback_data=f"done_#admins#{settings['admins']}")
       ]]
    return InlineKeyboardMarkup(button)
-      
+
+@Client.on_message(filters.left_chat_member)
+async def bot_kicked(c: Client, m: Message):
+    bot_id = Bot.get_me()
+    chat_id = m.chat.id
+    left_member = m.left_chat_member
+    if left_member.id == bot_id.id:
+        await db.remove_served_chat(chat_id)
+        await m.reply_text("👋👋👋👋👋")
+    return 
+  
+@Client.on_message(filters.new_chat_members)
+async def new_chat(c: Client, m: Message):
+    chat_id = m.chat.id
+    if await db.is_served_chat(chat_id):
+        pass
+    else:
+        await db.add_served_chat(chat_id)
+   return await m.relpy_text(f"welcome to {m.chat.title}")
+
 User.start()
 print("User Started!")
 Bot.start()
