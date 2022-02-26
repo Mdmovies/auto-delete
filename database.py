@@ -8,6 +8,7 @@ class Database:
         self.db = self._client[database_name]
         self.col = self.db.users
         self.grp = self.db.groups
+        self.srv = self.db.chats
         
     def new_user(self, id, name):
         return dict(
@@ -82,6 +83,22 @@ class Database:
         chat = await self.grp.find_one({'id':int(id)})
         if chat:
             return chat.get('config', default)
-        return default
+        return default 
+    
+    async def add_served_chat(self, chat_id: int):
+       is_served = await is_served_chat(chat_id)
+       if is_served:
+         return
+       return await self.srv.insert_one({"chat_id": chat_id})
+    
+    async def remove_served_chat(self, chat_id: int):
+       is_served = await is_served_chat(chat_id)
+       if not is_served:
+          return
+       return await self.srv.delete_one({"chat_id": chat_id})
+    
+    async def total_served_chat(self):
+       count = await self.srv.count_documents({})
+       return count
     
 db= Database(DATABASE, "auto-delete-bot")
