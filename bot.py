@@ -31,7 +31,7 @@ async def start(bot, cmd):
       # total=await Bot.get_chat_members_count(message.chat.id)
       # await Bot.send_message(LOG_CHANNEL, f"#new group:\nTitle - {message.chat.title}\nId - {message.chat.id}\nTotal members - {total} added by - None")
 
-@User.on_message(filters.group & filters.text)
+#@User.on_message(filters.group & filters.text)
 async def delete(user, message):
     data = await db.get_settings(message.chat.id)
     if not data["auto_delete"]: return
