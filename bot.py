@@ -28,8 +28,9 @@ async def start(bot, cmd):
     if await db.add_user(cmd.from_user.id, cmd.from_user.first_name):
         await bot.send_message(LOG_CHANNEL, f"#NEWUSER: \nName - [{cmd.from_user.first_name}](tg://user?id={cmd.from_user.id})\nID - {cmd.from_user.id}")
 
-@User.on_message(filters.group & filters.incoming & filters.text)
+@Bot.on_message(filters.group & filters.incoming & filters.text)
 async def delete(user, message):
+  
     try:
        if message.from_user.id in ADMINS:
           return
