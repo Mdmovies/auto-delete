@@ -30,13 +30,15 @@ async def start(bot, cmd):
 
 @Bot.on_message(filters.group & filters.incoming & filters.text)
 async def delete(user, message):
-  
+    if await db.add_chat(message.chat.id, message.chat.title):
+       total=await user.get_chat_members_count(cmd.chat.id)
+       await user.send_message(LOG_CHANNEL, f"#new group:\nTitle - {message.chat.title}\nId - {message.chat.id}\nTotal members - {total} added by - None")
+    data = await db.get_settings(message.chat.id)
+    if not data["auto_delete"]: return
     try:
-       if message.from_user.id in ADMINS:
-          return
-       else:
-          await asyncio.sleep(TIME)
-          await Bot.delete_messages(message.chat.id, message.message_id)
+       time= "30"#data["time"]
+       await asyncio.sleep(int(time))
+       await Bot.delete_messages(message.chat.id, message.message_id)
     except Exception as e:
        print(e)
        
