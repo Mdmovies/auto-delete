@@ -85,6 +85,12 @@ class Database:
             return chat.get('config', default)
         return default 
     
+    async def is_served_chat(self, chat_id: int) -> bool:
+       chat = await chatsdb.find_one({"chat_id": chat_id})
+       if not chat:
+           return False
+       return True
+
     async def add_served_chat(self, chat_id: int):
        is_served = await is_served_chat(chat_id)
        if is_served:
