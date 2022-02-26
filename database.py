@@ -19,7 +19,7 @@ class Database:
             id = id,
             title = title,
             config=dict(
-              auto_delete=True,
+              auto_delete=3600,
               delete=True,
               admins=False,
               files=False,
