@@ -63,11 +63,17 @@ async def settings_query(bot, msg):
       return await msg.answer("your not group owner or admin")
       
    if value=="True":
-      done = await save_group_settings(group, type, False)
+      done = await save_settings(group, type, False)
    else:
-      done = await save_group_settings(group, type, True)
+      done = await save_settings(group, type, True)
    await msg.message.edit_reply_markup(reply_markup=await buttons(group))
-  
+
+async def save_settings(group, key, value):
+  current = await db.get_settings(int(group))
+  current[key] = value 
+  await db.update_settings(group, current)
+  return
+
 async def buttons(chat):
    settings = await db.get_settings(chat)
    if settings is not None:
@@ -76,7 +82,7 @@ async def buttons(chat):
          ],[ 
          InlineKeyboardButton(f'Timer 🕐', callback_data =f"done#time#{settings['time']}"), InlineKeyboardButton('OFF ❌' if settings['time'] else 'ON ✅', callback_data=f"done_#time#{settings['time']}")
          ],[
-         InlineKeyboardButton(f'delete Mode ⚙️', callback_data =f"done#mode#{settings['mode']}"), InlineKeyboardButton('OFF ❌' if settings['mode'] else 'ON ✅', callback_data=f"done_#mode#{settings['mode']}")
+         InlineKeyboardButton(f'Delete Mode ⚙️', callback_data =f"done#mode#{settings['mode']}"), InlineKeyboardButton('OFF ❌' if settings['mode'] else 'ON ✅', callback_data=f"done_#mode#{settings['mode']}")
          ],[
          InlineKeyboardButton(f'Ignore admins 👱', callback_data =f"done#admins#{settings['admins']}"), InlineKeyboardButton('OFF ❌' if not settings['admins'] else 'ON ✅', callback_data=f"done_#admins#{settings['admins']}")
       ]]
