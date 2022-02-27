@@ -3,8 +3,9 @@ from os import environ
 from database import db
 from pyrogram import Client, filters, idle
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
-from configs import API_ID, API_HASH, BOT_TOKEN, SESSION,  DATABASE, LOG_CHANNEL, GROUPS, filters.chats
+from configs import API_ID, API_HASH, BOT_TOKEN, SESSION,  DATABASE, LOG_CHANNEL, GROUPS, is_chat, buttons
 
+filters.chats=filters.create(is_chat)
 START_MSG = "<b>Hai {},\nI'm a simple bot to delete group messages after a specific time</b>"
 
 User = Client(session_name=SESSION,
@@ -79,20 +80,6 @@ async def save_settings(group, key, value):
   await db.update_settings(group, current)
   return
 
-async def buttons(chat):
-   settings = await db.get_settings(chat)
-   if settings is not None:
-      button=[[
-         InlineKeyboardButton(f'Auto delete 🗑️', callback_data =f"done#auto_delete#{settings['auto_delete']}"), InlineKeyboardButton('OFF ❌' if settings['auto_delete'] else 'ON ✅', callback_data=f"done_#auto_delete#{settings['auto_delete']}")
-         ],[ 
-         InlineKeyboardButton(f'Timer 🕐', callback_data =f"done#time#{settings['time']}"), InlineKeyboardButton('OFF ❌' if settings['time'] else 'ON ✅', callback_data=f"done_#time#{settings['time']}")
-         ],[
-         InlineKeyboardButton(f'Delete Mode ⚙️', callback_data =f"done#mode#{settings['mode']}"), InlineKeyboardButton('OFF ❌' if settings['mode'] else 'ON ✅', callback_data=f"done_#mode#{settings['mode']}")
-         ],[
-         InlineKeyboardButton(f'Ignore admins 👱', callback_data =f"done#admins#{settings['admins']}"), InlineKeyboardButton('OFF ❌' if not settings['admins'] else 'ON ✅', callback_data=f"done_#admins#{settings['admins']}")
-      ]]
-   return InlineKeyboardMarkup(button)
-  
 @Bot.on_message(filters.left_chat_member)
 async def bot_kicked(c: Bot, m: Message):
     bot_id = Bot.get_me()
