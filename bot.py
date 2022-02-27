@@ -30,7 +30,7 @@ async def starts(bot, message):
    i = 0
    chats =[]
    async for chat in k:
-       xx = chat["chat_id]
+       xx = chat["chat_id"]
        chats.append(xx)
        i+=1
        await xxx.edit(f" updated {i}")
