@@ -60,8 +60,7 @@ async def refresh_db(bot, message):
       k=await message.reply_text("your not group owner or admin")
       await asyncio.sleep(7)
       return await k.delete(True)
-   default= dict(
-     
+   default = await db.get_settings(01)
    return await db.update_settings(message.chat.id, default)  
   
 @Bot.on_message(filters.command("settings") & filters.group)
