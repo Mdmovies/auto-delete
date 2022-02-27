@@ -1,5 +1,6 @@
 from os import environ
 import motor.motor_asyncio
+from typing import Dict, List, Union
 
 DATABASE = environ.get("DATABASE")
 
