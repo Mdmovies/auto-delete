@@ -92,13 +92,13 @@ class Database:
        return True
 
     async def add_served_chat(self, chat_id: int):
-       is_served = self.is_served_chat(chat_id)
+       is_served = await self.is_served_chat(chat_id)
        if is_served:
          return
        return await self.srv.insert_one({"chat_id": chat_id})
     
     async def remove_served_chat(self, chat_id: int):
-       is_served = self.is_served_chat(chat_id)
+       is_served = await self.is_served_chat(chat_id)
        if not is_served:
           return
        return await self.srv.delete_one({"chat_id": chat_id})
