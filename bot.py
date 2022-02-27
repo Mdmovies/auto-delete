@@ -26,7 +26,7 @@ Bot = Client(session_name="auto-delete",
 async def starts(bot, message):
    k = await db.get_served_chats()
    total = len(k)
-   GROUPS.append(k)
+   GROUPS.append(k["chat_id"])
    await message.reply_text(f"restart successful and updated {total}({k}) chats")
    return
                            
