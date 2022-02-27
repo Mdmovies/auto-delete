@@ -52,6 +52,17 @@ async def delete(user, message):
        await Bot.delete_messages(message.chat.id, message.message_id)
     except Exception as e:
        print(e)
+        
+@Bot.on_message(filters.command("refresh") & filters.group)
+async def refresh_db(bot, message):
+   st = await bot.get_chat_member(message.chat.id, message.from_user.id)
+   if not (st.status == "creator") or (st.status == "administrator"):
+      k=await message.reply_text("your not group owner or admin")
+      await asyncio.sleep(7)
+      return await k.delete(True)
+   default= dict(
+     
+   return await db.update_settings(message.chat.id, default)  
   
 @Bot.on_message(filters.command("settings") & filters.group)
 async def withcmd(bot, message):
