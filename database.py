@@ -27,7 +27,7 @@ class Database:
               link=False,
               time=True,
               mode=True,
-              bot=True,
+              bots=True,
             ),
           )
         
