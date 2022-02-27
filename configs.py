@@ -12,12 +12,12 @@ LOG_CHANNEL = int(environ.get("LOG_CHANNEL"))
 async def is_chat(_, bot, message: Message):
     chat_id = message.chat.id
     xx = await db.get_settings(chat_id)
-    if not await db.is_served_chat(chat_id):
-      return False         
-    if not xx["auto_delete"]:
-      return False
-    if not xx["bots"]:
-      return False 
+  #  if not await db.is_served_chat(chat_id):
+  #    return False         
+ #   if not xx["auto_delete"]:
+#      return False
+ #   if not xx["bots"]:
+   #   return False 
     if not int(chat_id) in GROUPS:
        GROUPS.append(int(chat_id))
     return True
