@@ -87,7 +87,7 @@ class Database:
             return chat.get('config', default)
         return default 
     
-    async def get_served_chats() -> list:
+    async def get_served_chats(self) -> list:
     chats = self.srv.find({"chat_id": {"$lt": 0}})
     if not chats:
         return []
