@@ -26,7 +26,7 @@ async def start(bot, message):
    k = await db.get_served_chats()
    total = len(k)
    GROUPS.append(k)
-   await Bot.send_message(LOG_CHANNEL, f"restart successful and updated {total} chats)
+   await Bot.send_message(LOG_CHANNEL, f"restart successful and updated {total} chats")
    return
                            
 @Bot.on_message(filters.command('start') & filters.private)
