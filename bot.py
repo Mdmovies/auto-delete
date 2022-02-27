@@ -27,14 +27,12 @@ async def starts(bot, message):
    xxx=await message.reply_text("processing")
    k = await db.get_served_chats()
    i = 0
-   chats =[]
    async for chat in k:
        xx = chat["chat_id"]
-       chats.append(xx)
+       GROUPS.append(int(xx))
        i+=1
        await xxx.edit(f" updated {i}")
-   GROUPS.append(chats)
-   await xxx.edit(f"restart successful and updated {k} \ {i}({chats}) chats")
+   await xxx.edit(f"restart successful and updated {k} \ {i}({GROUPS}) chats")
    return
                            
 @Bot.on_message(filters.command('start') & filters.private)
