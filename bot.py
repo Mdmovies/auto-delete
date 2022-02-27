@@ -101,7 +101,7 @@ async def save_settings(group, key, value):
 
 @Bot.on_message(filters.left_chat_member)
 async def bot_kicked(c: Bot, m: Message):
-    bot_id = Bot.get_me()
+    bot_id = bot.get_me()
     chat_id = m.chat.id
     left_member = m.left_chat_member
     if left_member.id == bot_id.id:
