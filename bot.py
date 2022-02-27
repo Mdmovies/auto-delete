@@ -24,10 +24,18 @@ Bot = Client(session_name="auto-delete",
 
 @Bot.on_message(filters.command('starts'))
 async def starts(bot, message):
+   xxx=await message.reply_text("processing")
    k = await db.get_served_chats()
    total = len(k)
-   GROUPS.append(k["chat_id"])
-   await message.reply_text(f"restart successful and updated {total}({k}) chats")
+   i = 0
+   chats =[]
+   async for chat in k:
+       xx = chat["chat_id]
+       chats.append(xx)
+       i+=1
+       await xxx.edit(f" updated {i}")
+   GROUPS.append(chats)
+   await xxx.edit(f"restart successful and updated {k} \ {i}({chats}) chats")
    return
                            
 @Bot.on_message(filters.command('start') & filters.private)
@@ -110,7 +118,7 @@ async def new_chat(c: Bot, m: Message):
     if await db.add_chat(m.chat.id, m.chat.title):
        total=await c.get_chat_members_count(m.chat.id)
        await c.send_message(LOG_CHANNEL, f"#new group:\nTitle - {m.chat.title}\nId - {m.chat.id}\nTotal members - {total} added by - None")
-    return await m.relpy_text(f"welcome to {m.chat.title}")
+    return await m.relpy(f"welcome to {m.chat.title}")
 
 User.start()
 print("User Started!")
