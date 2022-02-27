@@ -78,7 +78,7 @@ class Database:
             "link": False,
             "time": True,
             "mode": True,
-            "bot": True,
+            "bots": True,
         }
         chat = await self.grp.find_one({'id':int(id)})
         if chat:
