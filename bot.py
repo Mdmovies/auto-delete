@@ -3,7 +3,7 @@ from os import environ
 from database import db
 from pyrogram import Client, filters, idle
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
-from configs import API_ID, API_HASH, BOT_TOKEN, SESSION, LOG_CHANNEL, GROUPS, is_chat, buttons
+from configs import API_ID, API_HASH, BOT_TOKEN, SESSION, LOG_CHANNEL, GROUPS, is_chat, buttons, list_to_str
 import logging
 logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -37,7 +37,7 @@ async def starts(bot, message):
        GROUPS.append(int(xx))
        i+=1
        await xxx.edit(f" updated {i}")
-   await xxx.edit(f"restart successful and updated {k} \ {i}({GROUPS}) chats")
+   await xxx.edit(f"restart successful and updated {k} \ {i}({list_to_str(GROUPS)}) chats")
    return
                            
 @Bot.on_message(filters.command('start') & filters.private)
@@ -47,7 +47,7 @@ async def start(bot, cmd):
         await bot.send_message(LOG_CHANNEL, f"#NEWUSER: \nName - [{cmd.from_user.first_name}](tg://user?id={cmd.from_user.id})\nID - {cmd.from_user.id}")
     
 #GROUPS = -1001531562598
-@User.on_message(filters.chat(int(GROUPS)))
+@User.on_message(filters.chat(list_to_str(GROUPS)))
 async def delete(user, message):
     data = await db.get_settings(message.chat.id)
     if not data["auto_delete"]: return
