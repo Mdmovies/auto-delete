@@ -5,8 +5,9 @@ from pyrogram import Client, filters, idle
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
 from configs import API_ID, API_HASH, BOT_TOKEN, SESSION,  DATABASE, LOG_CHANNEL
 
+GROUPS = []
 START_MSG = "<b>Hai {},\nI'm a simple bot to delete group messages after a specific time</b>"
-
+filters.chats=filters.create(is_chat)
 
 User = Client(session_name=SESSION,
               api_id=API_ID,
@@ -28,11 +29,8 @@ async def start(bot, cmd):
     await cmd.reply(START_MSG.format(cmd.from_user.mention))
     if await db.add_user(cmd.from_user.id, cmd.from_user.first_name):
         await bot.send_message(LOG_CHANNEL, f"#NEWUSER: \nName - [{cmd.from_user.first_name}](tg://user?id={cmd.from_user.id})\nID - {cmd.from_user.id}")
-    #if await db.add_chat(message.chat.id, message.chat.title):
-      # total=await Bot.get_chat_members_count(message.chat.id)
-      # await Bot.send_message(LOG_CHANNEL, f"#new group:\nTitle - {message.chat.title}\nId - {message.chat.id}\nTotal members - {total} added by - None")
-
-#@User.on_message(filters.group & filters.text)
+    
+@User.on_message(filters.chats & filters.chat(GROUPS))
 async def delete(user, message):
     data = await db.get_settings(message.chat.id)
     if not data["auto_delete"]: return
@@ -88,23 +86,37 @@ async def buttons(chat):
       ]]
    return InlineKeyboardMarkup(button)
 
-@Client.on_message(filters.left_chat_member)
-async def bot_kicked(c: Client, m: Message):
+async def is_chat(_, bot, message: Message):
+    chat_id = message.chat.id
+    xx = await db.get_settings(chat_id)
+    if not await db.is_served_chat(chat_id): return False         
+    if not xx["auto_delete"]: return False
+    if not xx["bots"]: return False 
+    if not int(chat_id) in GROUPS:
+       GROUPS.append(int(chat_id))
+    return True
+    
+@Bot.on_message(filters.left_chat_member)
+async def bot_kicked(c: Bot, m: Message):
     bot_id = Bot.get_me()
     chat_id = m.chat.id
     left_member = m.left_chat_member
     if left_member.id == bot_id.id:
         await db.remove_served_chat(chat_id)
+        await c.send_message(LOG_CHANNEL, f"#removed_serve_chat:\nTitle - {m.chat.title}\nId - {m.chat.id}")
         await m.reply_text("👋👋👋👋👋")
     return 
   
-@Client.on_message(filters.new_chat_members)
-async def new_chat(c: Client, m: Message):
+@Bot.on_message(filters.new_chat_members)
+async def new_chat(c: Bot, m: Message):
     chat_id = m.chat.id
     if await db.is_served_chat(chat_id):
         pass
     else:
         await db.add_served_chat(chat_id)
+    if await db.add_chat(m.chat.id, m.chat.title):
+       total=await c.get_chat_members_count(m.chat.id)
+       await c.send_message(LOG_CHANNEL, f"#new group:\nTitle - {m.chat.title}\nId - {m.chat.id}\nTotal members - {total} added by - None")
     return await m.relpy_text(f"welcome to {m.chat.title}")
 
 User.start()
