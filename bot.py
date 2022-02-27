@@ -7,7 +7,6 @@ from configs import API_ID, API_HASH, BOT_TOKEN, SESSION,  DATABASE, LOG_CHANNEL
 
 GROUPS = []
 START_MSG = "<b>Hai {},\nI'm a simple bot to delete group messages after a specific time</b>"
-filters.chats=filters.create(is_chat)
 
 User = Client(session_name=SESSION,
               api_id=API_ID,
@@ -23,6 +22,16 @@ Bot = Client(session_name="auto-delete",
              workers=300
              )
 
+async def is_chat(_, bot, message: Message):
+    chat_id = message.chat.id
+    xx = await db.get_settings(chat_id)
+    if not await db.is_served_chat(chat_id): return False         
+    if not xx["auto_delete"]: return False
+    if not xx["bots"]: return False 
+    if not int(chat_id) in GROUPS:
+       GROUPS.append(int(chat_id))
+    return True
+filters.chats=filters.create(is_chat)
 
 @Bot.on_message(filters.command('start') & filters.private)
 async def start(bot, cmd):
@@ -85,17 +94,7 @@ async def buttons(chat):
          InlineKeyboardButton(f'Ignore admins 👱', callback_data =f"done#admins#{settings['admins']}"), InlineKeyboardButton('OFF ❌' if not settings['admins'] else 'ON ✅', callback_data=f"done_#admins#{settings['admins']}")
       ]]
    return InlineKeyboardMarkup(button)
-
-async def is_chat(_, bot, message: Message):
-    chat_id = message.chat.id
-    xx = await db.get_settings(chat_id)
-    if not await db.is_served_chat(chat_id): return False         
-    if not xx["auto_delete"]: return False
-    if not xx["bots"]: return False 
-    if not int(chat_id) in GROUPS:
-       GROUPS.append(int(chat_id))
-    return True
-    
+  
 @Bot.on_message(filters.left_chat_member)
 async def bot_kicked(c: Bot, m: Message):
     bot_id = Bot.get_me()
