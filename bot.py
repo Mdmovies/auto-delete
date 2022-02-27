@@ -4,6 +4,11 @@ from database import db
 from pyrogram import Client, filters, idle
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
 from configs import API_ID, API_HASH, BOT_TOKEN, SESSION, LOG_CHANNEL, GROUPS, is_chat, buttons
+import logging
+logging.basicConfig(level=logging.DEBUG,
+                    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
+logging.getLogger("pyrogram").setLevel(logging.WARNING)
 
 filters.chats=filters.create(is_chat)
 START_MSG = "<b>Hai {},\nI'm a simple bot to delete group messages after a specific time</b>"
@@ -42,7 +47,7 @@ async def start(bot, cmd):
         await bot.send_message(LOG_CHANNEL, f"#NEWUSER: \nName - [{cmd.from_user.first_name}](tg://user?id={cmd.from_user.id})\nID - {cmd.from_user.id}")
     
 #GROUPS = -1001531562598
-@User.on_message(filters.chat(str(GROUPS)))
+@User.on_message(filters.chat(int(GROUPS)))
 async def delete(user, message):
     data = await db.get_settings(message.chat.id)
     if not data["auto_delete"]: return
