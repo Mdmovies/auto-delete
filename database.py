@@ -1,5 +1,7 @@
+from os import environ
 import motor.motor_asyncio
-from configs import DATABASE
+
+DATABASE = environ.get("DATABASE")
 
 class Database:
 
