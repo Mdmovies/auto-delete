@@ -26,7 +26,6 @@ Bot = Client(session_name="auto-delete",
 async def starts(bot, message):
    xxx=await message.reply_text("processing")
    k = await db.get_served_chats()
-   total = len(k)
    i = 0
    chats =[]
    async for chat in k:
