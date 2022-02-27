@@ -25,6 +25,7 @@ Bot = Client(session_name="auto-delete",
 async def start(bot, message):
    k = await db.get_served_chats()
    total = len(k)
+   GROUPS.append(k)
    await Bot.send_message(LOG_CHANNEL, f"restart successful and updated {total} chats)
    return
                            
@@ -34,7 +35,7 @@ async def start(bot, cmd):
     if await db.add_user(cmd.from_user.id, cmd.from_user.first_name):
         await bot.send_message(LOG_CHANNEL, f"#NEWUSER: \nName - [{cmd.from_user.first_name}](tg://user?id={cmd.from_user.id})\nID - {cmd.from_user.id}")
     
-GROUPS = -1001531562598
+#GROUPS = -1001531562598
 @User.on_message(filters.chat(GROUPS))
 async def delete(user, message):
     data = await db.get_settings(message.chat.id)
