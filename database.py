@@ -89,12 +89,7 @@ class Database:
     
     async def get_served_chats(self) -> list:
        chats = self.srv.find({"chat_id": {"$lt": 0}})
-       if not chats:
-         return []
-       GROUPS=[]
-       for chat in await chats.to_list(length=1000000000):
-         GROUPS.append(chat)
-       return GROUPS
+       return chats
     
     async def is_served_chat(self, chat_id: int) -> bool:
        chat = await self.srv.find_one({"chat_id": chat_id})
