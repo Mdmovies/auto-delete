@@ -86,7 +86,7 @@ class Database:
         return default 
     
     async def is_served_chat(self, chat_id: int) -> bool:
-       chat = await chatsdb.find_one({"chat_id": chat_id})
+       chat = await self.srv.find_one({"chat_id": chat_id})
        if not chat:
            return False
        return True
