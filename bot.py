@@ -48,16 +48,16 @@ async def start(bot, cmd):
         await bot.send_message(LOG_CHANNEL, f"#NEWUSER: \nName - [{cmd.from_user.first_name}](tg://user?id={cmd.from_user.id})\nID - {cmd.from_user.id}")
     
 #GROUPS = -1001531562598
-@User.on_message(filters.chat(int(CHATS)))
+@Bot.on_message(filters.chat(GROUPS))
 async def delete(user, message):
-    data = await db.get_settings(message.chat.id)
-    if not data["auto_delete"]: return
+  #  data = await db.get_settings(message.chat.id)
+#    if not data["auto_delete"]: return
     try:
        time= "30"#data["time"]
        await asyncio.sleep(int(time))
        await Bot.delete_messages(message.chat.id, message.message_id)
     except Exception as e:
-       print(e)
+       logger.warning(e)
         
 @Bot.on_message(filters.command("refresh") & filters.group)
 async def refresh_db(bot, message):
