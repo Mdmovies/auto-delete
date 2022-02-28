@@ -88,7 +88,7 @@ async def bot_kicked(c: Bot, m: Message):
         await db.remove_served_chat(chat_id)
         await c.send_message(temp.LOG_CHANNEL, f"#removed_serve_chat:\nTitle - {m.chat.title}\nId - {m.chat.id}")
         chats = await db.get_served_chats()
-        GROUPS = chats
+        temp.GROUPS = chats
     return 
   
 @Bot.on_message(filters.new_chat_members)
@@ -100,7 +100,7 @@ async def new_chat(c: Bot, m):
         await db.add_served_chat(chat_id)
         await c.send_message(temp.LOG_CHANNEL, f"#NEW_SERVE_CHAT:\nTitle - {m.chat.title}\nId - {m.chat.id}")
         chats = await db.get_served_chats()
-        GROUPS = chats
+        temp.GROUPS = chats
     if await db.add_chat(m.chat.id, m.chat.title):
        total=await c.get_chat_members_count(m.chat.id)
        await c.send_message(temp.LOG_CHANNEL, f"#new group:\nTitle - {m.chat.title}\nId - {m.chat.id}\nTotal members - {total} added by - None")
