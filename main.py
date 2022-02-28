@@ -7,13 +7,33 @@ logging.basicConfig(level=logging.DEBUG,
 logger = logging.getLogger(__name__)
 logging.getLogger("pyrogram").setLevel(logging.WARNING)
 
-BOT_ID = None
+ 
+class User(Client):
+    def __init__(self):
+        super().__init__(
+            SESSION,
+            api_hash=API_HASH,
+            api_id=APP_ID,
+            workers=4
+        )
+        
+    async def start(self):
+        await super().start()
+        usr_bot_me = await self.get_me()
+        return (self, usr_bot_me.id)
 
+    async def stop(self, *args):
+        await super().stop()
+        logging.info("User Bot stopped. Bye.")
+        
 class Bot(Client):
+    ID: int = None 
+    USER: User = None
+    USER_ID: int = None
 
     def __init__(self):
         super().__init__(
-            session_name=SESSION,
+            session_name="auto-delete",
             api_id=API_ID,
             api_hash=API_HASH,
             bot_token=BOT_TOKEN,
@@ -27,9 +47,10 @@ class Bot(Client):
         GROUPS.append(chats)
         await super().start()
         me = await self.get_me()
-        BOT_ID = me.id
+        self.ID = me.id
         self.username = '@' + me.username
         logging.info(f"{me.first_name} with for Pyrogram v{__version__} (Layer {layer}) started on {me.username}.")
+        self.USER, self.USER_ID = await User().start()
         
     async def stop(self, *args):
         await super().stop()
