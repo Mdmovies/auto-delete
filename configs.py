@@ -11,6 +11,8 @@ LOG_CHANNEL = int(environ.get("LOG_CHANNEL"))
 
 async def is_chat(_, bot, message: Message):
     chat_id = message.chat.id
+    chat = await db.get_served_chats()
+    GROUPS = chat
     return chat_id in GROUPS
     
 async def buttons(chat):
