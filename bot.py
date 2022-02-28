@@ -124,18 +124,16 @@ async def new_chat(c: Bot, m: Message):
     return await m.relpy(f"welcome to {m.chat.title}")
 
 User.start()
-print("User Started!")
+logger.info("User Started!")
 Bot.start()
-async def starting(bot:Bot, message: Message):
-  chats = await db.get_served_chats()
-  GROUPS.append(chat)
-  return
+chats = await db.get_served_chats()
+GROUPS.append(chat)
 bot_id = Bot.get_me()
-print("Bot Started!")
+logger.info("Bot Started!")
 
 idle()
 
 User.stop()
-print("User Stopped!")
+logger.info("User Stopped!")
 Bot.stop()
-print("Bot Stopped!")
+logger.info("Bot Stopped!")
