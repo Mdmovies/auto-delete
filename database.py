@@ -87,9 +87,10 @@ class Database:
             return chat.get('config', default)
         return default 
     
-    async def get_served_chats(self) -> list:
+    async def served_chats(self):
        chats = self.srv.find({})
-       return chats
+       s_chats = [chat['chat_id'] async for chat in chats]
+       return schats
     
     async def is_served_chat(self, chat_id: int) -> bool:
        chat = await self.srv.find_one({"chat_id": chat_id})
