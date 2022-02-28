@@ -90,7 +90,7 @@ class Database:
     async def get_served_chats(self):
        chats = self.srv.find({})
        s_chats = [chat['chat_id'] async for chat in chats]
-       return schats
+       return s_chats
     
     async def is_served_chat(self, chat_id: int) -> bool:
        chat = await self.srv.find_one({"chat_id": chat_id})
