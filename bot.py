@@ -28,8 +28,6 @@ Bot = Client(session_name="auto-delete",
              workers=300
              )
 
-bot_id = Bot.get_me()
-
 @Bot.on_message(filters.command('starts'))
 async def starts(bot, message):
    xxx=await message.reply_text("processing")
@@ -128,6 +126,7 @@ async def new_chat(c: Bot, m: Message):
 User.start()
 print("User Started!")
 Bot.start()
+bot_id = Bot.get_me()
 print("Bot Started!")
 
 idle()
