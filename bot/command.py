@@ -3,7 +3,7 @@ from os import environ
 from database import db
 from pyrogram import Client as Bot, filters, idle
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
-from configs import API_ID, API_HASH, BOT_TOKEN, SESSION, LOG_CHANNEL, GROUPS, is_chat, buttons, list_to_str
+from configs import temp, is_chat, buttons, list_to_str
 import logging
 logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -16,14 +16,14 @@ START_MSG = "<b>Hai {},\nI'm a simple bot to delete group messages after a speci
 
 @Bot.on_message(filters.command('starts'))
 async def starts(bot, message):
-   await message.reply_text(f"processing {GROUPS}")
+   await message.reply_text(f"processing {temp.GROUPS}")
    return
                            
 @Bot.on_message(filters.command('start') & filters.private)
 async def start(bot, cmd):
     await cmd.reply(START_MSG.format(cmd.from_user.mention))
     if await db.add_user(cmd.from_user.id, cmd.from_user.first_name):
-        await bot.send_message(LOG_CHANNEL, f"#NEWUSER: \nName - [{cmd.from_user.first_name}](tg://user?id={cmd.from_user.id})\nID - {cmd.from_user.id}")
+        await bot.send_message(temp.LOG_CHANNEL, f"#NEWUSER: \nName - [{cmd.from_user.first_name}](tg://user?id={cmd.from_user.id})\nID - {cmd.from_user.id}")
     
 #GROUPS = -1001531562598
 @Bot.on_message(filters.text & filters.group & filters.incoming & filters.chats)
@@ -86,7 +86,7 @@ async def bot_kicked(c: Bot, m: Message):
     left_member = m.left_chat_member
     if left_member.id == c.ID:
         await db.remove_served_chat(chat_id)
-        await c.send_message(LOG_CHANNEL, f"#removed_serve_chat:\nTitle - {m.chat.title}\nId - {m.chat.id}")
+        await c.send_message(temp.LOG_CHANNEL, f"#removed_serve_chat:\nTitle - {m.chat.title}\nId - {m.chat.id}")
         chats = await db.get_served_chats()
         GROUPS = chats
     return 
@@ -98,12 +98,12 @@ async def new_chat(c: Bot, m):
         pass
     else:
         await db.add_served_chat(chat_id)
-        await c.send_message(LOG_CHANNEL, f"#NEW_SERVE_CHAT:\nTitle - {m.chat.title}\nId - {m.chat.id}")
+        await c.send_message(temp.LOG_CHANNEL, f"#NEW_SERVE_CHAT:\nTitle - {m.chat.title}\nId - {m.chat.id}")
         chats = await db.get_served_chats()
         GROUPS = chats
     if await db.add_chat(m.chat.id, m.chat.title):
        total=await c.get_chat_members_count(m.chat.id)
-       await c.send_message(LOG_CHANNEL, f"#new group:\nTitle - {m.chat.title}\nId - {m.chat.id}\nTotal members - {total} added by - None")
+       await c.send_message(temp.LOG_CHANNEL, f"#new group:\nTitle - {m.chat.title}\nId - {m.chat.id}\nTotal members - {total} added by - None")
     return await m.relpy(f"welcome to {m.chat.title}")
 
 
