@@ -1,7 +1,7 @@
 import asyncio
 from os import environ 
 from database import db
-from pyrogram import Client, filters, idle
+from pyrogram import Client as Bot, filters, idle
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
 from configs import API_ID, API_HASH, BOT_TOKEN, SESSION, LOG_CHANNEL, GROUPS, is_chat, buttons, list_to_str
 import logging
@@ -13,19 +13,6 @@ logging.getLogger("pyrogram").setLevel(logging.WARNING)
 filters.chats=filters.create(is_chat)
 START_MSG = "<b>Hai {},\nI'm a simple bot to delete group messages after a specific time</b>"
 
-User = Client(session_name=SESSION,
-              api_id=API_ID,
-              api_hash=API_HASH,
-              workers=300
-              )
-
-
-Bot = Client(session_name="auto-delete",
-             api_id=API_ID,
-             api_hash=API_HASH,
-             bot_token=BOT_TOKEN,
-             workers=300
-             )
 
 @Bot.on_message(filters.command('starts'))
 async def starts(bot, message):
@@ -105,7 +92,7 @@ async def save_settings(group, key, value):
 async def bot_kicked(c: Bot, m: Message):
     chat_id = m.chat.id
     left_member = m.left_chat_member
-    if left_member.id == bot_id.id:
+    if left_member.id == c.ID:
         await db.remove_served_chat(chat_id)
         await c.send_message(LOG_CHANNEL, f"#removed_serve_chat:\nTitle - {m.chat.title}\nId - {m.chat.id}")
         await m.reply("👋👋👋👋👋")
@@ -123,17 +110,5 @@ async def new_chat(c: Bot, m: Message):
        await c.send_message(LOG_CHANNEL, f"#new group:\nTitle - {m.chat.title}\nId - {m.chat.id}\nTotal members - {total} added by - None")
     return await m.relpy(f"welcome to {m.chat.title}")
 
-User.start()
-logger.info("User Started!")
-Bot.start()
-chats = await db.get_served_chats()
-GROUPS.append(chat)
-bot_id = Bot.get_me()
-logger.info("Bot Started!")
 
-idle()
 
-User.stop()
-logger.info("User Stopped!")
-Bot.stop()
-logger.info("Bot Stopped!")
