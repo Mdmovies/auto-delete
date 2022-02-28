@@ -47,7 +47,7 @@ async def start(bot, cmd):
     if await db.add_user(cmd.from_user.id, cmd.from_user.first_name):
         await bot.send_message(LOG_CHANNEL, f"#NEWUSER: \nName - [{cmd.from_user.first_name}](tg://user?id={cmd.from_user.id})\nID - {cmd.from_user.id}")
     
-#GROUPS = -1001531562598
+GROUPS = -1001531562598
 @Bot.on_message(filters.chat(GROUPS))
 async def delete(user, message):
     await message.reply_text("hi")
@@ -108,7 +108,7 @@ async def bot_kicked(c: Bot, m: Message):
     if left_member.id == bot_id.id:
         await db.remove_served_chat(chat_id)
         await c.send_message(LOG_CHANNEL, f"#removed_serve_chat:\nTitle - {m.chat.title}\nId - {m.chat.id}")
-        await m.reply_text("👋👋👋👋👋")
+        await m.reply("👋👋👋👋👋")
     return 
   
 @Bot.on_message(filters.new_chat_members)
