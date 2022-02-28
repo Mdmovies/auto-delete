@@ -16,18 +16,7 @@ START_MSG = "<b>Hai {},\nI'm a simple bot to delete group messages after a speci
 
 @Bot.on_message(filters.command('starts'))
 async def starts(bot, message):
-   xxx=await message.reply_text("processing")
-   k = await db.get_served_chats()
-   i = 0
-   try:
-     async for chat in k:
-       xx = chat["chat_id"]
-       GROUPS.append(int(xx))
-       i+=1
-       await xxx.edit(f" updated {i}")
-       await xxx.edit(f"restart successful and updated {k} \ {i}({list_to_str(GROUPS)}) chats")
-   except: 
-       await xxx.edit(GROUPS)
+   await message.reply_text(f"processing {GROUPS}")
    return
                            
 @Bot.on_message(filters.command('start') & filters.private)
