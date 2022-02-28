@@ -2,7 +2,7 @@ import logging
 from pyrogram import Client, __version__
 from database import db
 from pyrogram.raw.all import layer
-from configs import SESSION, API_ID, API_HASH, BOT_TOKEN, GROUPS
+from configs import temp
 logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
@@ -12,10 +12,10 @@ logging.getLogger("pyrogram").setLevel(logging.WARNING)
 class User(Client):
     def __init__(self):
         super().__init__(
-            SESSION,
-            api_hash=API_HASH,
-            api_id=API_ID,
-            workers=4
+            temp.SESSION,
+            api_hash=temp.API_HASH,
+            api_id=temp.API_ID,
+            workers=10
         )
         
     async def start(self):
@@ -35,9 +35,9 @@ class Bot(Client):
     def __init__(self):
         super().__init__(
             session_name="auto-delete",
-            api_id=API_ID,
-            api_hash=API_HASH,
-            bot_token=BOT_TOKEN,
+            api_id=temp.API_ID,
+            api_hash=temp.API_HASH,
+            bot_token=temp.BOT_TOKEN,
             workers=50,
             plugins={"root": "bot"},
             sleep_threshold=5,
@@ -45,7 +45,7 @@ class Bot(Client):
         
     async def start(self):
         chats = await db.get_served_chats()
-        GROUPS = chats
+        temp.GROUPS = chats
         await super().start()
         me = await self.get_me()
         self.ID = me.id
