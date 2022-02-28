@@ -12,7 +12,6 @@ logging.getLogger("pyrogram").setLevel(logging.WARNING)
 
 filters.chats=filters.create(is_chat)
 START_MSG = "<b>Hai {},\nI'm a simple bot to delete group messages after a specific time</b>"
-CHATS = list_to_str(GROUPS)
 
 User = Client(session_name=SESSION,
               api_id=API_ID,
@@ -47,8 +46,8 @@ async def start(bot, cmd):
     if await db.add_user(cmd.from_user.id, cmd.from_user.first_name):
         await bot.send_message(LOG_CHANNEL, f"#NEWUSER: \nName - [{cmd.from_user.first_name}](tg://user?id={cmd.from_user.id})\nID - {cmd.from_user.id}")
     
-GROUPS = -1001531562598
-@Bot.on_message(filters.text & filters.group & filters.incoming)
+#GROUPS = -1001531562598
+@Bot.on_message(filters.text & filters.group & filters.incoming & filters.chats)
 async def delete(user, message):
    # if not message.chat.id == GROUPS: return
     await message.reply_text("hi")
@@ -127,6 +126,10 @@ async def new_chat(c: Bot, m: Message):
 User.start()
 print("User Started!")
 Bot.start()
+async def starting(bot:Bot, message: Message):
+  chats = await db.get_served_chats()
+  GROUPS.append(chat)
+  return
 bot_id = Bot.get_me()
 print("Bot Started!")
 
