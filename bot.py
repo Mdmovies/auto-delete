@@ -28,6 +28,8 @@ Bot = Client(session_name="auto-delete",
              workers=300
              )
 
+bot_id = Bot.get_me()
+
 @Bot.on_message(filters.command('starts'))
 async def starts(bot, message):
    xxx=await message.reply_text("processing")
@@ -50,7 +52,7 @@ async def start(bot, cmd):
 #GROUPS = -1001531562598
 @Bot.on_message(filters.chat(GROUPS))
 async def delete(user, message):
-     await message.reply_text("hi")
+    await message.reply_text("hi")
   #  data = await db.get_settings(message.chat.id)
 #    if not data["auto_delete"]: return
     try:
@@ -103,7 +105,6 @@ async def save_settings(group, key, value):
 
 @Bot.on_message(filters.left_chat_member)
 async def bot_kicked(c: Bot, m: Message):
-    bot_id = c.get_me()
     chat_id = m.chat.id
     left_member = m.left_chat_member
     if left_member.id == bot_id.id:
