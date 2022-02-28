@@ -88,7 +88,7 @@ class Database:
         return default 
     
     async def get_served_chats(self) -> list:
-       chats = self.srv.find({"chat_id": {"$lt": 0}})
+       chats = self.srv.find({})
        return chats
     
     async def is_served_chat(self, chat_id: int) -> bool:
