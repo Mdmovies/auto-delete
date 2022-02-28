@@ -1,5 +1,6 @@
 import logging
 from pyrogram import Client, __version__
+from database import db
 from pyrogram.raw.all import layer
 from config import SESSION, API_ID, API_HASH, BOT_TOKEN, GROUPS
 logging.basicConfig(level=logging.DEBUG,
