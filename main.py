@@ -45,7 +45,7 @@ class Bot(Client):
         
     async def start(self):
         chats = await db.get_served_chats()
-        GROUPS.append(chats)
+        GROUPS = chats
         await super().start()
         me = await self.get_me()
         self.ID = me.id
