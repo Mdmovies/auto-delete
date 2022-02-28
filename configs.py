@@ -2,18 +2,19 @@ from os import environ
 from database import db 
 from pyrogram.types import Message, InlineKeyboardButton, InlineKeyboardMarkup
 
-GROUPS = []
-API_ID = int(environ.get("API_ID"))
-API_HASH = environ.get("API_HASH")
-BOT_TOKEN = environ.get("BOT_TOKEN")
-SESSION = environ.get("SESSION")
-LOG_CHANNEL = int(environ.get("LOG_CHANNEL"))
+class temp(object):
+   GROUPS = []
+   API_ID = int(environ.get("API_ID"))
+   API_HASH = environ.get("API_HASH")
+   BOT_TOKEN = environ.get("BOT_TOKEN")
+   SESSION = environ.get("SESSION")
+   LOG_CHANNEL = int(environ.get("LOG_CHANNEL"))
 
 async def is_chat(_, bot, message: Message):
     chat_id = message.chat.id
     chat = await db.get_served_chats()
-    GROUPS = chat
-    return chat_id in GROUPS
+   # temp.GROUPS = chat
+    return chat_id in temp.GROUPS
     
 async def buttons(chat):
    settings = await db.get_settings(chat)
