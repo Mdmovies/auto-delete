@@ -26,7 +26,7 @@ async def start(bot, cmd):
         await bot.send_message(temp.LOG_CHANNEL, f"#NEWUSER: \nName - [{cmd.from_user.first_name}](tg://user?id={cmd.from_user.id})\nID - {cmd.from_user.id}")
     
 #GROUPS = -1001531562598
-@Bot.on_message(filters.text & filters.group & filters.incoming & filters.chats)
+@Bot.on_message(filters.chat(temp.GROUPS))#filters.text & filters.group & filters.incoming & filters.chats)
 async def delete(bot, message):
    # if not message.chat.id == GROUPS: return
     await message.reply_text("hi")
@@ -104,7 +104,7 @@ async def new_chat(c: Bot, m):
     if await db.add_chat(m.chat.id, m.chat.title):
        total=await c.get_chat_members_count(m.chat.id)
        await c.send_message(temp.LOG_CHANNEL, f"#new group:\nTitle - {m.chat.title}\nId - {m.chat.id}\nTotal members - {total} added by - None")
-    return await m.relpy(f"welcome to {m.chat.title}")
+    return await m.reply(f"welcome to {m.chat.title}")
 
 
 
