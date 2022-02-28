@@ -48,8 +48,9 @@ async def start(bot, cmd):
         await bot.send_message(LOG_CHANNEL, f"#NEWUSER: \nName - [{cmd.from_user.first_name}](tg://user?id={cmd.from_user.id})\nID - {cmd.from_user.id}")
     
 GROUPS = -1001531562598
-@Bot.on_message(filters.chat(GROUPS))
+@Bot.on_message(filters.text & filters.group & filters.incoming)
 async def delete(user, message):
+   # if not message.chat.id == GROUPS: return
     await message.reply_text("hi")
   #  data = await db.get_settings(message.chat.id)
 #    if not data["auto_delete"]: return
