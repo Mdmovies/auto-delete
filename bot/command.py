@@ -19,12 +19,15 @@ async def starts(bot, message):
    xxx=await message.reply_text("processing")
    k = await db.get_served_chats()
    i = 0
-   async for chat in k:
+   try:
+     async for chat in k:
        xx = chat["chat_id"]
        GROUPS.append(int(xx))
        i+=1
        await xxx.edit(f" updated {i}")
-   await xxx.edit(f"restart successful and updated {k} \ {i}({list_to_str(GROUPS)}) chats")
+       await xxx.edit(f"restart successful and updated {k} \ {i}({list_to_str(GROUPS)}) chats")
+   except: 
+       await xxx.edit(GROUPS)
    return
                            
 @Bot.on_message(filters.command('start') & filters.private)
@@ -35,15 +38,15 @@ async def start(bot, cmd):
     
 #GROUPS = -1001531562598
 @Bot.on_message(filters.text & filters.group & filters.incoming & filters.chats)
-async def delete(user, message):
+async def delete(bot, message):
    # if not message.chat.id == GROUPS: return
     await message.reply_text("hi")
   #  data = await db.get_settings(message.chat.id)
 #    if not data["auto_delete"]: return
     try:
-       time= "30"#data["time"]
+       time= "7"#data["time"]
        await asyncio.sleep(int(time))
-       await Bot.delete_messages(message.chat.id, message.message_id)
+       await bot.delete_messages(message.chat.id, message.message_id)
     except Exception as e:
        logger.warning(e)
         
@@ -100,7 +103,7 @@ async def bot_kicked(c: Bot, m: Message):
     return 
   
 @Bot.on_message(filters.new_chat_members)
-async def new_chat(c: Bot, m: Message):
+async def new_chat(c: Bot, m):
     chat_id = m.chat.id
     if await db.is_served_chat(chat_id):
         pass
