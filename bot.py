@@ -50,6 +50,7 @@ async def start(bot, cmd):
 #GROUPS = -1001531562598
 @Bot.on_message(filters.chat(GROUPS))
 async def delete(user, message):
+     await message.reply_text("hi")
   #  data = await db.get_settings(message.chat.id)
 #    if not data["auto_delete"]: return
     try:
