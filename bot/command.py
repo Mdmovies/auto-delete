@@ -87,6 +87,7 @@ async def bot_kicked(c: Bot, m: Message):
     if left_member.id == c.ID:
         await db.remove_served_chat(chat_id)
         await c.send_message(temp.LOG_CHANNEL, f"#removed_serve_chat:\nTitle - {m.chat.title}\nId - {m.chat.id}")
+        await asyncio.sleep(5)
         chats = await db.get_served_chats()
         temp.GROUPS = chats
     return 
