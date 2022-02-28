@@ -87,7 +87,7 @@ class Database:
             return chat.get('config', default)
         return default 
     
-    async def served_chats(self):
+    async def get_served_chats(self):
        chats = self.srv.find({})
        s_chats = [chat['chat_id'] async for chat in chats]
        return schats
