@@ -5,7 +5,7 @@ from bot.main import User, Bot
 from pyrogram import Client, filters 
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
-@Client.on_messages(filters.command(["del", "delete"]))
+@Client.on_message(filters.command(["del", "delete"]) & filters.group)
 async def delete_all(bot, message):
    chat = message.chat.id
    froms = message.message_id
