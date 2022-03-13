@@ -29,11 +29,11 @@ async def start(bot, cmd):
     
 #GROUPS = -1001531562598
 try:
-  @User.USER.on_message(filters.chat(GROUPS) & service_filter)#filters.text & filters.group & filters.incoming & filters.chats)
+  @User.USER.on_message(filters.chat(GROUPS) & filters.service_filter)#filters.text & filters.group & filters.incoming & filters.chats)
   async def user_client(bot, message):
       return await delete(bot, message)
 except:# UserNotParticipant:
-  @Bot.on_message(filters.chat(GROUPS) & service_filter)
+  @Bot.on_message(filters.chat(GROUPS) & filters.service_filter)
   async def bot_client(bot, message):
       return await delete(bot, message)
     
