@@ -1,7 +1,9 @@
 import asyncio
 from os import environ 
-from database import db
-from pyrogram import Client as Bot, filters, idle
+from database import db 
+from main import User
+from pyrogram import Client as Bot, filters, idle 
+from pyrogram.errors import UserAlreadyParticipant, UserNotParticipant
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
 from configs import temp, is_chat, buttons, list_to_str
 import logging
@@ -26,7 +28,10 @@ async def start(bot, cmd):
         await bot.send_message(temp.LOG_CHANNEL, f"#NEWUSER: \nName - [{cmd.from_user.first_name}](tg://user?id={cmd.from_user.id})\nID - {cmd.from_user.id}")
     
 #GROUPS = -1001531562598
-@Bot.USER.on_message(filters.chat(GROUPS) & ~filters.left_chat_member)#filters.text & filters.group & filters.incoming & filters.chats)
+try:
+  @Bot.USER.on_message(filters.chat(GROUPS) & service_filter)#filters.text & filters.group & filters.incoming & filters.chats)
+except UserNotParticipant:
+  @User.on_message(filters.chat(GROUPS) & service_filter)
 async def delete(bot, message):
    # if not message.chat.id == GROUPS: return
     await message.reply_text("hi")
