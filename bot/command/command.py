@@ -1,7 +1,7 @@
 import asyncio
 from os import environ 
 from database import db 
-from bot.main import Bot as User
+from bot.main import User
 from pyrogram import Client as Bot, filters, idle 
 from pyrogram.errors import UserAlreadyParticipant, UserNotParticipant
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
@@ -47,7 +47,7 @@ async def delete(bot, message):
   #  data = await db.get_settings(message.chat.id)
 #    if not data["auto_delete"]: return
     try:
-       time= "7"#data["time"]
+       time= "4"#data["time"]
        await asyncio.sleep(int(time))
        await bot.delete_messages(message.chat.id, message.message_id)
     except Exception as e:
