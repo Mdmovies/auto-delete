@@ -37,7 +37,7 @@ try:
 except UserNotParticipant as e:
   @Bot.on_message(filters.chat(GROUPS))# & ~filters.service_filter)
   async def bot_client(bot, message):
-      await message.reply_text(f"bot {e}")
+       await message.reply_text(f"bot {e}")
        await delete(bot, message)
        return 
     
