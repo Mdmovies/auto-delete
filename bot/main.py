@@ -39,7 +39,7 @@ class Bot(Client):
             api_hash=temp.API_HASH,
             bot_token=temp.BOT_TOKEN,
             workers=50,
-            plugins={"root": "bot"},
+            plugins={"root": "bot/command"},
             sleep_threshold=5,
         )
         
