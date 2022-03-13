@@ -16,9 +16,9 @@ async def delete_all(bot, message):
    sucessfull = 0
    try:
         k = await bot.get_messages(chat, froms)
-    except:
+   except:
         return await message.reply('Make Sure That Iam An Admin In The group, if group is private')
-    if k.empty:
+   if k.empty:
         return await message.reply('This may be group and iam not a admin of the group.')
    start_time = time.time()
    msg = await message.reply_text("Deleting all message **Please wait**")
