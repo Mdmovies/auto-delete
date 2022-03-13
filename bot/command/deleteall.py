@@ -15,6 +15,7 @@ async def delete_all(bot, message):
    deleted = 0
    sucessful = 0
    MSG_ID = []
+   MSG_ID.append({"first msg id": froms})
    try:
         k = await bot.get_messages(chat, froms)
    except:
