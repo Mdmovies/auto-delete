@@ -31,11 +31,15 @@ async def start(bot, cmd):
 try:
   @User.on_message(filters.chat(GROUPS))#& ~filters.service_filter)#filters.text & filters.group & filters.incoming & filters.chats)
   async def user_client(bot, message):
-      return await delete(bot, message)
-except:# UserNotParticipant:
+       await message.reply_text("user")
+       await delete(bot, message)
+       return
+except UserNotParticipant as e:
   @Bot.on_message(filters.chat(GROUPS))# & ~filters.service_filter)
   async def bot_client(bot, message):
-      return await delete(bot, message)
+      await message.reply_text(f"bot {e}")
+       await delete(bot, message)
+       return 
     
 async def delete(bot, message):
    # if not message.chat.id == GROUPS: return
