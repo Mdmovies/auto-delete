@@ -16,7 +16,7 @@ async def delete_all(bot, message):
    sucessfull = 0
    start_time = time.time()
    msg = await message.reply_text("Deleting all message **Please wait**")
-   async for message in bot.USER.iter_messages(chat, froms, 0):
+   async for message in bot.iter_messages(chat, froms, 0):
          current += 1
          if current % 20 == 0:
              await msg.edit_text(
