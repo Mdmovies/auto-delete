@@ -14,6 +14,7 @@ async def delete_all(bot, message):
    current = 0
    deleted = 0
    sucessful = 0
+   MSG_ID = []
    try:
         k = await bot.get_messages(chat, froms)
    except:
@@ -32,6 +33,7 @@ async def delete_all(bot, message):
                continue 
          try:
             await bot.delete_messages(chat, messages.message_id)
+            MSG_ID.append(messages.message_id)
             sucessful+=1
          except Exception as e:
             print(e)
@@ -39,6 +41,10 @@ async def delete_all(bot, message):
             continue
            
    time_taken = datetime.timedelta(seconds=int(time.time()-start_time))
+   try:
+     await bot.send_message(chat, text=f"ids\n{MSG_ID}")
+   except:
+      print(MSG_ID)
    await msg.edit(f"**completed**\n complete in : {time_taken}\nTotal messages : {current}\ndelete sucessful : {sucessful}\ndelete unsucessful : {error}\n\nalready deleted : {deleted}")
          
        
