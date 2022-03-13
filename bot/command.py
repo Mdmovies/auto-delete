@@ -1,7 +1,7 @@
 import asyncio
 from os import environ 
 from database import db 
-from main import User
+from main import Bot as User
 from pyrogram import Client as Bot, filters, idle 
 from pyrogram.errors import UserAlreadyParticipant, UserNotParticipant
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
