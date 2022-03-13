@@ -24,7 +24,7 @@ async def delete_all(bot, message):
         return await message.reply('This may be group and iam not a admin of the group.')
    start_time = time.time()
    msg = await message.reply_text("Deleting all message **Please wait**")
-   async for messages in bot.USER.iter_messages(chat, froms, 0):
+   async for messages in bot.USER.iter_messages(chat, int(froms), 100):
          current += 1
          if current % 20 == 0:
              await msg.edit_text(
@@ -33,7 +33,7 @@ async def delete_all(bot, message):
                deleted+=1
                continue 
          try:
-            await bot.delete_messages(chat, messages.message_id)
+            await bot.delete_messages(chat, int(messages.message_id))
             MSG_ID.append(messages.message_id)
             sucessful+=1
          except Exception as e:
