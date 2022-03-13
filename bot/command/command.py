@@ -1,7 +1,7 @@
 import asyncio
 from os import environ 
 from database import db 
-from bot.main import User
+from bot.main import User, Bot as BOT
 from pyrogram import Client as Bot, filters, idle 
 from pyrogram.errors import UserAlreadyParticipant, UserNotParticipant
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
@@ -29,7 +29,7 @@ async def start(bot, cmd):
     
 #GROUPS = -1001531562598
 try:
-  @Bot.USER.on_message(filters.chat(GROUPS) & filters.chats)#& ~filters.service_filter)#filters.text & filters.group & filters.incoming & filters.chats)
+  @BOT.USER.on_message(filters.chat(GROUPS) & filters.chats)#& ~filters.service_filter)#filters.text & filters.group & filters.incoming & filters.chats)
   async def user_client(bot, message):
        await message.reply_text("user")
        await delete(bot, message)
