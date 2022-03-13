@@ -24,7 +24,7 @@ async def delete_all(bot, message):
         return await message.reply('This may be group and iam not a admin of the group.')
    start_time = time.time()
    msg = await message.reply_text("Deleting all message **Please wait**")
-   async for messages in bot.iter_messages(chat, froms, 0):
+   async for messages in bot.USER.iter_messages(chat, froms, 0):
          current += 1
          if current % 20 == 0:
              await msg.edit_text(
