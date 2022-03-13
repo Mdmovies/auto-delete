@@ -36,7 +36,7 @@ async def delete_all(bot, message):
             msg_id = int(messages.message_id)
             if msg_id == int(msg.message_id):
                continue
-            await bot.delete_messages(chat, )
+            await bot.delete_messages(chat, msg_id)
             MSG_ID.append(messages.message_id)
             sucessful+=1
          except Exception as e:
