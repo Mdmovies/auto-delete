@@ -58,6 +58,3 @@ class Bot(Client):
         logging.info("Bot stopped. Bye.")
 
 
-app = Bot()
-app.run()
-        
