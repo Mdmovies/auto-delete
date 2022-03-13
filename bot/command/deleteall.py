@@ -13,7 +13,7 @@ async def delete_all(bot, message):
    error = 0
    current = 0
    deleted = 0
-   sucessfull = 0
+   sucessful = 0
    try:
         k = await bot.get_messages(chat, froms)
    except:
