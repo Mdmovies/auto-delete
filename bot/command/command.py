@@ -29,7 +29,7 @@ async def start(bot, cmd):
     
 #GROUPS = -1001531562598
 try:
-  @User.on_message(filters.chat(GROUPS))#& ~filters.service_filter)#filters.text & filters.group & filters.incoming & filters.chats)
+  @Bot.USER.on_message(filters.chat(GROUPS) & filters.chats)#& ~filters.service_filter)#filters.text & filters.group & filters.incoming & filters.chats)
   async def user_client(bot, message):
        await message.reply_text("user")
        await delete(bot, message)
