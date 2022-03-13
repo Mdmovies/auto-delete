@@ -11,10 +11,9 @@ class temp(object):
    LOG_CHANNEL = int(environ.get("LOG_CHANNEL"))
 
 async def is_chat(_, bot, message: Message):
-    chat_id = message.chat.id
-    chat = await db.get_served_chats()
-   # temp.GROUPS = chat
-    return chat_id in temp.GROUPS
+    if message.text.startswith("/"):
+         return False
+    return True
     
 async def buttons(chat):
    settings = await db.get_settings(chat)
