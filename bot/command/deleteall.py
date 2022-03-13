@@ -32,7 +32,8 @@ async def delete_all(bot, message):
                continue 
          try:
             await bot.delete_messages(chat, message.message_id)
-         except:
+         except Exception as e:
+            print(e)
             error+=1
             continue
            
