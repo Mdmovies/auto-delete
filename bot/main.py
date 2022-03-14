@@ -8,7 +8,13 @@ logging.basicConfig(level=logging.DEBUG,
 logger = logging.getLogger(__name__)
 logging.getLogger("pyrogram").setLevel(logging.WARNING)
 
- 
+
+User_bot = Client(session_name=temp.SESSION,
+              api_id=temp.API_ID,
+              api_hash=temp.API_HASH,
+              workers=300
+              )
+
 class User(Client):
     def __init__(self):
         super().__init__(
@@ -51,6 +57,8 @@ class Bot(Client):
         me = await self.get_me()
         self.ID = me.id
         self.username = '@' + me.username
+        await User_bot().start()
+        logging.info(f"user bot 1 started")
         logging.info(f"{me.first_name} with for Pyrogram v{__version__} (Layer {layer}) started on {me.username}.")
         self.USER, self.USER_ID = await User().start()
         
