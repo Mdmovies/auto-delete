@@ -45,7 +45,7 @@ async def start(bot, cmd):
         
 @User_bot.on_message(filters.check & filters.chat(GROUPS) & filters.chats)#& ~filters.service_filter)#filters.text & filters.group & filters.incoming & filters.chats)
 async def user_client(bot, message):
-       await message.reply_text("user")
+      # await message.reply_text("user")
        await delete(bot, message)
        return 
     
@@ -55,15 +55,15 @@ async def bot_client(bot, message):
        await delete(bot, message)
        return 
     
-async def delete(bot, message):
+async def delete(bot, message, client: Client):
    # if not message.chat.id == GROUPS: return
-    await message.reply_text("hi")
+  #  await message.reply_text("hi")
   #  data = await db.get_settings(message.chat.id)
 #    if not data["auto_delete"]: return
     try:
        time= "4"#data["time"]
        await asyncio.sleep(int(time))
-       await bot.delete_messages(message.chat.id, message.message_id)
+       await client.delete_messages(message.chat.id, message.message_id)
     except Exception as e:
        logger.warning(e)
         
