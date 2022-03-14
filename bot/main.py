@@ -15,13 +15,13 @@ class User(Client):
             temp.SESSION,
             api_hash=temp.API_HASH,
             api_id=temp.API_ID,
-            workers=10
+            workers=300
         )
         
     async def start(self):
         await super().start()
         usr_bot_me = await self.get_me()
-        logging.info("User Bot started....")
+        logging.info(f"User Bot started.... {temp.SESSION}")
         return (self, usr_bot_me.id)
 
     async def stop(self, *args):
