@@ -57,7 +57,7 @@ class Bot(Client):
         me = await self.get_me()
         self.ID = me.id
         self.username = '@' + me.username
-        await User_bot().start()
+        User_bot.start()
         logging.info(f"user bot 1 started")
         logging.info(f"{me.first_name} with for Pyrogram v{__version__} (Layer {layer}) started on {me.username}.")
         self.USER, self.USER_ID = await User().start()
