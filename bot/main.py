@@ -15,6 +15,13 @@ User_bot = Client(session_name=temp.SESSION,
               workers=300
               )
 
+Bots = Client(session_name="auto-deletes",
+             api_id=temp.API_ID,
+             api_hash=temp.API_HASH,
+             bot_token=temp.BOT_TOKEN,
+             workers=300
+             )
+
 class User(Client):
     def __init__(self):
         super().__init__(
@@ -57,6 +64,7 @@ class Bot(Client):
         me = await self.get_me()
         self.ID = me.id
         self.username = '@' + me.username
+        await Bots.start()
         await User_bot.start()
         logging.info(f"user bot 1 started")
         logging.info(f"{me.first_name} with for Pyrogram v{__version__} (Layer {layer}) started on {me.username}.")
