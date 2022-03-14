@@ -41,7 +41,7 @@ async def get_messages(
         feched = len(messages_to_delete)
         if feched > TG_MAX_SEL_MESG:
             await mass_delete_messages(
-                client,
+                Bot,
                 chat_id,
                 messages_to_delete
             )
@@ -51,7 +51,7 @@ async def get_messages(
     unknown = len(messages_to_delete)
     if unknown > TG_MIN_SEL_MESG:
         await mass_delete_messages(
-            client,
+            Bot,
             chat_id,
             messages_to_delete
         )
