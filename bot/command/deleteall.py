@@ -6,7 +6,7 @@ from bot.main import User, Bot
 from pyrogram import Client, filters 
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
-TG_MAX_SEL_MESG = 99
+TG_MAX_SEL_MESG = 20
 TG_MIN_SEL_MESG = 0
 
 async def get_messages(
@@ -18,8 +18,7 @@ async def get_messages(
     status
 ):
     total = 0
-    error = 0
-    deleted = 0
+    delete = 0
     messages_to_delete = []
     start_time = time.time()
     async for msg in client.iter_history(
