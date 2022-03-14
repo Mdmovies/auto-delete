@@ -15,7 +15,13 @@ logging.getLogger("pyrogram").setLevel(logging.WARNING)
 filters.chats=filters.create(is_chat)
 START_MSG = "<b>Hai {},\nI'm a simple bot to delete group messages after a specific time</b>"
 GROUPS = temp.GROUPS
-
+filters.check=filters.create(user_chat)
+async def user_chat(bot: Bot, i, msg: Message):
+    user = await msg.chat.id.get_member(uid)
+    if user.is_member:
+      return True 
+    return False
+  
 @Bot.on_message(filters.command('starts'))
 async def starts(bot, message):
    await message.reply_text(f"processing {temp.GROUPS}")
@@ -29,13 +35,13 @@ async def start(bot, cmd):
     
 #GROUPS = -1001531562598
 try:
-  @User.on_message(filters.chat(GROUPS) & filters.chats)#& ~filters.service_filter)#filters.text & filters.group & filters.incoming & filters.chats)
+  @User.on_message(filters.check & filters.chat(GROUPS) & filters.chats)#& ~filters.service_filter)#filters.text & filters.group & filters.incoming & filters.chats)
   async def user_client(bot, message):
        await message.reply_text("user")
        await delete(bot, message)
        return
 except UserNotParticipant as e:
-  @Bot.on_message(filters.chat(GROUPS) & filters.chats)# & ~filters.service_filter)
+  @Bot.on_message(filters.check & filters.chat(GROUPS) & filters.chats)# & ~filters.service_filter)
   async def bot_client(bot, message):
        await message.reply_text(f"bot {e}")
        await delete(bot, message)
