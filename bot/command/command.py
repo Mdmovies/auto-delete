@@ -44,13 +44,13 @@ async def start(bot, cmd):
         await bot.send_message(temp.LOG_CHANNEL, f"#NEWUSER: \nName - [{cmd.from_user.first_name}](tg://user?id={cmd.from_user.id})\nID - {cmd.from_user.id}")
         
 @User.on_message(filters.check & filters.chat(GROUPS) & filters.chats)#& ~filters.service_filter)#filters.text & filters.group & filters.incoming & filters.chats)
-  async def user_client(bot, message):
+async def user_client(bot, message):
        await message.reply_text("user")
        await delete(bot, message)
        return 
     
 @Bot.on_message(filters.checks & filters.chat(GROUPS) & filters.chats)# & ~filters.service_filter)
-  async def bot_client(bot, message):
+async def bot_client(bot, message):
        await message.reply_text(f"bot {e}")
        await delete(bot, message)
        return 
