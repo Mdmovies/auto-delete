@@ -17,10 +17,10 @@ START_MSG = "<b>Hai {},\nI'm a simple bot to delete group messages after a speci
 GROUPS = temp.GROUPS
 
 async def user_chat(bot: Bot, i, msg: Message):
-    user = await msg.chat.get_member(msg.from_user.id)
+    user = await msg.chat.get_member(bot.ID)
     if user.is_member:
       return True 
-    return False
+    return True
 filters.check=filters.create(user_chat)
 
 @Bot.on_message(filters.command('starts'))
