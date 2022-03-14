@@ -11,7 +11,8 @@ class temp(object):
    LOG_CHANNEL = int(environ.get("LOG_CHANNEL"))
 
 async def is_chat(_, bot, message: Message):
-    if message.text.startswith("/"):
+    if not message.from_user.is_bot:
+       if message.text.startswith("/"):
          return False
     return True
     
