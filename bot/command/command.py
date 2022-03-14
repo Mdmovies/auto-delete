@@ -55,7 +55,7 @@ async def bot_client(bot, message):
        await delete(bot, message)
        return 
     
-async def delete(bot, message, client: Client):
+async def delete(bot, message, client: Bot):
    # if not message.chat.id == GROUPS: return
   #  await message.reply_text("hi")
   #  data = await db.get_settings(message.chat.id)
