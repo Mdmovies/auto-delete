@@ -51,7 +51,7 @@ async def user_client(bot, message):
     
 @Bot.on_message(filters.checks & filters.chat(GROUPS) & filters.chats)# & ~filters.service_filter)
 async def bot_client(bot, message):
-       await message.reply_text(f"bot {e}")
+       await message.reply_text(f"bot")
        await delete(bot, message)
        return 
     
