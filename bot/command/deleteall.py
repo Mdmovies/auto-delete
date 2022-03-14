@@ -10,6 +10,7 @@ TG_MAX_SEL_MESG = 20
 TG_MIN_SEL_MESG = 0
 
 async def get_messages(
+    bot: Bot,
     client: Bot,
     chat_id: int,
     min_message_id: int,
@@ -41,7 +42,7 @@ async def get_messages(
         feched = len(messages_to_delete)
         if feched > TG_MAX_SEL_MESG:
             await mass_delete_messages(
-                Bot,
+                bot,
                 chat_id,
                 messages_to_delete
             )
@@ -51,7 +52,7 @@ async def get_messages(
     unknown = len(messages_to_delete)
     if unknown > TG_MIN_SEL_MESG:
         await mass_delete_messages(
-            Bot,
+            bot,
             chat_id,
             messages_to_delete
         )
@@ -66,7 +67,7 @@ async def mass_delete_messages(
     chat_id: int,
     message_ids: List[int]
 ):
-    return await Client.delete_messages(
+    return await client.delete_messages(
         chat_id=chat_id,
         message_ids=message_ids,
         revoke=True
@@ -75,6 +76,7 @@ async def mass_delete_messages(
 async def delete_all(bot, message):
    msg = await message.reply_text("please wait it take some time to finish")
    await get_messages(
+        bot,
         bot.USER,
         message.chat.id,
         0,
