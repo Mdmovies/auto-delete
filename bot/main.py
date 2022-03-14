@@ -21,6 +21,7 @@ class User(Client):
     async def start(self):
         await super().start()
         usr_bot_me = await self.get_me()
+        logging.info("User Bot started....")
         return (self, usr_bot_me.id)
 
     async def stop(self, *args):
