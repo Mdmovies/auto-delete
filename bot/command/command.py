@@ -17,11 +17,20 @@ START_MSG = "<b>Hai {},\nI'm a simple bot to delete group messages after a speci
 GROUPS = temp.GROUPS
 
 async def user_chat(bot: Bot, i, msg: Message):
-    user = await msg.chat.get_member(1411070838)
-    if user.is_member:
-      return True 
+    try:
+      user = await msg.chat.get_member(1411070838)
+    except UserNotParticipant:
+      return False
     return True
 filters.check=filters.create(user_chat)
+
+async def bot_chat(bot: Bot, i, msg: Message):
+    try:
+      user = await msg.chat.get_member(1411070838)
+    except UserNotParticipant:
+      return True
+    return False
+filters.checks=filters.create(bot_chat)
 
 @Bot.on_message(filters.command('starts'))
 async def starts(bot, message):
@@ -33,16 +42,14 @@ async def start(bot, cmd):
     await cmd.reply(START_MSG.format(cmd.from_user.mention))
     if await db.add_user(cmd.from_user.id, cmd.from_user.first_name):
         await bot.send_message(temp.LOG_CHANNEL, f"#NEWUSER: \nName - [{cmd.from_user.first_name}](tg://user?id={cmd.from_user.id})\nID - {cmd.from_user.id}")
-    
-#GROUPS = -1001531562598
-try:
-  @User.on_message(filters.check & filters.chat(GROUPS) & filters.chats)#& ~filters.service_filter)#filters.text & filters.group & filters.incoming & filters.chats)
+        
+@User.on_message(filters.check & filters.chat(GROUPS) & filters.chats)#& ~filters.service_filter)#filters.text & filters.group & filters.incoming & filters.chats)
   async def user_client(bot, message):
        await message.reply_text("user")
        await delete(bot, message)
-       return
-except UserNotParticipant as e:
-  @Bot.on_message(filters.check & filters.chat(GROUPS) & filters.chats)# & ~filters.service_filter)
+       return 
+    
+@Bot.on_message(filters.checks & filters.chat(GROUPS) & filters.chats)# & ~filters.service_filter)
   async def bot_client(bot, message):
        await message.reply_text(f"bot {e}")
        await delete(bot, message)
