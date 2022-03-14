@@ -66,7 +66,7 @@ async def mass_delete_messages(
     chat_id: int,
     message_ids: List[int]
 ):
-    return await client.delete_messages(
+    return await Client.delete_messages(
         chat_id=chat_id,
         message_ids=message_ids,
         revoke=True
