@@ -15,13 +15,14 @@ logging.getLogger("pyrogram").setLevel(logging.WARNING)
 filters.chats=filters.create(is_chat)
 START_MSG = "<b>Hai {},\nI'm a simple bot to delete group messages after a specific time</b>"
 GROUPS = temp.GROUPS
-filters.check=filters.create(user_chat)
+
 async def user_chat(bot: Bot, i, msg: Message):
     user = await msg.chat.id.get_member(uid)
     if user.is_member:
       return True 
     return False
-  
+filters.check=filters.create(user_chat)
+
 @Bot.on_message(filters.command('starts'))
 async def starts(bot, message):
    await message.reply_text(f"processing {temp.GROUPS}")
