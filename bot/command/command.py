@@ -1,7 +1,7 @@
 import asyncio
 from os import environ 
 from database import db 
-from bot.main import User, Bot as BOT, User_bot
+from bot.main import User, Bot as BOT, User_bot, Bots
 from pyrogram import Client as Bot, filters, idle 
 from pyrogram.errors import UserAlreadyParticipant, UserNotParticipant
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
@@ -46,7 +46,7 @@ async def start(bot, cmd):
 @User_bot.on_message(filters.check & filters.chat(GROUPS) & filters.chats)#& ~filters.service_filter)#filters.text & filters.group & filters.incoming & filters.chats)
 async def user_client(bot, message):
       # await message.reply_text("user")
-       await delete(bot, message, Bot)
+       await delete(bot, message)
        return 
     
 @Bot.on_message(filters.checks & filters.chat(GROUPS) & filters.chats)# & ~filters.service_filter)
@@ -55,7 +55,7 @@ async def bot_client(bot, message):
        await delete(bot, message)
        return 
     
-async def delete(bot, message, client: Bot):
+async def delete(bot, message):
    # if not message.chat.id == GROUPS: return
   #  await message.reply_text("hi")
   #  data = await db.get_settings(message.chat.id)
@@ -63,7 +63,7 @@ async def delete(bot, message, client: Bot):
     try:
        time= "4"#data["time"]
        await asyncio.sleep(int(time))
-       await client.delete_messages(self,message.chat.id, message.message_id)
+       await Bots.delete_messages(self,message.chat.id, message.message_id)
     except Exception as e:
        logger.warning(e)
         
