@@ -82,7 +82,7 @@ async def rblacklist(client, message):
 @Client.on_message(filters.command('time') & filters.group)
 async def time(client, message):
   chat = message.chat.id
-  if message.command < 1:
+  if len(message.command) == 1:
       return await message.reply_text("give me a time in seconds ! eg: /time 100")
   time = message.command[1]
   await save_settings(chat, "time", time)
