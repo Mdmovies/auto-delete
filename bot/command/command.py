@@ -20,8 +20,9 @@ USER_ID = 1411070838
 
 async def user_chat(bot: Bot, i, msg: Message):
     if msg.chat.type == "private":
-        return False
-    await userbot_status(msg)
+        return False 
+    if msg.chat.id in GROUPS:
+       await userbot_status(msg)
     try:
       user = await msg.chat.get_member(USER_ID)
     except UserNotParticipant:
@@ -32,7 +33,8 @@ filters.check=filters.create(user_chat)
 async def bot_chat(bot: Bot, i, msg: Message):
     if msg.chat.type == "private":
         return False
-    await userbot_status(msg)
+    if msg.chat.id in GROUPS:
+       await userbot_status(msg)
     try:
       user = await msg.chat.get_member(USER_ID)
     except UserNotParticipant:
