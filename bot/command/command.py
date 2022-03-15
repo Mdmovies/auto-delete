@@ -1,6 +1,7 @@
 import asyncio
 from os import environ 
 from database import db 
+from .deleteall import delete_all
 from bot.main import User, Bot as BOT, User_bot, Bots
 from pyrogram import Client as Bot, filters, idle 
 from pyrogram.errors import UserAlreadyParticipant, UserNotParticipant
@@ -114,7 +115,14 @@ async def settings_query2(bot, msg):
       return await msg.answer("your not group owner or admin")
    if type=="1":
        return await msg.message.edit_text(text="choose type of messages\n\n🗑️ - delete\n❌ - do not delete",reply_markup=await next_buttons(group))
-   return await msg.message.edit_text(text= "<b>change your group setting using below buttons</b>",reply_markup=await buttons(group))
+   elif type=="2":
+       return await msg.message.edit_text(text= "<b>change your group setting using below buttons</b>",reply_markup=await buttons(group))
+   st = await bot.get_chat_member(group, "me")
+   if not (st.status=="administrator"):
+      await msg.answer("i not admin in group ! make me admin with full rights", show_alert=True)
+   await msg.answer("processing...", show_alert=True)
+   await delete_all(bot, msg.message)
+   return
    
 async def save_settings(group, key, value):
   current = await db.get_settings(int(group))
