@@ -171,7 +171,7 @@ async def new_chat(c: Bot, m):
 async def userbot_status(m):
   chat_id = m.chat.id
   try:
-    b = await m.chat.get_chat_member(USER_ID)
+    b = await m.chat.get_member(USER_ID)
     if (b.status=="banned"):
       try:
          await m.reply_text("❌ The userbot is banned in this chat, unban the userbot first to be able to delete message!")
