@@ -168,7 +168,7 @@ async def new_chat(c: Bot, m):
        await userbot_status(m)
     return await m.reply(f"welcome to {m.chat.title}")
 
-async def userbot_status(c, m):
+async def userbot_status(m):
   chat_id = m.chat.id
   try:
     b = await m.chat.get_chat_member(USER_ID)
