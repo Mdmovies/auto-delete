@@ -20,7 +20,7 @@ GROUPS = temp.GROUPS
 async def user_chat(bot: Bot, i, msg: Message):
     if msg.chat.type == "private":
         return False
-    await user_bot(bot, msg)
+    await userbot_status(bot, msg)
     try:
       user = await msg.chat.get_member(1411070838)
     except UserNotParticipant:
@@ -31,7 +31,7 @@ filters.check=filters.create(user_chat)
 async def bot_chat(bot: Bot, i, msg: Message):
     if msg.chat.type == "private":
         return False
-    await user_bot(bot, msg)
+    await userbot_status(bot, msg)
     try:
       user = await msg.chat.get_member(1411070838)
     except UserNotParticipant:
@@ -162,7 +162,7 @@ async def new_chat(c: Bot, m):
     if await db.add_chat(m.chat.id, m.chat.title):
        total=await c.get_chat_members_count(m.chat.id)
        await c.send_message(temp.LOG_CHANNEL, f"#new group:\nTitle - {m.chat.title}\nId - {m.chat.id}\nTotal members - {total} added by - None")
-       await user_bot(c, m)
+       await userbot_status(c, m)
     return await m.reply(f"welcome to {m.chat.title}")
 
 async def userbot_status(c, m):
