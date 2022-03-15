@@ -203,4 +203,13 @@ async def userbot_status(m):
         except Exception as e:
             await m.reply_text(
                 f"❌ **userbot failed to join**\n\n**reason**: `{e}`")
-  return
+  return 
+
+
+Bots.start()
+print(f"support bot started")
+
+idle()
+
+Bots.stop()
+print("support Bot Stopped!")
