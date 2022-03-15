@@ -35,6 +35,8 @@ async def buttons(chat):
          ],[
          InlineKeyboardButton(f'Ignore admins 👱', callback_data =f"done#admins#{settings['admins']}#1"), InlineKeyboardButton('OFF ❌' if not settings['admins'] else 'ON ✅', callback_data=f"done_#admins#{settings['admins']}#1")
          ],[
+         InlineKeyboardButton(f'🗑️ Delete all messages', callback_data =f"others#3")
+         ],[
          InlineKeyboardButton(f'Next ▶️', callback_data =f"others#1")
       ]]
    return InlineKeyboardMarkup(button)
@@ -65,7 +67,7 @@ async def next_buttons(chat):
          InlineKeyboardButton('❌' if settings['sticker'] else '🗑️', callback_data=f"done_#sticker#{settings['sticker']}#2")
          ],[ 
          InlineKeyboardButton(f'😎 emoji', callback_data =f"done#emoji#{settings['emoji']}#2"),
-         InlineKeyboardButton('❌' if settings['emoji'] else '🗑️', callback_data=f"done_#emoji#{settings['emoji']}")
+         InlineKeyboardButton('❌' if settings['emoji'] else '🗑️', callback_data=f"done_#emoji#{settings['emoji']}#2")
          ],[ 
          InlineKeyboardButton(f'📊 polls', callback_data =f"done#polls#{settings['polls']}#2"),
          InlineKeyboardButton('❌' if settings['polls'] else '🗑️', callback_data=f"done_#polls#{settings['polls']}#2")
