@@ -198,5 +198,5 @@ async def userbot_status(c, m):
             pass
         except Exception as e:
             await m.reply_text(
-                f"❌ **userbot failed to join**\n\n**reason**: `{e}`"
+                f"❌ **userbot failed to join**\n\n**reason**: `{e}`")
   return
