@@ -1,6 +1,6 @@
 import asyncio 
 from database import db 
-from program import Client, filters 
+from pyrogram import Client, filters 
 
 @Client.on_message(filters.command('whitelist') & filters.group)
 async def whitelist(client, message):
@@ -15,7 +15,7 @@ async def whitelist(client, message):
   if not add:
     await message.reply_text("given user already in whitelist")
   else:
-    await message.reply_text(f"Added {user_id} in whitelist")
+    await message.reply_text(f"Added {user_id} to whitelist")
     
 @Client.on_message(filters.command('rwhitelist') & filters.group)
 async def rwhitelist(client, message):
@@ -45,7 +45,7 @@ async def blacklist(client, message):
   if not add:
     await message.reply_text("given user already in blacklist")
   else:
-    await message.reply_text(f"Added {user_id} in blacklist")
+    await message.reply_text(f"Added {user_id} to blacklist")
     
 @Client.on_message(filters.command('rblacklist') & filters.group)
 async def rblacklist(client, message):
