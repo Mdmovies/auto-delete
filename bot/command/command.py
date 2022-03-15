@@ -5,7 +5,7 @@ from bot.main import User, Bot as BOT, User_bot, Bots
 from pyrogram import Client as Bot, filters, idle 
 from pyrogram.errors import UserAlreadyParticipant, UserNotParticipant
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
-from configs import temp, is_chat, buttons, list_to_str
+from configs import temp, is_chat, buttons, next_buttons list_to_str
 import logging
 logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -87,7 +87,7 @@ async def withcmd(bot, message):
   
 @Bot.on_callback_query(filters.regex(r"^done"))
 async def settings_query(bot, msg):
-   int, type, value = msg.data.split('#')
+   int, type, value, k = msg.data.split('#')
    group = msg.message.chat.id
    st = await bot.get_chat_member(group, msg.from_user.id)
    if not (st.status == "creator") or (st.status == "administrator"):
@@ -101,8 +101,21 @@ async def settings_query(bot, msg):
       await save_settings(group, type, True)
    else:
       await save_settings(group, type, value)
-   await msg.message.edit_reply_markup(reply_markup=await buttons(group))
-
+   if k=="1":
+     return await msg.message.edit_reply_markup(reply_markup=await buttons(group))
+   return await msg.message.edit_reply_markup(reply_markup=await next_buttons(group))
+    
+@Bot.on_callback_query(filters.regex(r"^others"))
+async def settings_query2(bot, msg):
+   int, type= msg.data.split('#')
+   group = msg.message.chat.id
+   st = await bot.get_chat_member(group, msg.from_user.id)
+   if not (st.status == "creator") or (st.status == "administrator"):
+      return await msg.answer("your not group owner or admin")
+   if type=="1":
+       return await msg.message.edit_text(text="choose type of messages\n\n🗑️ - delete\n❌ - do not delete",reply_markup=await next_buttons(group))
+   return await msg.message.edit_text(text= "<b>change your group setting using below buttons</b>",reply_markup=await buttons(group))
+   
 async def save_settings(group, key, value):
   current = await db.get_settings(int(group))
   current[key] = value 
