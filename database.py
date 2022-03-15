@@ -116,7 +116,7 @@ class Database:
        return count 
     
     async def in_whitelist(self, user: int, chat: int) -> bool:
-       chat = await self.wht.find_one({"chat_id": chat_id, "user_id": user})
+       chat = await self.wht.find_one({"chat_id": chat, "user_id": user})
        if not chat:
            return False
        return True 
@@ -134,7 +134,7 @@ class Database:
        return await self.wht.delete_one({"chat_id": chat_id, "user_id": user})
     
     async def in_blacklist(self, user: int, chat: int) -> bool:
-       chat = await self.blk.find_one({"chat_id": chat_id, "user_id": user})
+       chat = await self.blk.find_one({"chat_id": chat, "user_id": user})
        if not chat:
            return False
        return True 
