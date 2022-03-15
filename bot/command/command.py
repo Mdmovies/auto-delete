@@ -93,14 +93,19 @@ async def settings_query(bot, msg):
       return await msg.answer("your not group owner or admin")
       
    if value=="True":
-      done = await save_settings(group, type, False)
+      await save_settings(group, type, False)
+   elif type=="time":
+      return await msg.answer("To change time use /time\neg:- /time 100 in seconds")
+   elif value=="False":
+      await save_settings(group, type, True)
    else:
-      done = await save_settings(group, type, True)
+      await save_settings(group, type, value)
    await msg.message.edit_reply_markup(reply_markup=await buttons(group))
 
 async def save_settings(group, key, value):
   current = await db.get_settings(int(group))
   current[key] = value 
+  temp.SETTINGS[group] = current
   await db.update_settings(group, current)
   return
 
