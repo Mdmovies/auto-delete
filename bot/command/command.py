@@ -21,8 +21,8 @@ USER_ID = 1411070838
 async def user_chat(bot: Bot, i, msg: Message):
     if msg.chat.type == "private":
         return False 
-    if msg.chat.id in GROUPS:
-       await userbot_status(msg)
+   # if msg.chat.id in GROUPS:
+    await userbot_status(msg)
     try:
       user = await msg.chat.get_member(USER_ID)
     except UserNotParticipant:
