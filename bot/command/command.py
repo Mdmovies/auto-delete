@@ -63,7 +63,7 @@ async def delete(bot, message):
     try:
        time= "4"#data["time"]
        await asyncio.sleep(int(time))
-       await Bots.delete_messages(message.chat.id, message.message_id)
+       await BOT.delete_messages(BOT, message.chat.id, message.message_id)
     except Exception as e:
        logger.warning(e)
         
