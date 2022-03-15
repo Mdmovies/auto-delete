@@ -11,6 +11,8 @@ class Database:
         self.col = self.db.users
         self.grp = self.db.groups
         self.srv = self.db.chats
+        self.wht = self.db.whitelist
+        self.blk = self db.blacklist
         
     def new_user(self, id, name):
         return dict(
@@ -68,8 +70,8 @@ class Database:
             "admins": False,
             "files": False,
             "link": False,
-            "time": True,
-            "mode": True,
+            "time": 1600,
+            "mode": "delete",
             "bots": True,
             "gifs": True,
             "photo": True,
@@ -111,6 +113,42 @@ class Database:
     
     async def total_served_chat(self):
        count = await self.srv.count_documents({})
-       return count
+       return count 
+    
+    async def in_whitelist(self, user: int, chat: int) -> bool:
+       chat = await self.wht.find_one({"chat_id": chat_id, "user_id": user})
+       if not chat:
+           return False
+       return True 
+    
+    async def add_whitelist(self, user:int, chat_id: int):
+       is_served = await self.in_whitelist(user, chat_id)
+       if is_served:
+         return False
+       return await self.wht.insert_one({"chat_id": chat_id, "user_id": user})
+    
+    async def remove_whitelist(self, user:int, chat_id: int):
+       is_served = await self.in_whitelist(user, chat_id)
+       if not is_served:
+         return False
+       return await self.wht.delete_one({"chat_id": chat_id, "user_id": user})
+    
+    async def in_blacklist(self, user: int, chat: int) -> bool:
+       chat = await self.blk.find_one({"chat_id": chat_id, "user_id": user})
+       if not chat:
+           return False
+       return True 
+    
+    async def add_blacklist(self, user:int, chat_id: int):
+       is_served = await self.in_blacklist(user, chat_id)
+       if is_served:
+         return False
+       return await self.blk.insert_one({"chat_id": chat_id, "user_id": user})
+    
+    async def remove_blacklist(self, user:int, chat_id: int):
+       is_served = await self.in_blacklist(user, chat_id)
+       if not is_served:
+         return False
+       return await self.blk.delete_one({"chat_id": chat_id, "user_id": user})
     
 db= Database(DATABASE, "auto-delete-bot")
