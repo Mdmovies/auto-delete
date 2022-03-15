@@ -20,25 +20,57 @@ async def is_chat(_, bot, message: Message):
 async def buttons(chat):
    settings = await db.get_settings(chat)
    if settings["mode"] =="whitelist":
-      text = "blacklist"
+      mode, text = "blacklist", "blacklisted users"
    elif settings["mode"] =="blacklist":
-      text = "delete"
+      mode, text = "delete", "All messages"
    elif settings["mode"] =="delete":
-      text = "whitelist"
+      mode, text = "whitelist", "except whitelisted"
    if settings is not None:
       button=[[
-         InlineKeyboardButton(f'Auto delete 🗑️', callback_data =f"done#auto_delete#{settings['auto_delete']}"), InlineKeyboardButton('OFF ❌' if settings['auto_delete'] else 'ON ✅', callback_data=f"done_#auto_delete#{settings['auto_delete']}")
+         InlineKeyboardButton(f'Auto delete 🗑️', callback_data =f"done#auto_delete#{settings['auto_delete']}#1"), InlineKeyboardButton('OFF ❌' if settings['auto_delete'] else 'ON ✅', callback_data=f"done_#auto_delete#{settings['auto_delete']}#1")
          ],[ 
-         InlineKeyboardButton(f'Timer 🕐', callback_data =f"done#time#{settings['time']}"), InlineKeyboardButton(f"{settings['time']} s", callback_data=f"done_#time#{settings['time']}")
+         InlineKeyboardButton(f'Time 🕐', callback_data =f"done#time#{settings['time']}#1"), InlineKeyboardButton(f"{settings['time']} s", callback_data=f"done_#time#{settings['time']}#1")
          ],[
-         InlineKeyboardButton(f'Delete Mode ⚙️', callback_data =f"done#mode#{text}"), InlineKeyboardButton(f'{text}', callback_data=f"done_#mode#{text}")
+         InlineKeyboardButton(f'Delete Mode ⚙️', callback_data =f"done#mode#{text}#1"), InlineKeyboardButton(f'{text}', callback_data=f"done_#mode#{mode}#1")
          ],[
-         InlineKeyboardButton(f'Ignore admins 👱', callback_data =f"done#admins#{settings['admins']}"), InlineKeyboardButton('OFF ❌' if not settings['admins'] else 'ON ✅', callback_data=f"done_#admins#{settings['admins']}")
+         InlineKeyboardButton(f'Ignore admins 👱', callback_data =f"done#admins#{settings['admins']}#1"), InlineKeyboardButton('OFF ❌' if not settings['admins'] else 'ON ✅', callback_data=f"done_#admins#{settings['admins']}#1")
          ],[
-         InlineKeyboardButton(f'Next ▶️', callback_data =f"others")
+         InlineKeyboardButton(f'Next ▶️', callback_data =f"others#1")
       ]]
    return InlineKeyboardMarkup(button)
-  
+ 
+async def next_buttons(chat):
+   settings = await db.get_settings(chat)
+   if settings is not None:
+      button=[[
+         InlineKeyboardButton(f'📷 photo', callback_data =f"done#photos#{settings['photo']}#2"),
+         InlineKeyboardButton('❌' if settings['photo'] else '🗑️', callback_data=f"done_#photo#{settings['photo']}#2")
+         ],[ 
+         InlineKeyboardButton(f'🎥 video', callback_data =f"done#video#{settings['video']}#2"),
+         InlineKeyboardButton('❌' if settings['video'] else '🗑️', callback_data=f"done_#video#{settings['video']}#2")
+         ],[ 
+         InlineKeyboardButton(f'💾 file', callback_data =f"done#file#{settings['file']}#2"),
+         InlineKeyboardButton('❌' if settings['file'] else '🗑️', callback_data=f"done_#file#{settings['file']}#2")
+         ],[ 
+         InlineKeyboardButton(f'🎧 audio', callback_data =f"done#audio#{settings['audio']}#2"),
+         InlineKeyboardButton('❌' if settings['audio'] else '🗑️', callback_data=f"done_#audio#{settings['audio']}#2")
+         ],[ 
+         InlineKeyboardButton(f'🎤 voice', callback_data =f"done#voice#{settings['voice']}#2"),
+         InlineKeyboardButton('❌' if settings['voice'] else '🗑️', callback_data=f"done_#voice#{settings['voice']}#2")
+         ],[ 
+         InlineKeyboardButton(f'🃏 sticker', callback_data =f"done#sticker#{settings['sticker']}#2"),
+         InlineKeyboardButton('❌' if settings['sticker'] else '🗑️', callback_data=f"done_#sticker#{settings['sticker']}#2")
+         ],[ 
+         InlineKeyboardButton(f'😎 emoji', callback_data =f"done#emoji#{settings['emoji']}#2"),
+         InlineKeyboardButton('❌' if settings['emoji'] else '🗑️', callback_data=f"done_#emoji#{settings['emoji']}")
+         ],[ 
+         InlineKeyboardButton(f'📊 polls', callback_data =f"done#poll#{settings['poll']}#2"),
+         InlineKeyboardButton('❌' if settings['poll'] else '🗑️', callback_data=f"done_#poll#{settings['poll']}#2")
+         ],[
+         InlineKeyboardButton(f'◀️ back', callback_data =f"others#2")
+       ]]
+   return InlineKeyboardMarkup(button)
+
 def list_to_str(k):
     if not k:
         return 0
