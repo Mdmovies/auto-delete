@@ -5,7 +5,7 @@ from bot.main import User, Bot as BOT, User_bot, Bots
 from pyrogram import Client as Bot, filters, idle 
 from pyrogram.errors import UserAlreadyParticipant, UserNotParticipant
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
-from configs import temp, is_chat, buttons, next_buttons list_to_str
+from configs import temp, is_chat, buttons, next_buttons, list_to_str
 import logging
 logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
