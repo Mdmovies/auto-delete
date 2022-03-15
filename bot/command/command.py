@@ -56,10 +56,6 @@ async def bot_client(bot, message):
        return 
     
 async def delete(bot, message):
-   # if not message.chat.id == GROUPS: return
-  #  await message.reply_text("hi")
-  #  data = await db.get_settings(message.chat.id)
-#    if not data["auto_delete"]: return
     try:
        time= "4"#data["time"]
        await asyncio.sleep(int(time))
