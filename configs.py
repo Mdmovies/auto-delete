@@ -27,8 +27,8 @@ async def buttons(chat):
    if settings is not None:
       button=[[
          InlineKeyboardButton(f'Auto delete 🗑️', callback_data =f"done#auto_delete#{settings['auto_delete']}"), InlineKeyboardButton('OFF ❌' if settings['auto_delete'] else 'ON ✅', callback_data=f"done_#auto_delete#{settings['auto_delete']}")
-         ],[ 
-         InlineKeyboardButton(f'Timer 🕐', callback_data =f"done#time#{settings['time']}"), InlineKeyboardButton(f'{settings['time']}', callback_data=f"done_#time#{settings['time']}")
+        # ],[ 
+       #  InlineKeyboardButton(f'Timer 🕐', callback_data =f"done#time#{settings['time']}"), InlineKeyboardButton(f'{settings['time']}', callback_data=f"done_#time#{settings['time']}")
          ],[
          InlineKeyboardButton(f'Delete Mode ⚙️', callback_data =f"done#mode#{text}"), InlineKeyboardButton(f'{text}', callback_data=f"done_#mode#{text}")
          ],[
