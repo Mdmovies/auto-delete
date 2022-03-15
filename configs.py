@@ -18,6 +18,12 @@ async def is_chat(_, bot, message: Message):
     
 async def buttons(chat):
    settings = await db.get_settings(chat)
+   if settings["mode"] =="whitelist":
+      text = "blacklist"
+   elif settings["mode"] =="blacklist":
+      text = "delete"
+   elif settings["mode"] =="delete":
+      text = "whitelist"
    if settings is not None:
       button=[[
          InlineKeyboardButton(f'Auto delete 🗑️', callback_data =f"done#auto_delete#{settings['auto_delete']}"), InlineKeyboardButton('OFF ❌' if settings['auto_delete'] else 'ON ✅', callback_data=f"done_#auto_delete#{settings['auto_delete']}")
@@ -27,6 +33,8 @@ async def buttons(chat):
          InlineKeyboardButton(f'Delete Mode ⚙️', callback_data =f"done#mode#{settings['mode']}"), InlineKeyboardButton('OFF ❌' if settings['mode'] else 'ON ✅', callback_data=f"done_#mode#{settings['mode']}")
          ],[
          InlineKeyboardButton(f'Ignore admins 👱', callback_data =f"done#admins#{settings['admins']}"), InlineKeyboardButton('OFF ❌' if not settings['admins'] else 'ON ✅', callback_data=f"done_#admins#{settings['admins']}")
+         ],[
+         InlineKeyboardButton(f'Next ▶️', callback_data =f"others")
       ]]
    return InlineKeyboardMarkup(button)
   
