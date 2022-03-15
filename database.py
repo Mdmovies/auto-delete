@@ -12,7 +12,7 @@ class Database:
         self.grp = self.db.groups
         self.srv = self.db.chats
         self.wht = self.db.whitelist
-        self.blk = self db.blacklist
+        self.blk = self.db.blacklist
         
     def new_user(self, id, name):
         return dict(
