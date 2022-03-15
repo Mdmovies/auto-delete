@@ -21,16 +21,6 @@ class Database:
         return dict(
             id = id,
             title = title,
-            config=dict(
-              auto_delete=True,
-              delete=True,
-              admins=False,
-              files=False,
-              link=False,
-              time=3600,
-              mode=True,
-              bots=True,
-            ),
           )
         
     async def add_user(self, id, name):
@@ -81,6 +71,15 @@ class Database:
             "time": True,
             "mode": True,
             "bots": True,
+            "gifs": True,
+            "photo": True,
+            "video": True,
+            "emoji": True,
+            "polls": True,
+            "voice": True,
+            "audio": True,
+            "files": True,
+            "sticker": True
         }
         chat = await self.grp.find_one({'id':int(id)})
         if chat:
