@@ -18,6 +18,9 @@ START_MSG = "<b>Hai {},\nI'm a simple bot to delete group messages after a speci
 GROUPS = temp.GROUPS
 
 async def user_chat(bot: Bot, i, msg: Message):
+    if msg.chat.type == "private":
+        return False
+    await user_bot(bot, msg)
     try:
       user = await msg.chat.get_member(1411070838)
     except UserNotParticipant:
@@ -26,6 +29,9 @@ async def user_chat(bot: Bot, i, msg: Message):
 filters.check=filters.create(user_chat)
 
 async def bot_chat(bot: Bot, i, msg: Message):
+    if msg.chat.type == "private":
+        return False
+    await user_bot(bot, msg)
     try:
       user = await msg.chat.get_member(1411070838)
     except UserNotParticipant:
@@ -156,7 +162,41 @@ async def new_chat(c: Bot, m):
     if await db.add_chat(m.chat.id, m.chat.title):
        total=await c.get_chat_members_count(m.chat.id)
        await c.send_message(temp.LOG_CHANNEL, f"#new group:\nTitle - {m.chat.title}\nId - {m.chat.id}\nTotal members - {total} added by - None")
+       await user_bot(c, m)
     return await m.reply(f"welcome to {m.chat.title}")
 
-
-
+async def userbot_status(c, m):
+  chat_id = m.chat.id
+  try:
+    b = await c.get_chat_member(chat_id, m.USER_ID)
+    if (b.status=="banned"):
+      try:
+         await m.reply_text("❌ The userbot is banned in this chat, unban the userbot first to be able to delete message!")
+      except BaseException:
+         pass
+      invitelink = (await c.get_chat(chat_id)).invite_link
+      if not invitelink:
+          await c.export_chat_invite_link(chat_id)
+          invitelink = (await c.get_chat(chat_id)).invite_link
+          if invitelink.startswith("https://t.me/+"):
+             invitelink = invitelink.replace(
+                    "https://t.me/+", "https://t.me/joinchat/"
+                )
+          await user.join_chat(invitelink)
+  except UserNotParticipant:
+        try:
+            invitelink = (await c.get_chat(chat_id)).invite_link
+            if not invitelink:
+                await c.export_chat_invite_link(chat_id)
+                invitelink = (await c.get_chat(chat_id)).invite_link
+            if invitelink.startswith("https://t.me/+"):
+                invitelink = invitelink.replace(
+                    "https://t.me/+", "https://t.me/joinchat/"
+                )
+            await User_bot.join_chat(invitelink)
+        except UserAlreadyParticipant:
+            pass
+        except Exception as e:
+            await m.reply_text(
+                f"❌ **userbot failed to join**\n\n**reason**: `{e}`"
+  return
