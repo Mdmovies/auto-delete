@@ -16,13 +16,14 @@ logging.getLogger("pyrogram").setLevel(logging.WARNING)
 filters.chats=filters.create(is_chat)
 START_MSG = "<b>Hai {},\nI'm a simple bot to delete group messages after a specific time</b>"
 GROUPS = temp.GROUPS
+USER_ID = 1411070838
 
 async def user_chat(bot: Bot, i, msg: Message):
     if msg.chat.type == "private":
         return False
-    await userbot_status(bot, msg)
+    await userbot_status(msg)
     try:
-      user = await msg.chat.get_member(1411070838)
+      user = await msg.chat.get_member(USER_ID)
     except UserNotParticipant:
       return False
     return True
@@ -31,9 +32,9 @@ filters.check=filters.create(user_chat)
 async def bot_chat(bot: Bot, i, msg: Message):
     if msg.chat.type == "private":
         return False
-    await userbot_status(bot, msg)
+    await userbot_status(msg)
     try:
-      user = await msg.chat.get_member(1411070838)
+      user = await msg.chat.get_member(USER_ID)
     except UserNotParticipant:
       return True
     return False
@@ -162,13 +163,13 @@ async def new_chat(c: Bot, m):
     if await db.add_chat(m.chat.id, m.chat.title):
        total=await c.get_chat_members_count(m.chat.id)
        await c.send_message(temp.LOG_CHANNEL, f"#new group:\nTitle - {m.chat.title}\nId - {m.chat.id}\nTotal members - {total} added by - None")
-       await userbot_status(c, m)
+       await userbot_status(m)
     return await m.reply(f"welcome to {m.chat.title}")
 
 async def userbot_status(c, m):
   chat_id = m.chat.id
   try:
-    b = await c.get_chat_member(chat_id, m.USER_ID)
+    b = await m.chat.get_chat_member(USER_ID)
     if (b.status=="banned"):
       try:
          await m.reply_text("❌ The userbot is banned in this chat, unban the userbot first to be able to delete message!")
