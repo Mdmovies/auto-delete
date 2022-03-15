@@ -71,6 +71,7 @@ async def refresh_db(bot, message):
       await asyncio.sleep(7)
       return await k.delete(True)
    default = await db.get_settings("01")
+   await message.reply_text("✅ refreshed")
    return await db.update_settings(message.chat.id, default)  
   
 @Bot.on_message(filters.command("settings") & filters.group)
