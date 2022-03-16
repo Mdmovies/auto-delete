@@ -46,13 +46,7 @@ filters.checks=filters.create(bot_chat)
 async def starts(bot, message):
    await message.reply_text(f"processing {temp.GROUPS}")
    return
-                           
-@Bot.on_message(filters.command('start') & filters.private)
-async def start(bot, cmd):
-    await cmd.reply(START_MSG.format(cmd.from_user.mention))
-    if await db.add_user(cmd.from_user.id, cmd.from_user.first_name):
-        await bot.send_message(temp.LOG_CHANNEL, f"#NEWUSER: \nName - [{cmd.from_user.first_name}](tg://user?id={cmd.from_user.id})\nID - {cmd.from_user.id}")
-        
+   
 @User.on_message(filters.check & filters.chat(GROUPS) & filters.chats)#& ~filters.service_filter)#filters.text & filters.group & filters.incoming & filters.chats)
 async def user_client(bot, message):
     await delete(bot, message)
