@@ -18,9 +18,10 @@ class temp(object):
 async def is_chat(_, bot, message: Message):
     m = message
     get = await db.get_settings(chat)
-    if not message.from_user.is_bot:
-       if message.text.startswith("/"):
-         return False 
+    if message.from_user.id == temp.bot_id:
+       return False
+    if not message.from_user.is_bot and message.text.startswith("/"):
+       return False 
     if not get["photo"] and m.photo:
        return False 
     if not get["video"] and m.video:
