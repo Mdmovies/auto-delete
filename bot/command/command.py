@@ -59,7 +59,7 @@ async def bot_client(bot, message):
     
 async def delete(bot, message):
     chat = message.chat.id
-    data = await get_settings(chat)
+    data = await db.get_settings(chat)
     try:
        time= data["time"]
        await asyncio.sleep(int(time))
