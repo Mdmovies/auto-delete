@@ -1,9 +1,9 @@
 import asyncio
 from os import environ 
 from database import db 
+from pyrogram import filters
+from bot.main import User, Bot
 from .deleteall import delete_all
-from bot.main import User, Bot as BOT, User_bot, Bots
-from pyrogram import Client as Bot, filters, idle 
 from pyrogram.errors import UserAlreadyParticipant, UserNotParticipant
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
 from configs import temp, is_chat, buttons, next_buttons, list_to_str
@@ -16,7 +16,7 @@ logging.getLogger("pyrogram").setLevel(logging.WARNING)
 filters.chats=filters.create(is_chat)
 START_MSG = "<b>Hai {},\nI'm a simple bot to delete group messages after a specific time</b>"
 GROUPS = temp.GROUPS
-USER_ID = 1411070838
+USER_ID = temp.user_id
 
 async def user_chat(bot: Bot, i, msg: Message):
     if msg.chat.type == "private":
@@ -53,7 +53,7 @@ async def start(bot, cmd):
     if await db.add_user(cmd.from_user.id, cmd.from_user.first_name):
         await bot.send_message(temp.LOG_CHANNEL, f"#NEWUSER: \nName - [{cmd.from_user.first_name}](tg://user?id={cmd.from_user.id})\nID - {cmd.from_user.id}")
         
-@User_bot.on_message(filters.check & filters.chat(GROUPS) & filters.chats)#& ~filters.service_filter)#filters.text & filters.group & filters.incoming & filters.chats)
+@User.on_message(filters.check & filters.chat(GROUPS) & filters.chats)#& ~filters.service_filter)#filters.text & filters.group & filters.incoming & filters.chats)
 async def user_client(bot, message):
       # await message.reply_text("user")
        await delete(bot, message)
@@ -69,7 +69,7 @@ async def delete(bot, message):
     try:
        time= "4"#data["time"]
        await asyncio.sleep(int(time))
-       await BOT.delete_messages(message.chat.id, message.message_id)
+       await Bot.delete_messages(message.chat.id, message.message_id)
     except Exception as e:
        logger.warning(e)
         
@@ -144,7 +144,7 @@ async def save_settings(group, key, value):
 async def bot_kicked(c: Bot, m: Message):
     chat_id = m.chat.id
     left_member = m.left_chat_member
-    if left_member.id == c.ID:
+    if left_member.id == temp.bot_id:
         await db.remove_served_chat(chat_id)
         await c.send_message(temp.LOG_CHANNEL, f"#removed_serve_chat:\nTitle - {m.chat.title}\nId - {m.chat.id}")
         await asyncio.sleep(5)
@@ -204,12 +204,3 @@ async def userbot_status(m):
             await m.reply_text(
                 f"❌ **userbot failed to join**\n\n**reason**: `{e}`")
   return 
-
-
-Bots.start()
-print(f"support bot started")
-
-idle()
-
-Bots.stop()
-print("support Bot Stopped!")
