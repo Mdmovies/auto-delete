@@ -4,7 +4,7 @@ from database import db
 from configs import temp
 from .main import Bot, User
 from pyrogram.raw.all import layer
-from pyrogram import Client, __version__ 
+from pyrogram import Client, __version__, idle
 
 logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
