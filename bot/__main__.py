@@ -1,29 +1,15 @@
 import asyncio
-import logging
-from pyrogram import Client, __version__
+import logging 
 from database import db
-from pyrogram.raw.all import layer
 from configs import temp
+from main import Bot, User
+from pyrogram.raw.all import layer
+from pyrogram import Client, __version__ 
+
 logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 logging.getLogger("pyrogram").setLevel(logging.WARNING)
-
-
-User = Client(session_name=temp.SESSION,
-              api_id=temp.API_ID,
-              api_hash=temp.API_HASH,
-              workers=300
-              )
-
-Bot = Client(session_name="auto-deletes",
-             api_id=temp.API_ID,
-             api_hash=temp.API_HASH,
-             bot_token=temp.BOT_TOKEN,
-             plugins={"root": "bot/command"},
-             sleep_threshold=5,
-             workers=300
-             )
 
 async def start():
    chats = await db.get_served_chats()
