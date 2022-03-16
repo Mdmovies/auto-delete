@@ -20,7 +20,7 @@ async def start():
    temp.user_id = me.id
    logging.info(f" User bot ({me.username}) started")
    await Bot.start()
-   me = await self.get_me()
+   me = await Bot.get_me()
    temp.bot_id = me.id
    logging.info(f"{me.first_name} with for Pyrogram v{__version__} (Layer {layer}) started on {me.username}.")
    temp.Bot = Bot 
