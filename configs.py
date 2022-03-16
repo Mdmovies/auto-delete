@@ -5,6 +5,7 @@ from pyrogram.types import Message, InlineKeyboardButton, InlineKeyboardMarkup
 class temp(object):
    Bot = None 
    User = None 
+   B_NAME = None
    bot_id = 0
    user_id = 0
    GROUPS = []
