@@ -11,7 +11,6 @@ TG_MIN_SEL_MESG = 0
 
 async def get_messages(
     bot: Bot,
-    client: Bot,
     chat_id: int,
     min_message_id: int,
     max_message_id: int,
@@ -42,7 +41,7 @@ async def get_messages(
         feched = len(messages_to_delete)
         if feched > TG_MAX_SEL_MESG:
             await mass_delete_messages(
-                client,
+                Bot,
                 chat_id,
                 messages_to_delete
             )
@@ -52,7 +51,7 @@ async def get_messages(
     unknown = len(messages_to_delete)
     if unknown > TG_MIN_SEL_MESG:
         await mass_delete_messages(
-            client,
+            Bot,
             chat_id,
             messages_to_delete
         )
@@ -72,12 +71,11 @@ async def mass_delete_messages(
         message_ids=message_ids,
         revoke=True
     )
-@Client.on_message(filters.command(["del", "delete"]) & filters.group)
+@Bot.on_message(filters.command(["del", "delete"]) & filters.group)
 async def delete_all(bot, message):
    msg = await message.reply_text("please wait it take some time to finish")
    await get_messages(
         bot,
-        bot.USER,
         message.chat.id,
         0,
         msg.message_id if msg else message.message_id,
@@ -116,7 +114,7 @@ async def dumb(client, message):
             msg_id = int(messages.message_id)
             if msg_id == int(msg.message_id):
                continue
-            await bot.USER.delete_messages(chat, msg_id)
+            await Bot.delete_messages(chat, msg_id)
             MSG_ID.append(messages.message_id)
             sucessful+=1
          except Exception as e:
