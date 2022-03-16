@@ -2,7 +2,8 @@ import asyncio
 from database import db 
 from configs import temp 
 from bot.main import Bot 
-from pyrogram import filters
+from pyrogram import filters 
+from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 START_MSG = "hi {},\nI am a auto delete bot to delete messages in group after a specific time\nfor know more press help button"
 buttons = [[InlineKeyboardButton('➕ Add Me To Your Groups ➕', url=f'http://t.me/{temp.B_NAME}?startgroup=true')],[InlineKeyboardButton('ℹ️ Help', callback_data='help')],[InlineKeyboardButton('📢 Support channel', callback_data='help')]]
