@@ -21,7 +21,7 @@ async def get_messages(
     delete = 0
     messages_to_delete = []
     start_time = time.time()
-    async for msg in client.iter_history(
+    async for msg in User.iter_history(
         chat_id=chat_id,
         limit=None
     ):
