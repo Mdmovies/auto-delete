@@ -1,3 +1,4 @@
+import asyncio
 import logging
 from pyrogram import Client, __version__
 from database import db
@@ -9,68 +10,39 @@ logger = logging.getLogger(__name__)
 logging.getLogger("pyrogram").setLevel(logging.WARNING)
 
 
-User_bot = Client(session_name=temp.SESSION,
+User = Client(session_name=temp.SESSION,
               api_id=temp.API_ID,
               api_hash=temp.API_HASH,
               workers=300
               )
 
-Bots = Client(session_name="auto-deletes",
+Bot = Client(session_name="auto-deletes",
              api_id=temp.API_ID,
              api_hash=temp.API_HASH,
              bot_token=temp.BOT_TOKEN,
+             plugins={"root": "bot/command"},
+             sleep_threshold=5,
              workers=300
              )
 
-class User(Client):
-    def __init__(self):
-        super().__init__(
-            temp.SESSION,
-            api_hash=temp.API_HASH,
-            api_id=temp.API_ID,
-            workers=300
-        )
-        
-    async def start(self):
-        await super().start()
-        usr_bot_me = await self.get_me()
-        logging.info(f"User Bot started.... {temp.SESSION}")
-        return (self, usr_bot_me.id)
-
-    async def stop(self, *args):
-        await super().stop()
-        logging.info("User Bot stopped. Bye.")
-        
-class Bot(Client):
-    ID: int = None 
-    USER: User = None
-    USER_ID: int = None
-
-    def __init__(self):
-        super().__init__(
-            session_name="auto-delete",
-            api_id=temp.API_ID,
-            api_hash=temp.API_HASH,
-            bot_token=temp.BOT_TOKEN,
-            workers=50,
-            plugins={"root": "bot/command"},
-            sleep_threshold=5,
-        )
-        
-    async def start(self):
-        chats = await db.get_served_chats()
-        temp.GROUPS = chats
-        await super().start()
-        me = await self.get_me()
-        self.ID = me.id
-        self.username = '@' + me.username
-        await User_bot.start()
-        logging.info(f"user bot 1 started")
-        logging.info(f"{me.first_name} with for Pyrogram v{__version__} (Layer {layer}) started on {me.username}.")
-        self.USER, self.USER_ID = await User().start()
-        
-    async def stop(self, *args):
-        await super().stop()
-        logging.info("Bot stopped. Bye.")
-
-
+async def start():
+   chats = await db.get_served_chats()
+   temp.GROUPS = chats 
+   logging.info(f"Sucessfully updated {len(chats)} active Chats")
+   await User.start()
+   me = await User.get_me()
+   temp.user_id = me.id
+   logging.info(f" User bot ({me.username}) started")
+   await Bot.start()
+   me = await self.get_me()
+   temp.bot_id = me.id
+   logging.info(f"{me.first_name} with for Pyrogram v{__version__} (Layer {layer}) started on {me.username}.")
+   temp.Bot = Bot 
+   temp.User = User
+   await idle()
+   await Bot.stop()
+   await User.stop()
+   logging.info("Bot and user stopped. Bye.")
+  
+loop = asyncio.get_event_loop()
+loop.run_until_complete(start_bot())
