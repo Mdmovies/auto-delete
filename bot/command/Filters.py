@@ -1,7 +1,8 @@
 import asyncio 
 from database import db 
+from pyrogram import filters 
 from .command import save_settings
-from pyrogram import Client, filters 
+from configs import temp.Bot as Client
 
 @Client.on_message(filters.command('whitelist') & filters.group)
 async def whitelist(client, message):
