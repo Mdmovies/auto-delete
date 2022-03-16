@@ -16,11 +16,12 @@ class temp(object):
    LOG_CHANNEL = int(environ.get("LOG_CHANNEL"))
 
 async def is_chat(_, bot, message: Message):
-    m = message
-    get = await db.get_settings(chat)
+    m = message 
+    text = message.text
+    get = await db.get_settings(m.chat.id)
     if message.from_user.id == temp.bot_id:
        return False
-    if not message.from_user.is_bot and message.text.startswith("/"):
+    if not message.from_user.is_bot and not text is None and text.startswith("/"):
        return False 
     if not get["photo"] and m.photo:
        return False 
@@ -33,6 +34,8 @@ async def is_chat(_, bot, message: Message):
     if not get["sticker"] and m.sticker:
        return False
     if not get["polls"] and m.poll:
+       return False 
+    if not get["emoji"] and m.animation:
        return False
     return True
     
@@ -85,7 +88,7 @@ async def next_buttons(chat):
          InlineKeyboardButton(f'🃏 sticker', callback_data =f"done#sticker#{settings['sticker']}#2"),
          InlineKeyboardButton('❌' if settings['sticker'] else '🗑️', callback_data=f"done_#sticker#{settings['sticker']}#2")
          ],[ 
-         InlineKeyboardButton(f'😎 emoji', callback_data =f"done#emoji#{settings['emoji']}#2"),
+         InlineKeyboardButton(f'🎭 animated sticker', callback_data =f"done#emoji#{settings['emoji']}#2"),
          InlineKeyboardButton('❌' if settings['emoji'] else '🗑️', callback_data=f"done_#emoji#{settings['emoji']}#2")
          ],[ 
          InlineKeyboardButton(f'📊 polls', callback_data =f"done#polls#{settings['polls']}#2"),
