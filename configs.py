@@ -3,6 +3,10 @@ from database import db
 from pyrogram.types import Message, InlineKeyboardButton, InlineKeyboardMarkup
 
 class temp(object):
+   Bot = None 
+   User = None 
+   bot_id = 0
+   user_id = 0
    GROUPS = []
    SETTINGS = {}
    API_ID = int(environ.get("API_ID"))
