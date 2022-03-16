@@ -55,21 +55,21 @@ async def start(bot, cmd):
         
 @User.on_message(filters.check & filters.chat(GROUPS) & filters.chats)#& ~filters.service_filter)#filters.text & filters.group & filters.incoming & filters.chats)
 async def user_client(bot, message):
-      # await message.reply_text("user")
-       await delete(bot, message)
-       return 
+    await delete(bot, message)
+    return 
     
 @Bot.on_message(filters.checks & filters.chat(GROUPS) & filters.chats)# & ~filters.service_filter)
 async def bot_client(bot, message):
-       await message.reply_text(f"bot")
-       await delete(bot, message)
-       return 
+    await delete(bot, message)
+    return 
     
 async def delete(bot, message):
+    chat = message.chat.id
+    data = await get_settings(chat)
     try:
-       time= "4"#data["time"]
+       time= data["time"]
        await asyncio.sleep(int(time))
-       await Bot.delete_messages(message.chat.id, message.message_id)
+       await Bot.delete_messages(chat, message.message_id)
     except Exception as e:
        logger.warning(e)
         
