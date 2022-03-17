@@ -174,6 +174,7 @@ async def userbot_status(m):
     if (b.status=="banned"):
       try:
          await m.reply_text("❌ The userbot is banned in this chat, unban the userbot first to be able to delete message!")
+         await c.unban_chat_member(chat_id=chat_id, user_id=temp.user_id)
       except BaseException:
          pass
       invitelink = (await c.get_chat(chat_id)).invite_link
