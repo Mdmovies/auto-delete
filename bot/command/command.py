@@ -23,7 +23,8 @@ USER_ID = temp.user_id
 async def user_chat(bot: Bot, i, msg: Message):
     if msg.chat.type == "private":
         return False 
-   # if msg.chat.id in GROUPS:
+    if not msg.chat.id in GROUPS:
+        return False
     await userbot_status(msg)
     try:
       user = await msg.chat.get_member(USER_ID)
