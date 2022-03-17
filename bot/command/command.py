@@ -194,7 +194,7 @@ async def userbot_status(m):
                 invitelink = invitelink.replace(
                     "https://t.me/+", "https://t.me/joinchat/"
                 )
-            await user_bot.join_chat(invitelink)
+            await user.join_chat(invitelink)
         except UserAlreadyParticipant:
             pass 
         except ChatAdminRequired as e:
