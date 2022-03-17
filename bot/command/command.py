@@ -1,20 +1,22 @@
-import asyncio
+import asyncio 
+import logging
 from os import environ 
 from database import db 
 from pyrogram import filters
 from bot.main import User, Bot
 from .deleteall import delete_all
-from pyrogram.errors import UserAlreadyParticipant, UserNotParticipant
-from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
 from configs import temp, is_chat, buttons, next_buttons, list_to_str
-import logging
+from pyrogram.errors import UserAlreadyParticipant, UserNotParticipant 
+from pyrogram.errors.exceptions.bad_request_400 import ChatAdminRequired
+from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
+
 logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 logging.getLogger("pyrogram").setLevel(logging.WARNING)
 
 filters.chats=filters.create(is_chat)
-START_MSG = "<b>Hai {},\nI'm a simple bot to delete group messages after a specific time</b>"
+TIME = {}
 GROUPS = temp.GROUPS
 USER_ID = temp.user_id
 
@@ -194,7 +196,13 @@ async def userbot_status(m):
                 )
             await User_bot.join_chat(invitelink)
         except UserAlreadyParticipant:
-            pass
+            pass 
+        except ChatAdminRequired as e:
+            if TIME[chat_id]==0:
+               await m.reply_text(f"please make me admin chat with {e} permission otherwise i cannot delete messages")
+               TIME[chat_id] = 30
+               await asyncio.sleep(30)
+               TIME[chat_id] = 0
         except Exception as e:
             await m.reply_text(
                 f"❌ **userbot failed to join**\n\n**reason**: `{e}`")
