@@ -17,8 +17,7 @@ class temp(object):
    LOG_CHANNEL = int(environ.get("LOG_CHANNEL"))
 
 async def is_chat(_, bot, message: Message):
-    m = message 
-    bot = Bot
+    m = message
     text = message.text
     get = await db.get_settings(m.chat.id)
     if get["mode"]=="whitelist" and (await db.in_whitelist(m.chat.id, m.from_user.id)):
@@ -27,10 +26,6 @@ async def is_chat(_, bot, message: Message):
         return False 
     elif get["mode"]=="bots" and (m.from_user.is_bot):
         return False
-    if not get["admins"]:
-       st = await bot.get_chat_member(m.from.chat.id, m.from_user.id)
-       if (st.status=="administrator" or 'creator"):
-          return False
     if message.from_user.id == temp.bot_id:
        return False
     if not message.from_user.is_bot and not text is None and text.startswith("/"):
