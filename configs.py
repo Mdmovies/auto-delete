@@ -18,7 +18,7 @@ class temp(object):
 
 async def is_chat(_, bot, message: Message):
     m = message 
-    bot = .temp.Bot
+    bot = Bot
     text = message.text
     get = await db.get_settings(m.chat.id)
     if get["mode"]=="whitelist" and (await db.in_whitelist(m.chat.id, m.from_user.id):
