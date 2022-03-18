@@ -63,6 +63,10 @@ async def bot_client(bot, message):
 async def delete(bot, message):
     chat = message.chat.id
     data = await db.get_settings(chat)
+    if not data["admins"]:
+       st = await Bot.get_chat_member(chat, message.from_user.id)
+       if (st.status=="administrator" or st.status=="creator"):
+          return False
     try:
        time= data["time"]
        await asyncio.sleep(int(time))
@@ -90,7 +94,7 @@ async def withcmd(bot, message):
       k=await message.reply_text("your not group owner or admin")
       await asyncio.sleep(7)
       return await k.delete(True)
-   await message.reply_text("<b>change your group setting using below buttons</b>", reply_markup=await buttons(chat))
+   await message.reply_text("<b>Configure your group deletion setting using below buttons</b>", reply_markup=await buttons(chat))
   
 @Bot.on_callback_query(filters.regex(r"^done"))
 async def settings_query(bot, msg):
@@ -103,7 +107,7 @@ async def settings_query(bot, msg):
    if value=="True":
       await save_settings(group, type, False)
    elif type=="time":
-      return await msg.answer("To change time use /time\neg:- /time 100 in seconds")
+      return await msg.answer("To change deletion time use /time <time in seconds>\neg:- /time 100")
    elif value=="False":
       await save_settings(group, type, True)
    else:
