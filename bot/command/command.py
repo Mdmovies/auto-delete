@@ -120,7 +120,7 @@ async def settings_query2(bot, msg):
    if not (st.status == "creator") or (st.status == "administrator"):
       return await msg.answer("your not group owner or admin")
    if type=="1":
-       return await msg.message.edit_text(text="choose type of messages\n\n🗑️ - delete\n❌ - do not delete",reply_markup=await next_buttons(group))
+       return await msg.message.edit_text(text="choose type of messages which bot delete and not delete\n\n🗑️ - delete\n❌ - do not delete",reply_markup=await next_buttons(group))
    elif type=="2":
        return await msg.message.edit_text(text= "<b>change your group setting using below buttons</b>",reply_markup=await buttons(group))
    st = await bot.get_chat_member(group, "me")
@@ -199,12 +199,12 @@ async def userbot_status(m):
             await user.join_chat(invitelink)
         except UserAlreadyParticipant:
             pass 
-        except (ChatAdminInviteRequired, ChatAdminRequired) as e:
+        except (ChatAdminInviteRequired, ChatAdminRequired):
             time = TIME.get(chat_id)
             if not time:
-              TIME[chat_id] = 0
+              TIME[chat_id] and time = 0
             if time==0:
-               await m.reply_text(f"please make me admin chat with {e} permissions otherwise i cannot delete messages")
+               await m.reply_text(f"Please Make Me Admin in Group With 'invite user via link' and 'Delete messages' permissions otherwise i cannot delete messages")
                TIME[chat_id] = 30
                await asyncio.sleep(30)
                TIME[chat_id] = 0
