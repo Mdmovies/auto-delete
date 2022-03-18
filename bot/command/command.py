@@ -27,7 +27,7 @@ async def user_chat(bot: Bot, i, msg: Message):
         return False
     await userbot_status(msg)
     try:
-      user = await msg.chat.get_member(USER_ID)
+      user = await Bot.get_chat_member(msg.chat.id, USER_ID)
     except UserNotParticipant:
       return False
     return True
@@ -39,7 +39,7 @@ async def bot_chat(bot: Bot, i, msg: Message):
     if msg.chat.id in GROUPS:
        await userbot_status(msg)
     try:
-      user = await Bot.get_chat_member(m.chat.id, USER_ID)
+      user = await Bot.get_chat_member(msg.chat.id, USER_ID)
     except UserNotParticipant:
       return True
     return False
