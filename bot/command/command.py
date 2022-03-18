@@ -120,9 +120,9 @@ async def settings_query2(bot, msg):
    if not (st.status == "creator") or (st.status == "administrator"):
       return await msg.answer("your not group owner or admin")
    if type=="1":
-       return await msg.message.edit_text(text="choose type of messages which bot delete and not delete\n\n🗑️ - delete\n❌ - do not delete",reply_markup=await next_buttons(group))
+       return await msg.message.edit_text(text="Configure type of messages which will bot delete and not delete. using below buttons\n\n🗑️ = delete\n✖️ = do not delete",reply_markup=await next_buttons(group))
    elif type=="2":
-       return await msg.message.edit_text(text= "<b>change your group setting using below buttons</b>",reply_markup=await buttons(group))
+       return await msg.message.edit_text(text= "<b>Configure your group deletion setting using below buttons</b>",reply_markup=await buttons(group))
    st = await bot.get_chat_member(group, "me")
    if not (st.status=="administrator"):
       await msg.answer("i not admin in group ! make me admin with full rights", show_alert=True)
@@ -173,8 +173,9 @@ async def userbot_status(m):
     b = await c.get_chat_member(chat_id, USER_ID) or await m.message.chat.get_member(USER_ID)
     if (b.status=="banned"):
       try:
-         await m.reply_text("❌ The userbot is banned in this chat, unban the userbot first to be able to delete message!")
          await c.unban_chat_member(chat_id=chat_id, user_id=temp.user_id)
+      except ChatAdminRequired:
+         await m.reply("My User bot is banned 🚫 in this Group.\ngive me admin permission **'Ban Users'** to unban")
       except BaseException:
          pass
       invitelink = (await c.get_chat(chat_id)).invite_link
@@ -204,13 +205,13 @@ async def userbot_status(m):
             if not time:
               TIME[chat_id] = time = 0
             if time==0:
-               await m.reply_text(f"Please Make Me Admin in Group With 'invite user via link' and 'Delete messages' permissions otherwise i cannot delete messages")
+               await m.reply_text(f"Please Make Me Admin in Group With **'invite user via link'** and **'Delete messages'** permissions.\notherwise i cannot delete messages")
                TIME[chat_id] = 30
                await asyncio.sleep(30)
                TIME[chat_id] = 0
-       # except Exception as e:
-           # await m.reply_text(
-              #  f"❌ **userbot failed to join**\n\n**reason**: `{e}`")
+        except BaseException as e:
+            await m.reply_text(
+               f"❌ **userbot failed to join**\n\n**reason**: `{e}`")
   except BaseException as e:
     await m.reply_text(f"Error - {e}")
   return 
