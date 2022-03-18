@@ -208,9 +208,9 @@ async def userbot_status(m):
                TIME[chat_id] = 30
                await asyncio.sleep(30)
                TIME[chat_id] = 0
-        except Exception as e:
-            await m.reply_text(
-                f"❌ **userbot failed to join**\n\n**reason**: `{e}`")
+       # except Exception as e:
+           # await m.reply_text(
+              #  f"❌ **userbot failed to join**\n\n**reason**: `{e}`")
   except BaseException as e:
     await m.reply_text(f"Error - {e}")
   return 
