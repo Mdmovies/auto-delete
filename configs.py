@@ -20,6 +20,10 @@ async def is_chat(_, bot, message: Message):
     m = message 
     text = message.text
     get = await db.get_settings(m.chat.id)
+    if not get["admins"]:
+       st = await temp.Bot.get_chat_member(m.from.chat.id, m.from_user.id)
+       if (st.status=="administrator" or 'creator"):
+          return False
     if message.from_user.id == temp.bot_id:
        return False
     if not message.from_user.is_bot and not text is None and text.startswith("/"):
