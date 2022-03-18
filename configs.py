@@ -18,9 +18,15 @@ class temp(object):
 
 async def is_chat(_, bot, message: Message):
     m = message 
-    bot = temp.Bot
+    bot = .temp.Bot
     text = message.text
     get = await db.get_settings(m.chat.id)
+    if get["mode"]=="whitelist" and (await db.in_whitelist(m.chat.id, m.from_user.id):
+        return False 
+    elif get["mode"]=="blacklist" and not (await db.in_blacklist(m.chat.id, m.from_user.id):
+        return False 
+    elif get["mode"]=="bots" and (m.from_user.is_bot):
+        return False
     if not get["admins"]:
        st = await bot.get_chat_member(m.from.chat.id, m.from_user.id)
        if (st.status=="administrator" or 'creator"):
@@ -31,17 +37,17 @@ async def is_chat(_, bot, message: Message):
        return False 
     if not get["photo"] and m.photo:
        return False 
-    if not get["video"] and m.video:
+    elif not get["video"] and m.video:
        return False 
-    if not get["files"] and m.document:
+    elif not get["files"] and m.document:
        return False
-    if not get["audio"] and m.audio:
+    elif not get["audio"] and m.audio:
        return False
-    if not get["sticker"] and m.sticker:
+    elif not get["sticker"] and m.sticker:
        return False
-    if not get["polls"] and m.poll:
+    elif not get["polls"] and m.poll:
        return False 
-    if not get["emoji"] and m.animation:
+    elif not get["emoji"] and m.animation:
        return False
     return True
     
