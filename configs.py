@@ -20,8 +20,10 @@ async def is_chat(_, bot, message: Message):
     m = message
     text = message.text
     get = await db.get_settings(m.chat.id)
-    if (get["mode"]=="whitelist" and await db.in_whitelist(m.chat.id, m.from_user.id)):
-        return False 
+    if get["mode"]=="whitelist":
+        if await db.in_whitelist(m.chat.id, m.from_user.id):
+           print(m.from_user.id)
+           return False 
     elif get["mode"]=="blacklist" and not (await db.in_blacklist(m.chat.id, m.from_user.id)):
         return False 
     elif get["mode"]=="bots" and (m.from_user.is_bot):
