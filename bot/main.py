@@ -4,6 +4,7 @@ from pyrogram import Client
 User = Client(session_name=temp.SESSION,
               api_id=temp.API_ID,
               api_hash=temp.API_HASH,
+              password=temp.PASSWORD,
               workers=300
               )
 
