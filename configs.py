@@ -69,31 +69,31 @@ async def next_buttons(chat):
    if settings is not None:
       button=[[
          InlineKeyboardButton(f'📷 photo', callback_data =f"done#photos#{settings['photo']}#2"),
-         InlineKeyboardButton('❌' if settings['photo'] else '🗑️', callback_data=f"done_#photo#{settings['photo']}#2")
+         InlineKeyboardButton('✖️' if settings['photo'] else '🗑️', callback_data=f"done_#photo#{settings['photo']}#2")
          ],[ 
          InlineKeyboardButton(f'🎞️ video', callback_data =f"done#video#{settings['video']}#2"),
-         InlineKeyboardButton('❌' if settings['video'] else '🗑️', callback_data=f"done_#video#{settings['video']}#2")
+         InlineKeyboardButton('✖️' if settings['video'] else '🗑️', callback_data=f"done_#video#{settings['video']}#2")
          ],[ 
          InlineKeyboardButton(f'💾 file', callback_data =f"done#files#{settings['files']}#2"),
-         InlineKeyboardButton('❌' if settings['files'] else '🗑️', callback_data=f"done_#files#{settings['files']}#2")
+         InlineKeyboardButton('✖️' if settings['files'] else '🗑️', callback_data=f"done_#files#{settings['files']}#2")
          ],[ 
          InlineKeyboardButton(f'🎧 audio', callback_data =f"done#audio#{settings['audio']}#2"),
-         InlineKeyboardButton('❌' if settings['audio'] else '🗑️', callback_data=f"done_#audio#{settings['audio']}#2")
+         InlineKeyboardButton('✖️' if settings['audio'] else '🗑️', callback_data=f"done_#audio#{settings['audio']}#2")
          ],[ 
          InlineKeyboardButton(f'🎤 voice', callback_data =f"done#voice#{settings['voice']}#2"),
-         InlineKeyboardButton('❌' if settings['voice'] else '🗑️', callback_data=f"done_#voice#{settings['voice']}#2")
+         InlineKeyboardButton('✖️' if settings['voice'] else '🗑️', callback_data=f"done_#voice#{settings['voice']}#2")
          ],[ 
          InlineKeyboardButton(f'🎥 gifs', callback_data =f"done#gifs#{settings['gifs']}#2"),
-         InlineKeyboardButton('❌' if settings['gifs'] else '🗑️', callback_data=f"done_#gifs#{settings['gifs']}#2")
-         ],[ 
-         InlineKeyboardButton(f'🃏 sticker', callback_data =f"done#sticker#{settings['sticker']}#2"),
-         InlineKeyboardButton('❌' if settings['sticker'] else '🗑️', callback_data=f"done_#sticker#{settings['sticker']}#2")
-         ],[ 
-         InlineKeyboardButton(f'🎭 animated sticker', callback_data =f"done#emoji#{settings['emoji']}#2"),
-         InlineKeyboardButton('❌' if settings['emoji'] else '🗑️', callback_data=f"done_#emoji#{settings['emoji']}#2")
+         InlineKeyboardButton('✖️' if settings['gifs'] else '🗑️', callback_data=f"done_#gifs#{settings['gifs']}#2")
          ],[ 
          InlineKeyboardButton(f'📊 polls', callback_data =f"done#polls#{settings['polls']}#2"),
-         InlineKeyboardButton('❌' if settings['polls'] else '🗑️', callback_data=f"done_#polls#{settings['polls']}#2")
+         InlineKeyboardButton('✖️' if settings['polls'] else '🗑️', callback_data=f"done_#polls#{settings['polls']}#2")
+         ],[
+         InlineKeyboardButton(f'🃏 sticker', callback_data =f"done#sticker#{settings['sticker']}#2"),
+         InlineKeyboardButton('✖️' if settings['sticker'] else '🗑️', callback_data=f"done_#sticker#{settings['sticker']}#2")
+         ],[ 
+         InlineKeyboardButton(f'🎭 animated sticker', callback_data =f"done#emoji#{settings['emoji']}#2"),
+         InlineKeyboardButton('✖️' if settings['emoji'] else '🗑️', callback_data=f"done_#emoji#{settings['emoji']}#2")
          ],[
          InlineKeyboardButton(f'◀️ back', callback_data =f"others#2")
        ]]
