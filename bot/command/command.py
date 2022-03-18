@@ -202,7 +202,7 @@ async def userbot_status(m):
         except (ChatAdminInviteRequired, ChatAdminRequired):
             time = TIME.get(chat_id)
             if not time:
-              TIME[chat_id] and time = 0
+              TIME[chat_id] = time = 0
             if time==0:
                await m.reply_text(f"Please Make Me Admin in Group With 'invite user via link' and 'Delete messages' permissions otherwise i cannot delete messages")
                TIME[chat_id] = 30
