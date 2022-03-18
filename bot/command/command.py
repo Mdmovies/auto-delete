@@ -199,12 +199,12 @@ async def userbot_status(m):
             await user.join_chat(invitelink)
         except UserAlreadyParticipant:
             pass 
-        except (ChatAdminInviteRequired, ChatAdminRequired):
+        except (ChatAdminInviteRequired, ChatAdminRequired) as e:
             time = TIME.get(chat_id)
             if not time:
               TIME[chat_id] = 0
             if time==0:
-               await m.reply_text(f"please make me admin chat with all permissions otherwise i cannot delete messages")
+               await m.reply_text(f"please make me admin chat with {e} permissions otherwise i cannot delete messages")
                TIME[chat_id] = 30
                await asyncio.sleep(30)
                TIME[chat_id] = 0
