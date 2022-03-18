@@ -7,7 +7,7 @@ from bot.main import User, Bot
 from .deleteall import delete_all
 from configs import temp, is_chat, buttons, next_buttons, list_to_str
 from pyrogram.errors import UserAlreadyParticipant, UserNotParticipant 
-from pyrogram.errors.exceptions.bad_request_400 import ChatAdminRequired
+from pyrogram.errors.exceptions.bad_request_400 import ChatAdminRequired, Chat_admin_invite_required
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
 
 logging.basicConfig(level=logging.DEBUG,
@@ -199,7 +199,7 @@ async def userbot_status(m):
             await user.join_chat(invitelink)
         except UserAlreadyParticipant:
             pass 
-        except ChatAdminRequired:
+        except (Chat_admin_invite_required, ChatAdminRequired):
             time = TIME.get(chat_id)
             if not time:
               TIME[chat_id] = 0
