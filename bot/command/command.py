@@ -127,6 +127,9 @@ async def settings_query2(bot, msg):
        return await msg.message.edit_text(text="Configure type of messages which will bot delete and not delete. using below buttons\n\n🗑️ = delete\n✖️ = do not delete",reply_markup=await next_buttons(group))
    elif type=="2":
        return await msg.message.edit_text(text= "<b>Configure your group deletion setting using below buttons</b>",reply_markup=await buttons(group))
+   elif type=="3":
+       buttons = [[InlineKeyboardButton('✅ Confirm', callback_data="others#4")],[InlineKeyboardButton('❌ Cancel', callback_data="others#2")]]
+       return await msg.message.edit_text(text="**🗑️ Delete all messages**\n\npress **confirm** to Delete all messages in group or press **cancel** to cancel process", reply_markup=InlineKeyboardMarkup(buttons))
    st = await bot.get_chat_member(group, "me")
    if not (st.status=="administrator"):
       await msg.answer("i not admin in group ! make me admin with full rights", show_alert=True)
