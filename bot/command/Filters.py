@@ -11,7 +11,7 @@ async def whitelist(client, message):
   if not message.reply_to_message:
     if len(message.command) == 1:
       return await message.reply_text("give me a user id")
-    i, user_id = await message.text.split(None, 1)
+    user_id = message.command[1]
   else:
     user_id = message.reply_to_message.from_user.id
   try:
@@ -32,7 +32,7 @@ async def rwhitelist(client, message):
   if not message.reply_to_message:
     if len(message.command) == 1:
       return await message.reply_text("give me a user id")
-    i, user_id = await message.text.split(None, 1)
+    user_id = message.command[1]
   else:
     user_id = message.reply_to_message.from_user.id
   try:
@@ -53,7 +53,7 @@ async def blacklist(client, message):
   if not message.reply_to_message:
     if len(message.command) == 1:
       return await message.reply_text("give me a user id")
-    i, user_id = await message.text.split(None, 1)
+    user_id = message.command[1]
   else:
     user_id = message.reply_to_message.from_user.id
   try:
@@ -74,7 +74,7 @@ async def rblacklist(client, message):
   if not message.reply_to_message:
     if len(message.command) == 1:
       return await message.reply_text("give me a user id")
-    i, user_id = await message.text.split(None, 1)
+    user_id = message.command[1]
   else:
     user_id = message.reply_to_message.from_user.id
   try:
