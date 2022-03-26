@@ -226,6 +226,9 @@ async def userbot_status(m):
                f"❌ **userbot failed to join**\n\n**reason**: `{e}`")
   except PeerIdInvalid as e:
     logger.exception(e)
+    k=await m.reply_text("error occurred try to fixing")
+    await asyncio.sleep(0.5)
+    await k.delete()
     pass
   except BaseException as e:
     await m.reply_text(f"Error - {e}")
