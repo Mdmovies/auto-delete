@@ -3,18 +3,21 @@ from database import db
 from pyrogram import filters 
 from bot.main import Bot as Client
 from .command import save_settings 
+from pyrogram.errors.exceptions.bad_request_400 import PeerIdInvalid
 
 @Client.on_message(filters.command('whitelist') & filters.group)
 async def whitelist(client, message):
   chat = message.chat.id
   if not message.reply_to_message:
-    if message.text < 2:
+    if len(message.command) == 1:
       return await message.reply_text("give me a user id")
     i, user_id = await message.split(None, 1)
   else:
     user_id = message.reply_to_message.from_user.id
   try:
      user = await client.get_users(user_id)
+  except PeerIdInvalid:
+        return await message.reply("This is an invalid user")
   except Exception as e:
         return await message.reply(f'Error - {e}')
   add = await db.add_whitelist(user_id, chat)
@@ -27,13 +30,15 @@ async def whitelist(client, message):
 async def rwhitelist(client, message):
   chat = message.chat.id
   if not message.reply_to_message:
-    if message.text < 2:
+    if len(message.command) == 1:
       return await message.reply_text("give me a user id")
     i, user_id = await message.split(None, 1)
   else:
     user_id = message.reply_to_message.from_user.id
   try:
      user = await client.get_users(user_id)
+  except PeerIdInvalid:
+        return await message.reply("This is an invalid user")
   except Exception as e:
         return await message.reply(f'Error - {e}')
   add = await db.remove_whitelist(user_id, chat)
@@ -46,13 +51,15 @@ async def rwhitelist(client, message):
 async def blacklist(client, message):
   chat = message.chat.id
   if not message.reply_to_message:
-    if message.text < 2:
+    if len(message.command) == 1:
       return await message.reply_text("give me a user id")
     i, user_id = await message.split(None, 1)
   else:
     user_id = message.reply_to_message.from_user.id
   try:
      user = await client.get_users(user_id)
+  except PeerIdInvalid:
+        return await message.reply("This is an invalid user")
   except Exception as e:
         return await message.reply(f'Error - {e}')
   add = await db.add_blacklist(user_id, chat)
@@ -65,13 +72,15 @@ async def blacklist(client, message):
 async def rblacklist(client, message):
   chat = message.chat.id
   if not message.reply_to_message:
-    if message.text < 2:
+    if len(message.command) == 1:
       return await message.reply_text("give me a user id")
     i, user_id = await message.split(None, 1)
   else:
     user_id = message.reply_to_message.from_user.id
   try:
      user = await client.get_users(user_id)
+  except PeerIdInvalid:
+        return await message.reply("This is an invalid user")
   except Exception as e:
         return await message.reply(f'Error - {e}')
   add = await db.remove_blacklist(user_id, chat)
