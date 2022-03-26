@@ -228,7 +228,7 @@ async def userbot_status(m):
     k=await m.reply_text("🚫 error occurred try to fixing")
     await asyncio.sleep(0.1)
     await k.delete()
-    return await userbot_status(m)
+    pass
   except BaseException as e:
     await m.reply_text(f"Error - {e}")
   return 
