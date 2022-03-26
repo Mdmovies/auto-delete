@@ -5,7 +5,7 @@ from database import db
 from pyrogram import filters
 from bot.main import User, Bot
 from .deleteall import delete_all
-from configs import temp, is_chat, buttons, next_buttons, list_to_str
+from configs import temp, is_chat, buttons, next_buttons, list_to_str, buttons as back_button
 from pyrogram.errors import UserAlreadyParticipant, UserNotParticipant, ChatAdminInviteRequired
 from pyrogram.errors.exceptions.forbidden_403 import ChatAdminRequired 
 from pyrogram.errors.exceptions.bad_request_400 import PeerIdInvalid
@@ -116,7 +116,7 @@ async def settings_query(bot, msg):
    else:
       await save_settings(group, type, value)
    if k=="1":
-     return await msg.message.edit_reply_markup(reply_markup=await buttons(group))
+     return await msg.message.edit_reply_markup(reply_markup=await back_button(group))
    return await msg.message.edit_reply_markup(reply_markup=await next_buttons(group))
     
 @Bot.on_callback_query(filters.regex(r"^others"))
@@ -225,11 +225,10 @@ async def userbot_status(m):
             await m.reply_text(
                f"❌ **userbot failed to join**\n\n**reason**: `{e}`")
   except PeerIdInvalid as e:
-    logger.exception(e)
-    k=await m.reply_text("error occurred try to fixing")
-    await asyncio.sleep(0.5)
+    k=await m.reply_text("🚫 error occurred try to fixing")
+    await asyncio.sleep(0.1)
     await k.delete()
-    pass
+    return await userbot_status(m)
   except BaseException as e:
     await m.reply_text(f"Error - {e}")
   return 
