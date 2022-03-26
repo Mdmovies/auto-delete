@@ -7,7 +7,8 @@ from bot.main import User, Bot
 from .deleteall import delete_all
 from configs import temp, is_chat, buttons, next_buttons, list_to_str
 from pyrogram.errors import UserAlreadyParticipant, UserNotParticipant, ChatAdminInviteRequired
-from pyrogram.errors.exceptions.forbidden_403 import ChatAdminRequired
+from pyrogram.errors.exceptions.forbidden_403 import ChatAdminRequired 
+from pyrogram.errors.exceptions.bad_request_400 import PeerIdInvalid
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
 
 logging.basicConfig(level=logging.DEBUG,
@@ -223,6 +224,9 @@ async def userbot_status(m):
         except BaseException as e:
             await m.reply_text(
                f"❌ **userbot failed to join**\n\n**reason**: `{e}`")
+  except PeerIdInvalid as e:
+    logger.exception(e)
+    pass
   except BaseException as e:
     await m.reply_text(f"Error - {e}")
   return 
