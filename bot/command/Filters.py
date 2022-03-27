@@ -46,7 +46,18 @@ async def rwhitelist(client, message):
     await message.reply_text(f"{user.mention} not in whitelist")
   else:
     await message.reply_text(f"Successfully {user.mention} removed from whitelist")
-    
+
+@Client.on_message(filters.command('gwhitelist') & filters.group)
+async def get_all_whitelist(client, message):
+   chat = message.chat.id
+   msg = await message.reply_text("Processing.....")
+   users = await db.get_chat_whitelists(chat)
+   txt = "whitelisted users are\n\n"
+   async for user in users:
+         k = await client.get_users(user['user_id'])
+         txt+= f"{k.mention} [<code>{k.id}</code>]\n"
+   return await msg.edit(txt)
+  
 @Client.on_message(filters.command('blacklist') & filters.group)
 async def blacklist(client, message):
   chat = message.chat.id
@@ -88,6 +99,17 @@ async def rblacklist(client, message):
     await message.reply_text(f"{user.mention} not in blacklist")
   else:
     await message.reply_text(f"Successfully {user.mention} removed from blacklist") 
+
+@Client.on_message(filters.command('gblacklist') & filters.group)
+async def get_all_blacklist(client, message):
+   chat = message.chat.id
+   msg = await message.reply_text("Processing.....")
+   users = await db.get_chat_blacklists(chat)
+   txt = "blacklisted users are\n\n"
+   async for user in users:
+         k = await client.get_users(user['user_id'])
+         txt+= f"{k.mention} [<code>{k.id}</code>]\n"
+   return await msg.edit(txt)
 
 @Client.on_message(filters.command('time') & filters.group)
 async def time(client, message):
