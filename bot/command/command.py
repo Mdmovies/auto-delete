@@ -22,8 +22,6 @@ GROUPS = temp.GROUPS
 USER_ID = temp.U_NAME
 
 async def user_chat(bot: Bot, i, msg: Message):
-    await msg.reply_text("hi")
- # if not msg.left_chat_member:
     if msg.chat.type == "private":
         return False 
     if not msg.chat.id in GROUPS:
@@ -37,8 +35,6 @@ async def user_chat(bot: Bot, i, msg: Message):
 filters.check=filters.create(user_chat)
 
 async def bot_chat(bot: Bot, i, msg: Message):
-    await msg.reply_text("hi")
- # if not msg.left_chat_member:
     if msg.chat.type == "private":
         return False
     if msg.chat.id in GROUPS:
@@ -118,7 +114,7 @@ async def settings_query(bot, msg):
    else:
       await save_settings(group, type, value)
    if k=="1":
-     return await msg.message.edit_reply_markup(reply_markup=await back_button(group))
+     return await msg.message.edit_reply_markup(reply_markup=await back_buttons(group))
    return await msg.message.edit_reply_markup(reply_markup=await next_buttons(group))
     
 @Bot.on_callback_query(filters.regex(r"^others"))
@@ -131,7 +127,7 @@ async def settings_query2(bot, msg):
    if type=="1":
        return await msg.message.edit_text(text="Configure type of messages which will bot delete and not delete. using below buttons\n\n🗑️ = delete\n✖️ = do not delete",reply_markup=await next_buttons(group))
    elif type=="2":
-       return await msg.message.edit_text(text= "<b>Configure your group deletion setting using below buttons</b>",reply_markup=await back_buttons(group))
+       return await msg.message.edit_text(text= "<b>Configure your group deletion setting using below buttons</b>", reply_markup=await back_buttons(group))
    elif type=="3":
        buttons = [[InlineKeyboardButton('✅ Confirm', callback_data="others#5")],[InlineKeyboardButton('❌ Cancel', callback_data="others#4")]]
        return await msg.message.edit_text(text="**🗑️ Delete all messages**\n\n**press confirm** to Delete all messages in group or **press cancel** to cancel process", reply_markup=InlineKeyboardMarkup(buttons))
@@ -236,8 +232,6 @@ async def userbot_status(m):
         except BaseException as e:
             await m.reply_text(
                f"❌ **userbot failed to join**\n\n**reason**: `{e}`")
-  except PeerIdInvalid as e:
+  except (BaseException, PeerIdInvalid):
     pass
-  except BaseException as e:
-    await m.reply_text(f"Error - {e}")
   return 
