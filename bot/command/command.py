@@ -22,7 +22,7 @@ GROUPS = temp.GROUPS
 USER_ID = temp.U_NAME
 
 async def user_chat(bot: Bot, i, msg: Message):
-    await m.reply_text("hi")
+    await msg..reply_text("hi")
  # if not msg.left_chat_member:
     if msg.chat.type == "private":
         return False 
@@ -37,7 +37,7 @@ async def user_chat(bot: Bot, i, msg: Message):
 filters.check=filters.create(user_chat)
 
 async def bot_chat(bot: Bot, i, msg: Message):
-    await m.reply_text("hi")
+    await msg.reply_text("hi")
  # if not msg.left_chat_member:
     if msg.chat.type == "private":
         return False
