@@ -155,11 +155,11 @@ async def bot_kicked(c: Bot, m: Message):
     left_member = m.left_chat_member
     if left_member.id == temp.bot_id:
         await db.remove_served_chat(chat_id)
-        await c.send_message(temp.LOG_CHANNEL, f"#Removed_Serve_Chat:\n**CHAT** - {m.chat.title} [<code>{m.chat.id}</code>]")
+        await c.send_message(temp.LOG_CHANNEL, f"#Removed_Serve_Chat :\n**CHAT** - {m.chat.title} [<code>{m.chat.id}</code>]")
         try:
           await User.leave_chat(chat_id)
-        except UserNotParticipant:
-          pass 
+        except (UserNotParticipant, PeerIdInvalid):
+          pass
         except Exception as e:
           await c.send_message(temp.LOG_CHANNEL, f"**ERROR WHEN USER LEAVE FROM CHAT **({chat_id})\n\n<code>{e}</code>")
         chats = await db.get_served_chats()
@@ -173,13 +173,13 @@ async def new_chat(c: Bot, m):
         pass
     else:
         await db.add_served_chat(chat_id)
-        await c.send_message(temp.LOG_CHANNEL, f"#New_Serve_Chat:\n**CHAT** - {m.chat.title} [<code>{m.chat.id}</code>]")
+        await c.send_message(temp.LOG_CHANNEL, f"#New_Serve_Chat :\n**CHAT** - {m.chat.title} [<code>{m.chat.id}</code>]")
         chats = await db.get_served_chats()
         temp.GROUPS = chats 
         await userbot_status(m)
     if await db.add_chat(m.chat.id, m.chat.title):
         total=await c.get_chat_members_count(m.chat.id)
-        await c.send_message(temp.LOG_CHANNEL, "#New_Group:\n**Title** - {}\n**ID** - {}\n**Total members** - {}\n**Added by** - {}".format(m.chat.title, m.chat.id, total, "Unknown"))
+        await c.send_message(temp.LOG_CHANNEL, "#New_Group :\n**Title** - {} [<code>{}</code>]\n**Total members** - {}\n**Added by** - {}".format(m.chat.title, m.chat.id, total, "Unknown"))
         await userbot_status(m) 
     return
 
