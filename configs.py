@@ -113,7 +113,7 @@ async def next_buttons(chat):
    return InlineKeyboardMarkup(button)
 
 async def verify_users(_,__, m: Message):
-   st = await m.chat.get_chat_member(m.from_user.id)
+   st = await m.chat.get_member(m.from_user.id)
    if chat.type == "private":
       return False
    if not (st.status == "creator") or (st.status == "administrator"):
