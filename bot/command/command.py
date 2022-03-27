@@ -22,6 +22,7 @@ GROUPS = temp.GROUPS
 USER_ID = temp.U_NAME
 
 async def user_chat(bot: Bot, i, msg: Message):
+  if not m.left_chat_member and not temp.bot_id in [u.id for u in m.new_chat_members]:
     if msg.chat.type == "private":
         return False 
     if not msg.chat.id in GROUPS:
