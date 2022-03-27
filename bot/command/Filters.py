@@ -1,6 +1,6 @@
 import asyncio 
 from database import db 
-from config import verify
+from configs import verify
 from pyrogram import filters 
 from bot.main import Bot as Client
 from .command import save_settings 
