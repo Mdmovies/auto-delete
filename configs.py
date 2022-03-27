@@ -22,8 +22,10 @@ async def is_chat(_, bot, message: Message):
     m = message
     text = message.text
     get = await db.get_settings(m.chat.id)
+    if not get['auto_delete']:
+        return False
     if get["mode"]=="whitelist" and await db.in_whitelist(m.from_user.id, m.chat.id):
-          return False 
+        return False 
     elif get["mode"]=="blacklist" and not (await db.in_blacklist(m.from_user.id, m.chat.id)):
         return False 
     elif get["mode"]=="bots" and m.from_user.is_bot:
@@ -57,7 +59,7 @@ async def buttons(chat):
    elif settings["mode"] =="delete":
       mode, text = "whitelist", "Except whitelisted"
    elif settings["mode"] =="blacklist":
-      mode, text = "bots", "Except 🤖 Bots"
+      mode, text = "bots", "Except Bots 🤖"
    if settings is not None:
       button=[[
          InlineKeyboardButton(f'Auto delete 🗑️', callback_data =f"done#auto_delete#{settings['auto_delete']}#1"), InlineKeyboardButton('OFF ❌' if settings['auto_delete'] else 'ON ✅', callback_data=f"done_#auto_delete#{settings['auto_delete']}#1")
