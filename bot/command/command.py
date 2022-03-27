@@ -53,13 +53,11 @@ async def starts(bot, message):
    
 @User.on_message(filters.check & filters.chat(GROUPS) & filters.chats)#& ~filters.service_filter)#filters.text & filters.group & filters.incoming & filters.chats)
 async def user_client(bot, message):
-    await message.reply_text("hi")
     await delete(bot, message)
     return 
     
 @Bot.on_message(filters.checks & filters.chat(GROUPS) & filters.chats)# & ~filters.service_filter)
 async def bot_client(bot, message):
-    await message.reply_text("hi")
     await delete(bot, message)
     return 
     
@@ -218,6 +216,8 @@ async def userbot_status(m):
             await user.join_chat(invitelink)
         except UserAlreadyParticipant:
             pass 
+        except PeerIdInvalid as e:
+            return False
         except (ChatAdminInviteRequired, ChatAdminRequired):
             time = TIME.get(chat_id)
             if not time:
@@ -231,9 +231,6 @@ async def userbot_status(m):
             await m.reply_text(
                f"❌ **userbot failed to join**\n\n**reason**: `{e}`")
   except PeerIdInvalid as e:
-    k=await m.reply_text("🚫 error occurred try to fixing")
-    await asyncio.sleep(0.5)
-    await k.delete()
     pass
   except BaseException as e:
     await m.reply_text(f"Error - {e}")
