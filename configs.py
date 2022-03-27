@@ -111,13 +111,15 @@ async def next_buttons(chat):
        ]]
    return InlineKeyboardMarkup(button)
 
-async def verfiy_users(_,__, m: Message):
+async def verify_users(_,__, m: Message):
    st = await m.chat.get_chat_member(m.from_user.id)
    if chat.type == "private":
       return False
    if not (st.status == "creator") or (st.status == "administrator"):
       return False 
    return True 
+
+verify = filters.create(verify_users)
 
 def list_to_str(k):
     if not k:
