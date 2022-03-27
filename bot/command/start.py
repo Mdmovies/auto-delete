@@ -6,7 +6,7 @@ from pyrogram import filters
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 START_MSG = "Hi {},\nI am a **auto delete bot** to delete messages from **bot and users** in your group after a specific time. just add me to your group and make me admin with full permissions.\nconfigure me in group using /settings\n\n**For know more press help button**"
-buttons = [[InlineKeyboardButton('➕ Add Me To Your Groups ➕', url=f'http://t.me/{temp.B_NAME}?startgroup=true')],[InlineKeyboardButton('ℹ️ Help', callback_data='help'),InlineKeyboardButton('📢 update channel', callback_data='help')]]
+buttons = [[InlineKeyboardButton('➕ Add Me To Your Groups ➕', url=f'http://t.me/{temp.B_NAME}?startgroup=true')],[InlineKeyboardButton('ℹ️ Help', callback_data='help'),InlineKeyboardButton('📢 update channel', url='https://t.me/venombotupdates')]]
 
 @Bot.on_message(filters.command('start') & filters.private)
 async def start(bot, cmd):
@@ -26,4 +26,4 @@ async def back(bot, query):
 
 @Bot.on_message(filters.command('createownbot') & filters.private)
 async def create(bot, msg):
-    await msg.reply_text("Contact [Owner](https://t.me/mdadmin2) to create your own auto delete bot")
+    await msg.reply_text("Contact [Owner](https://t.me/mdadmin2) to create your own **auto delete bot**")
