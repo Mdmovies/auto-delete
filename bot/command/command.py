@@ -131,10 +131,10 @@ async def settings_query2(bot, msg):
    elif type=="2":
        return await msg.message.edit_text(text= "<b>Configure your group deletion setting using below buttons</b>",reply_markup=await back_buttons(group))
    elif type=="3":
-       buttons = [[InlineKeyboardButton('✅ Confirm', callback_data="others#4")],[InlineKeyboardButton('❌ Cancel', callback_data="others#4")]]
+       buttons = [[InlineKeyboardButton('✅ Confirm', callback_data="others#5")],[InlineKeyboardButton('❌ Cancel', callback_data="others#4")]]
        return await msg.message.edit_text(text="**🗑️ Delete all messages**\n\n**press confirm** to Delete all messages in group or **press cancel** to cancel process", reply_markup=InlineKeyboardMarkup(buttons))
    elif type=="4":
-        await msg.message.delete()
+       return await msg.message.delete()
    st = await bot.get_chat_member(group, "me")
    if not (st.status=="administrator"):
       await msg.answer("i not admin in group ! make me admin with full rights", show_alert=True)
@@ -161,7 +161,7 @@ async def bot_kicked(c: Bot, m: Message):
         except UserNotParticipant:
           pass 
         except Exception as e:
-          await c.send_message(temp.LOG_CHANNEL, f"**ERROR WHEN USER LEAVE FROM CHAT **({chat_id})\n\n<code>{e}</code>"
+          await c.send_message(temp.LOG_CHANNEL, f"**ERROR WHEN USER LEAVE FROM CHAT **({chat_id})\n\n<code>{e}</code>")
         chats = await db.get_served_chats()
         temp.GROUPS = chats
     return 
