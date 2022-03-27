@@ -54,6 +54,7 @@ async def get_all_whitelist(client, message):
    users = await db.get_chat_whitelists(chat)
    txt = "whitelisted users are\n\n"
    async for user in users:
+         await msg.edit(user["user_id"])
          k = await client.get_users(user['user_id'])
          txt+= f"{k.mention} [<code>{k.id}</code>]\n"
    return await msg.edit(txt)
