@@ -67,7 +67,7 @@ class Database:
         default = {
             "auto_delete": True,
             "delete": True,
-            "admins": False,
+            "admins": True,
             "files": False,
             "link": False,
             "time": 1600,
