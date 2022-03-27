@@ -1,10 +1,12 @@
 import asyncio 
 from database import db 
-from configs import verify
 from pyrogram import filters 
+from configs import verify_users 
 from bot.main import Bot as Client
 from .command import save_settings 
-from pyrogram.errors.exceptions.bad_request_400 import PeerIdInvalid
+from pyrogram.errors.exceptions.bad_request_400 import PeerIdInvalid 
+
+verify = filters.create(verify_users)
 
 @Client.on_message(filters.command('whitelist') & verify)
 async def whitelist(client, message):
