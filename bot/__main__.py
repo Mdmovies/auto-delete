@@ -18,6 +18,7 @@ async def start():
    await User.start()
    me = await User.get_me()
    temp.user_id = me.id
+   temp.U_NAME = me.username
    logging.info(f" User bot ({me.username}) started")
    await Bot.start()
    me = await Bot.get_me()
