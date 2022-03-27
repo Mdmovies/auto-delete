@@ -8,7 +8,7 @@ from .deleteall import delete_all
 from configs import temp, is_chat, buttons, next_buttons, list_to_str, buttons as back_button
 from pyrogram.errors import UserAlreadyParticipant, UserNotParticipant, ChatAdminInviteRequired
 from pyrogram.errors.exceptions.forbidden_403 import ChatAdminRequired 
-from pyrogram.errors.exceptions.bad_request_400 import PeerIdInvalid
+from pyrogram.errors.exceptions.bad_request_400 import PeerIdInvalid, UserNotParticipant as UserNotMember
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
 
 logging.basicConfig(level=logging.DEBUG,
@@ -203,6 +203,8 @@ async def userbot_status(m):
                     "https://t.me/+", "https://t.me/joinchat/"
                 )
           await user.join_chat(invitelink)
+  except UserNotMember:
+    pass
   except UserNotParticipant:
         try:
             invitelink = (await c.get_chat(chat_id)).invite_link
