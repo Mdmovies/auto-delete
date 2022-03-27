@@ -129,7 +129,7 @@ async def settings_query2(bot, msg):
    if type=="1":
        return await msg.message.edit_text(text="Configure type of messages which will bot delete and not delete. using below buttons\n\n🗑️ = delete\n✖️ = do not delete",reply_markup=await next_buttons(group))
    elif type=="2":
-       return await msg.message.edit_text(text= "<b>Configure your group deletion setting using below buttons</b>",reply_markup=await buttons(group))
+       return await msg.message.edit_text(text= "<b>Configure your group deletion setting using below buttons</b>",reply_markup=await back_buttons(group))
    elif type=="3":
        buttons = [[InlineKeyboardButton('✅ Confirm', callback_data="others#4")],[InlineKeyboardButton('❌ Cancel', callback_data="others#4")]]
        return await msg.message.edit_text(text="**🗑️ Delete all messages**\n\n**press confirm** to Delete all messages in group or **press cancel** to cancel process", reply_markup=InlineKeyboardMarkup(buttons))
@@ -155,8 +155,13 @@ async def bot_kicked(c: Bot, m: Message):
     left_member = m.left_chat_member
     if left_member.id == temp.bot_id:
         await db.remove_served_chat(chat_id)
-        await c.send_message(temp.LOG_CHANNEL, f"#removed_serve_chat:\nTitle - {m.chat.title}\nId - {m.chat.id}")
-        await asyncio.sleep(5)
+        await c.send_message(temp.LOG_CHANNEL, f"#Removed_Serve_Chat:\n**CHAT** - {m.chat.title} [<code>{m.chat.id}</code>]")
+        try:
+          await User.leave_chat(chat_id)
+        except UserNotParticipant:
+          pass 
+        except Exception as e:
+          await c.send_message(temp.LOG_CHANNEL, f"**ERROR WHEN USER LEAVE FROM CHAT **({chat_id})\n\n<code>{e}</code>"
         chats = await db.get_served_chats()
         temp.GROUPS = chats
     return 
@@ -168,14 +173,15 @@ async def new_chat(c: Bot, m):
         pass
     else:
         await db.add_served_chat(chat_id)
-        await c.send_message(temp.LOG_CHANNEL, f"#NEW_SERVE_CHAT:\nTitle - {m.chat.title}\nId - {m.chat.id}")
+        await c.send_message(temp.LOG_CHANNEL, f"#New_Serve_Chat:\n**CHAT** - {m.chat.title} [<code>{m.chat.id}</code>]")
         chats = await db.get_served_chats()
-        temp.GROUPS = chats
+        temp.GROUPS = chats 
+        await userbot_status(m)
     if await db.add_chat(m.chat.id, m.chat.title):
-       total=await c.get_chat_members_count(m.chat.id)
-       await c.send_message(temp.LOG_CHANNEL, f"#new group:\nTitle - {m.chat.title}\nId - {m.chat.id}\nTotal members - {total} added by - None")
-       await userbot_status(m)
-    return await m.reply(f"welcome to {m.chat.title}")
+        total=await c.get_chat_members_count(m.chat.id)
+        await c.send_message(temp.LOG_CHANNEL, f"#New_Group:\n**Title** - {}\n**ID** - {}\n**Total members** - {}\n**Added by** - {}".format(m.chat.title, m.chat.id, total, "Unknown"))
+        await userbot_status(m)
+    return
 
 async def userbot_status(m):
   c = Bot 
