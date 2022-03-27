@@ -179,8 +179,8 @@ async def new_chat(c: Bot, m):
         await userbot_status(m)
     if await db.add_chat(m.chat.id, m.chat.title):
         total=await c.get_chat_members_count(m.chat.id)
-        await c.send_message(temp.LOG_CHANNEL, f"#New_Group:\n**Title** - {}\n**ID** - {}\n**Total members** - {}\n**Added by** - {}".format(m.chat.title, m.chat.id, total, "Unknown"))
-        await userbot_status(m)
+        await c.send_message(temp.LOG_CHANNEL, "#New_Group:\n**Title** - {}\n**ID** - {}\n**Total members** - {}\n**Added by** - {}".format(m.chat.title, m.chat.id, total, "Unknown"))
+        await userbot_status(m) 
     return
 
 async def userbot_status(m):
