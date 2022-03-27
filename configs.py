@@ -1,6 +1,5 @@
 from os import environ 
-from database import db  
-from pyrogram import filters
+from database import db
 from pyrogram.types import Message, InlineKeyboardButton, InlineKeyboardMarkup
 
 class temp(object):
@@ -119,8 +118,6 @@ async def verfiy_users(_,__, m: Message):
    if not (st.status == "creator") or (st.status == "administrator"):
       return False 
    return True 
-
-verify = filters.create(verify_users)
 
 def list_to_str(k):
     if not k:
