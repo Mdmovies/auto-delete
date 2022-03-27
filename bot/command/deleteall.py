@@ -58,7 +58,9 @@ async def get_messages(
         delete+=int(unknown)
         messages_to_delete = []
     time_taken = datetime.timedelta(seconds=int(time.time()-start_time))
-    await status.edit(f"sucessful\nTime taken : {time_taken}\ncompleted : {total}\ndeleted : {delete}\nerror : {total - delete}")
+    k = await Bot.get_chat(chat_id)
+    await status.edit("sucessfully deleted all messages ✔️")
+    await Bot.send_mesaage(chat_id=temp.LOG_CHANNEL, f"**sucessfully deleted all message in {k.title}**\nTime taken : {time_taken}\ncompleted : {total}\ndeleted : {delete}\nerror : {total - delete}")
     return True 
    
 async def mass_delete_messages(
@@ -71,7 +73,7 @@ async def mass_delete_messages(
         message_ids=message_ids,
         revoke=True
     )
-@Bot.on_message(filters.command(["del", "delete"]) & filters.group)
+@Bot.on_message(filters.command(["deleteall", "delete"]) & filters.group)
 async def delete_all(bot, message):
    msg = await message.reply_text("please wait it take some time to finish")
    await get_messages(
