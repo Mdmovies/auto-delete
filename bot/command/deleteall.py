@@ -1,7 +1,8 @@
 import time
 import asyncio 
-import datetime 
-from typing import List
+import datetime
+from typing import List 
+from configs import temp
 from pyrogram import filters 
 from bot.main import User, Bot
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
@@ -59,7 +60,7 @@ async def get_messages(
     time_taken = datetime.timedelta(seconds=int(time.time()-start_time))
     k = await Bot.get_chat(chat_id)
     await status.edit("sucessfully deleted all messages ✔️")
-    await Bot.send_message(chat_id=temp.LOG_CHANNEL, f"**sucessfully deleted all message in {k.title}**\nTime taken : {time_taken}\ncompleted : {total}\ndeleted : {delete}\nerror : {total - delete}")
+    await Bot.send_message(temp.LOG_CHANNEL, f"**sucessfully deleted all message in {k.title}**\nTime taken : {time_taken}\ncompleted : {total}\ndeleted : {delete}\nerror : {total - delete}")
     return True 
    
 async def mass_delete_messages(
