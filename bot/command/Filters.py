@@ -53,10 +53,13 @@ async def get_all_whitelist(client, message):
    chat = message.chat.id
    msg = await message.reply_text("Processing.....")
    users = await db.get_chat_whitelists(chat)
-   txt = "**whitelisted users are**\n\n"
-   async for user in users:
+   txt = "**whitelisted users are :-**\n\n"
+   if users:
+      async for user in users:
          k = await client.get_users(user['user_id'])
          txt+= f"<a href=tg://user?id={k.id}>{k.first_name}</a>\n"
+   else:
+      txt = "**No Whitelisted users in this Group**"
    return await msg.edit(txt)
   
 @Client.on_message(filters.command('blacklist') & verify)
@@ -106,10 +109,13 @@ async def get_all_blacklist(client, message):
    chat = message.chat.id
    msg = await message.reply_text("Processing.....")
    users = await db.get_chat_blacklists(chat)
-   txt = "**blacklisted users are**\n\n"
-   async for user in users:
+   txt = "**blacklisted users are :-**\n\n"
+   if users:
+      async for user in users:
          k = await client.get_users(user['user_id'])
          txt+= f"<a href=tg://user?id={k.id}>{k.first_name}</a>\n"
+   else:
+      txt = "**No Blacklisted users in this Group**"
    return await msg.edit(txt)
 
 @Client.on_message(filters.command('time') & verify)
