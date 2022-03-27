@@ -47,7 +47,6 @@ async def get_messages(
             )
             delete+=int(feched)
             messages_to_delete = []
-            await status.edit(f"completed : {total}\ndeleted : {delete}\nerror : {total - delete}")
     unknown = len(messages_to_delete)
     if unknown > TG_MIN_SEL_MESG:
         await mass_delete_messages(
@@ -60,7 +59,7 @@ async def get_messages(
     time_taken = datetime.timedelta(seconds=int(time.time()-start_time))
     k = await Bot.get_chat(chat_id)
     await status.edit("sucessfully deleted all messages ✔️")
-    await Bot.send_mesaage(chat_id=temp.LOG_CHANNEL, f"**sucessfully deleted all message in {k.title}**\nTime taken : {time_taken}\ncompleted : {total}\ndeleted : {delete}\nerror : {total - delete}")
+    await Bot.send_message(chat_id=temp.LOG_CHANNEL, f"**sucessfully deleted all message in {k.title}**\nTime taken : {time_taken}\ncompleted : {total}\ndeleted : {delete}\nerror : {total - delete}")
     return True 
    
 async def mass_delete_messages(
