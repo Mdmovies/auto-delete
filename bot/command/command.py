@@ -127,7 +127,7 @@ async def settings_query2(bot, msg):
    if type=="1":
        return await msg.message.edit_text(text="Configure type of messages which will bot delete and not delete. using below buttons\n\n🗑️ = delete\n✖️ = do not delete",reply_markup=await next_buttons(group))
    elif type=="2":
-       return await msg.message.edit_text(text= "<b>Configure your group deletion setting using below buttons</b>", reply_markup=await back_buttons(group))
+       return await msg.message.edit_text(text= "<b>Configure your group deletion setting using below buttons</b>", reply_markup= await back_buttons(group))
    elif type=="3":
        buttons = [[InlineKeyboardButton('✅ Confirm', callback_data="others#5")],[InlineKeyboardButton('❌ Cancel', callback_data="others#4")]]
        return await msg.message.edit_text(text="**🗑️ Delete all messages**\n\n**press confirm** to Delete all messages in group or **press cancel** to cancel process", reply_markup=InlineKeyboardMarkup(buttons))
