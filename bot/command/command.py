@@ -19,7 +19,7 @@ logging.getLogger("pyrogram").setLevel(logging.WARNING)
 filters.chats=filters.create(is_chat)
 TIME = {}
 GROUPS = temp.GROUPS
-USER_ID = temp.user_id
+USER_ID = temp.U_NAME
 
 async def user_chat(bot: Bot, i, msg: Message):
     if msg.chat.type == "private":
