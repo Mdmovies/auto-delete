@@ -22,7 +22,8 @@ GROUPS = temp.GROUPS
 USER_ID = temp.U_NAME
 
 async def user_chat(bot: Bot, i, msg: Message):
-  if not msg.left_chat_member:
+    await m.reply_text("hi")
+ # if not msg.left_chat_member:
     if msg.chat.type == "private":
         return False 
     if not msg.chat.id in GROUPS:
@@ -36,6 +37,7 @@ async def user_chat(bot: Bot, i, msg: Message):
 filters.check=filters.create(user_chat)
 
 async def bot_chat(bot: Bot, i, msg: Message):
+    await m.reply_text("hi")
  # if not msg.left_chat_member:
     if msg.chat.type == "private":
         return False
@@ -205,8 +207,8 @@ async def userbot_status(m):
                     "https://t.me/+", "https://t.me/joinchat/"
                 )
           await user.join_chat(invitelink)
-  except UserNotMember:
-    pass
+  #except UserNotMember:
+ #   pass
   except UserNotParticipant:
         try:
             invitelink = (await c.get_chat(chat_id)).invite_link
