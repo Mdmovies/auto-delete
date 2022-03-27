@@ -1,11 +1,12 @@
 import asyncio 
 from database import db 
+from config import verify
 from pyrogram import filters 
 from bot.main import Bot as Client
 from .command import save_settings 
 from pyrogram.errors.exceptions.bad_request_400 import PeerIdInvalid
 
-@Client.on_message(filters.command('whitelist') & filters.group)
+@Client.on_message(filters.command('whitelist') & verify)
 async def whitelist(client, message):
   chat = message.chat.id
   if not message.reply_to_message:
@@ -26,7 +27,7 @@ async def whitelist(client, message):
   else:
     await message.reply_text(f"Successfully Added {user.mention} to whitelist")
     
-@Client.on_message(filters.command('rwhitelist') & filters.group)
+@Client.on_message(filters.command('rwhitelist') & verify)
 async def rwhitelist(client, message):
   chat = message.chat.id
   if not message.reply_to_message:
@@ -47,19 +48,18 @@ async def rwhitelist(client, message):
   else:
     await message.reply_text(f"Successfully {user.mention} removed from whitelist")
 
-@Client.on_message(filters.command('gwhitelist') & filters.group)
+@Client.on_message(filters.command('gwhitelist') & verify)
 async def get_all_whitelist(client, message):
    chat = message.chat.id
    msg = await message.reply_text("Processing.....")
    users = await db.get_chat_whitelists(chat)
-   txt = "whitelisted users are\n\n"
+   txt = "**whitelisted users are**\n\n"
    async for user in users:
-         await msg.edit(user["user_id"])
          k = await client.get_users(user['user_id'])
-         txt+= f"{k.mention} [<code>{k.id}</code>]\n"
+         txt+= f"<a href=tg://user?id={k.id}>{k.first_name}</a>\n"
    return await msg.edit(txt)
   
-@Client.on_message(filters.command('blacklist') & filters.group)
+@Client.on_message(filters.command('blacklist') & verify)
 async def blacklist(client, message):
   chat = message.chat.id
   if not message.reply_to_message:
@@ -80,7 +80,7 @@ async def blacklist(client, message):
   else:
     await message.reply_text(f"Successfully {user.mention} Added to blacklist")
     
-@Client.on_message(filters.command('rblacklist') & filters.group)
+@Client.on_message(filters.command('rblacklist') & verify)
 async def rblacklist(client, message):
   chat = message.chat.id
   if not message.reply_to_message:
@@ -101,18 +101,18 @@ async def rblacklist(client, message):
   else:
     await message.reply_text(f"Successfully {user.mention} removed from blacklist") 
 
-@Client.on_message(filters.command('gblacklist') & filters.group)
+@Client.on_message(filters.command('gblacklist') & verify)
 async def get_all_blacklist(client, message):
    chat = message.chat.id
    msg = await message.reply_text("Processing.....")
    users = await db.get_chat_blacklists(chat)
-   txt = "blacklisted users are\n\n"
+   txt = "**blacklisted users are**\n\n"
    async for user in users:
          k = await client.get_users(user['user_id'])
-         txt+= f"{k.mention} [<code>{k.id}</code>]\n"
+         txt+= f"<a href=tg://user?id={k.id}>{k.first_name}</a>\n"
    return await msg.edit(txt)
 
-@Client.on_message(filters.command('time') & filters.group)
+@Client.on_message(filters.command('time') & verify)
 async def time(client, message):
   chat = message.chat.id
   if len(message.command) == 1:
