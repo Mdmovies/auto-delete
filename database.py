@@ -133,6 +133,9 @@ class Database:
          return False
        return await self.wht.delete_one({"chat_id": chat_id, "user_id": user})
     
+    async def get_chat_whitelists(self, chat_id: int):
+        return self.wht.find({"chat_id": chat_id})
+    
     async def in_blacklist(self, user: int, chat: int) -> bool:
        chat = await self.blk.find_one({"chat_id": chat, "user_id": user})
        if not chat:
@@ -150,5 +153,8 @@ class Database:
        if not is_served:
          return False
        return await self.blk.delete_one({"chat_id": chat_id, "user_id": user})
+    
+    async def get_chat_blacklists(self, chat_id: int):
+        return self.blk.find({"chat_id": chat_id})
     
 db= Database(DATABASE, "auto-delete-bot")
