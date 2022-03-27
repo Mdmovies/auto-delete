@@ -36,6 +36,7 @@ async def user_chat(bot: Bot, i, msg: Message):
 filters.check=filters.create(user_chat)
 
 async def bot_chat(bot: Bot, i, msg: Message):
+  if not m.left_chat_member and not temp.bot_id in [u.id for u in m.new_chat_members]:
     if msg.chat.type == "private":
         return False
     if msg.chat.id in GROUPS:
