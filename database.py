@@ -70,7 +70,7 @@ class Database:
             "admins": True,
             "files": False,
             "link": False,
-            "time": 1600,
+            "time": 1800,
             "mode": "delete",
             "bots": True,
             "gifs": True,
