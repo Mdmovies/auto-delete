@@ -6,10 +6,10 @@ from pyrogram import filters
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 START_MSG = "Hi {},\nI am a **auto delete bot** to delete messages from **bot and users** in your group after a specific time. just add me to your group and make me admin with full permissions.\nconfigure me in group using /settings\n\n**For know more press help button**"
-buttons = [[InlineKeyboardButton('➕ Add Me To Your Groups ➕', url=f'http://t.me/{temp.B_NAME}?startgroup=true')],[InlineKeyboardButton('ℹ️ Help', callback_data='help'),InlineKeyboardButton('📢 update channel', url='https://t.me/venombotupdates')]]
-
+  
 @Bot.on_message(filters.command('start') & filters.private)
 async def start(bot, cmd):
+    buttons = [[InlineKeyboardButton('➕ Add Me To Your Groups ➕', url=f'http://t.me/{temp.B_NAME}?startgroup=true')],[InlineKeyboardButton('ℹ️ Help', callback_data='help'),InlineKeyboardButton('📢 update channel', url='https://t.me/venombotupdates')]]
     await cmd.reply(START_MSG.format(cmd.from_user.mention), reply_markup = InlineKeyboardMarkup(buttons))
     if await db.add_user(cmd.from_user.id, cmd.from_user.first_name):
         await bot.send_message(temp.LOG_CHANNEL, f"#NEWUSER: \nName - [{cmd.from_user.first_name}](tg://user?id={cmd.from_user.id})\nID - {cmd.from_user.id}")
@@ -22,6 +22,7 @@ async def help(bot, query):
     
 @Bot.on_callback_query(filters.regex(r"^back"))
 async def back(bot, query):
+    buttons = [[InlineKeyboardButton('➕ Add Me To Your Groups ➕', url=f'http://t.me/{temp.B_NAME}?startgroup=true')],[InlineKeyboardButton('ℹ️ Help', callback_data='help'),InlineKeyboardButton('📢 update channel', url='https://t.me/venombotupdates')]]
     await query.message.edit_text(START_MSG.format(query.from_user.mention), reply_markup = InlineKeyboardMarkup(buttons))
 
 @Bot.on_message(filters.command('createownbot') & filters.private)
