@@ -4,7 +4,8 @@ import time_formatter
 from database import db 
 from configs import temp 
 from bot.main import Bot 
-from pyrogram import filters
+from pyrogram import filters 
+from Mdmovies import time_formatter
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 start_time = time.time()
