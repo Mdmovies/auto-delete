@@ -8,7 +8,7 @@ from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 start_time = time.time()
 BUTTON = [[InlineKeyboardButton("◀ back", callback_data="back")]]
-START_MSG = "Hi {},\nI am a **auto delete bot** to delete messages from **bot and users** in your group after a specific time. just add me to your group and make me admin with full permissions.\nconfigure me in group using /settings\n\n**For know more press help button**"
+START_MSG = "Hi {},\nI am a **auto delete bot** to delete messages from **bot and users** in your group after a specific time **(default 5 min)**. just add me to your group and make me admin with full permissions.\nconfigure me in group using /settings\n\n**For know more press help button**"
 ABOUT_TXT = """
 ╔════❰ ᴍᴅ ғɪʟᴇ sᴛᴏʀᴇ ʙᴏᴛ ❱═❍⊱❁۪۪
 ║╭━━━━━━━━━━━━━━━➣
