@@ -1,5 +1,6 @@
 import time
 import asyncio 
+import time_formatter
 from database import db 
 from configs import temp 
 from bot.main import Bot 
@@ -56,12 +57,3 @@ async def bot_stats(bot, msg):
     total_srv_chats = await db.total_served_chat()
     await rju.edit(f"★ Total users: <code>{total_users}</code>\n★ Total chats: <code>{total_chats}</code>\n★ Total served chats: <code>{total_srv_chats}</code>")
                                      
-def time_formatter(seconds: float) -> str:
-    minutes, seconds = divmod(int(seconds),60)
-    hours, minutes = divmod(minutes, 60)
-    days, hours = divmod(hours, 24)
-    tmp = ((str(days) + "d, ") if days else "") + \
-        ((str(hours) + "h, ") if hours else "") + \
-        ((str(minutes) + "m, ") if minutes else "") + \
-        ((str(seconds) + "s") if seconds else "")
-    return tmp 
