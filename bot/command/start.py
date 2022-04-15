@@ -12,7 +12,7 @@ START_MSG = "Hi {},\nI am a **auto delete bot** to delete messages from **bot an
 ABOUT_TXT = """
 ╔════❰ ᴍᴅ ғɪʟᴇ sᴛᴏʀᴇ ʙᴏᴛ ❱═❍⊱❁۪۪
 ║╭━━━━━━━━━━━━━━━➣
-║┣⪼📃ʙᴏᴛ : [ᴍᴅ ғɪʟᴇ sᴛᴏʀᴇ ʙᴏᴛ](https://t.me/{})
+║┣⪼📃ʙᴏᴛ : [ᴀᴜᴛᴏ ᴅᴇʟᴇᴛᴇ ʙᴏᴛ](https://t.me/{})
 ║┣⪼👦ᴄʀᴇᴀᴛᴏʀ : [ᴍᴅᴀᴅᴍɪɴ](https://t.me/mdadmin2)
 ║┣⪼📡ʜᴏsᴛᴇᴅ ᴏɴ : ʜᴇʀᴏᴋᴜ
 ║┣⪼🗣️ʟᴀɴɢᴜᴀɢᴇ : ᴘʏᴛʜᴏɴ3
@@ -46,7 +46,7 @@ async def create(bot, msg):
 
 @Bot.on_message(filters.command('about') & filters.private)
 async def about(bot, msg):
-   await msg.reply_text(text=ABOUT_TXT.format(temp.B_NAME, time_formatter(time.time() - start_uptime)), reply_markup=InlineKeyboardMarkup(BUTTON))
+   await msg.reply_text(text=ABOUT_TXT.format(temp.B_NAME, time_formatter(time.time() - start_time)), reply_markup=InlineKeyboardMarkup(BUTTON))
     
 @Bot.on_message(filters.command('stats') & filters.private)
 async def bot_stats(bot, msg):
