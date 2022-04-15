@@ -34,11 +34,7 @@ async def start(bot, cmd):
 async def help(bot, query):
     HELP = "Add me to your group and make me admin with full permissions. use /settings to configure me in group\n\n**🗣️ Available commands :-**\n<code>/deleteall - To delete all messages in chat\n/Time - set deletion time\n/whitelist - To add users to whitelist\n/rwhitelist - To remove users from whitelist\n/blacklist - To add users to blacklist\n/rblacklist - to remove users from blacklist</code>\n\n**Four Deletion Mode Available.**\n**1. All messages** - delete all message after specific time\n**2. Except whitelist** - All messages except those messages from whitelisted users will be deleted.\n**3. blacklisted users** - only delete messages from blacklisted users\n**4. Except Bots** - All messages except those messages from bot will be deleted \n\n/createownbot - To create your own bot (paid 300₹)"
     await query.message.edit_text(text=HELP, reply_markup = InlineKeyboardMarkup(BUTTON))
-  
-@Bot.on_callback_query(filters.regex(r"^about"))
-async def about(bot, query):
-   await query.message.edit_text(text=ABOUT_TXT.format(temp.B_NAME, time_formatter(time.time() - start_uptime)), reply_markup=InlineKeyboardMarkup(BUTTON))
-    
+ 
 @Bot.on_callback_query(filters.regex(r"^back"))
 async def back(bot, query):
     buttons = [[InlineKeyboardButton('➕ Add Me To Your Groups ➕', url=f'http://t.me/{temp.B_NAME}?startgroup=true')],[InlineKeyboardButton('ℹ️ Help', callback_data='help'),InlineKeyboardButton('📢 update channel', url='https://t.me/venombotupdates')]]
@@ -48,12 +44,16 @@ async def back(bot, query):
 async def create(bot, msg):
     await msg.reply_text("Contact [Owner](https://t.me/mdadmin2) to create your own **auto delete bot**")
 
+@Bot.on_message(filters.command('about') & filters.private)
+async def about(bot, msg):
+   await msg.reply_text(text=ABOUT_TXT.format(temp.B_NAME, time_formatter(time.time() - start_uptime)), reply_markup=InlineKeyboardMarkup(BUTTON))
+    
 @Bot.on_message(filters.command('stats') & filters.private)
 async def bot_stats(bot, msg):
-    rju = await message.reply('Fetching stats..')
+    rju = await msg.reply('Fetching stats..')
     total_users = await db.total_users_count()
     total_chats = await db.total_chat_count()
-    total_srv_chats = await db.total_served_chat_count()
+    total_srv_chats = await db.total_served_chat()
     await rju.edit(f"★ Total users: <code>{total_users}</code>\n★ Total chats: <code>{total_chats}</code>\n★ Total served chats: <code>{total_srv_chats}</code>")
                                      
 def time_formatter(seconds: float) -> str:
