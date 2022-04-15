@@ -1,5 +1,5 @@
+git+https://github.com/hockbhmv/Mdthings  
 pyrogram
 Tgcrypto
 pymongo[srv]
 motor
-Mdthings
