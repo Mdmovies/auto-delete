@@ -18,10 +18,10 @@ async def whitelist(client, message):
     user_id = message.reply_to_message.from_user.id
   try:
      user = await client.get_users(user_id)
+  except PeerIdInvalid:
+     return await message.reply("This is an invalid user")
   except IndexError:
      chats = await client.get_chat(user_id)
-  except PeerIdInvalid:
-        return await message.reply("This is an invalid user")
   except Exception as e:
         return await message.reply(f'Error - {e}')
   add = await db.add_whitelist(user_id, chat)
