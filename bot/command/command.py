@@ -7,7 +7,7 @@ from bot.main import User, Bot
 from .deleteall import delete_all
 from configs import temp, is_chat, buttons, next_buttons, list_to_str, buttons as back_buttons
 from pyrogram.errors import UserAlreadyParticipant, UserNotParticipant, ChatAdminInviteRequired
-from pyrogram.errors.exceptions.forbidden_403 import ChatAdminRequired, Message_Delete_Forbidden
+from pyrogram.errors.exceptions.forbidden_403 import ChatAdminRequired, MessageDeleteForbidden
 from pyrogram.errors.exceptions.bad_request_400 import PeerIdInvalid, UserNotParticipant as UserNotMember
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
 
@@ -72,7 +72,7 @@ async def delete(bot, message):
        time= data["time"]
        await asyncio.sleep(int(time))
        await Bot.delete_messages(chat, message.message_id)
-    except Message_Delete_Forbidden:
+    except MessageDeleteForbidden:
        return await Bot.send_message(chat, "please give me **Delete messages** permission to delete messages", parse_mode="md", reply_to_message_id=message.message_id)
     except Exception as e:
        logger.warning(e)
