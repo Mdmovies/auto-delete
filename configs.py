@@ -17,6 +17,7 @@ class temp(object):
    BOT_TOKEN = environ.get("BOT_TOKEN")
    SESSION = environ.get("SESSION")
    PASSWORD = environ.get("PASSWORD", None)
+   ADMINS = int(environ.get("ADMINS", "0"))
    LOG_CHANNEL = int(environ.get("LOG_CHANNEL"))
 
 async def is_chat(_, bot, message: Message):
