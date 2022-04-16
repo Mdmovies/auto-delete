@@ -8,6 +8,7 @@ from pyrogram.errors.exceptions.bad_request_400 import PeerIdInvalid
 
 @Client.on_message(filters.command('whitelist') & verify)
 async def whitelist(client, message):
+  chats = False
   chat = message.chat.id
   if not message.reply_to_message:
     if len(message.command) == 1:
@@ -17,15 +18,17 @@ async def whitelist(client, message):
     user_id = message.reply_to_message.from_user.id
   try:
      user = await client.get_users(user_id)
+  except IndexError:
+     chats = await client.get_chat(user_id)
   except PeerIdInvalid:
         return await message.reply("This is an invalid user")
   except Exception as e:
         return await message.reply(f'Error - {e}')
   add = await db.add_whitelist(user_id, chat)
   if not add:
-    await message.reply_text(f"{user.mention} already in whitelist")
+    await message.reply_text(f"{chats.first_name if chats else user.mention} already in whitelist")
   else:
-    await message.reply_text(f"Successfully Added {user.mention} to whitelist")
+    await message.reply_text(f"Successfully Added {chats.first_name if chats else user.mention} to whitelist")
     
 @Client.on_message(filters.command('rwhitelist') & verify)
 async def rwhitelist(client, message):
