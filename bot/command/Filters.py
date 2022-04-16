@@ -16,7 +16,7 @@ async def whitelist(client, message):
       return await message.reply_text("give me a user id")
     user_id = message.command[1]
   else:
-    user_id = replied.sender_chat.id if replied sender_chat else replied.from_user.id
+    user_id = replied.sender_chat.id if replied.sender_chat else replied.from_user.id
   try:
      user = await client.get_users(user_id)
   except PeerIdInvalid:
