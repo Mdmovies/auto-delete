@@ -52,9 +52,9 @@ async def get_messages(
     unknown = len(messages_to_delete)
     if unknown > TG_MIN_SEL_MESG:
         await mass_delete_messages(
-            Bot,
-            chat_id,
-            messages_to_delete
+           Bot,
+           chat_id,
+           messages_to_delete
         )
         delete+=int(unknown)
         messages_to_delete = []
@@ -69,18 +69,18 @@ async def mass_delete_messages(
     chat_id: int,
     message_ids: List[int]
 ):
-    try:
-      await client.delete_messages(
-         chat_id=chat_id,
-         message_ids=message_ids,
-         revoke=True)
-    except MessageDeleteForbidden:
-      await client.send_message(chat_id, "please give me admin permission **Delete messages** to delete messages")
-    return
-
+    return await client.delete_messages(
+            chat_id=chat_id,
+            message_ids=message_ids,
+            revoke=True)
+    
 @Bot.on_message(filters.command(["deleteall", "delete"]) & filters.group)
 async def delete_all(bot, message):
    msg = await message.reply_text("please wait it take some time to finish")
+   try:
+     await message.delete()
+   except MessageDeleteForbidden:
+     return await msg.edit("please give me admin permission **Delete messages** to delete messages")
    await get_messages(
         bot,
         message.chat.id,
