@@ -8,28 +8,27 @@ from pyrogram.errors.exceptions.bad_request_400 import PeerIdInvalid
 
 @Client.on_message(filters.command('whitelist') & verify)
 async def whitelist(client, message):
-  chats = False
   chat = message.chat.id
-  replied = message.reply_to_message
-  if not replied:
+  reply = message.reply_to_message
+  if not reply:
     if len(message.command) == 1:
       return await message.reply_text("give me a user id")
     user_id = message.command[1]
   else:
-    user_id = replied.sender_chat.id if replied.sender_chat else replied.from_user.id
+    user_id = reply.sender_chat.id if reply.sender_chat else reply.from_user.id
   try:
      user = await client.get_users(user_id)
   except PeerIdInvalid:
      return await message.reply("This is an invalid user")
   except IndexError:
-     chats=True
+     pass
   except Exception as e:
-        return await message.reply(f'Error - {e}')
+     return await message.reply(f'Error - {e}')
   add = await db.add_whitelist(user_id, chat)
   if not add:
-    await message.reply_text(f"{replied.sender_chat.first_name if chats else user.mention} already in whitelist")
+    await message.reply_text(f"{reply.sender_chat.title if reply.sender_chat else user.mention} already in whitelist")
   else:
-    await message.reply_text(f"Successfully Added {replied.sender_chat.first_name if chats else user.mention} to whitelist")
+    await message.reply_text(f"Successfully Added {reply.sender_chat.title if reply.sender_chat else user.mention} to whitelist")
     
 @Client.on_message(filters.command('rwhitelist') & verify)
 async def rwhitelist(client, message):
