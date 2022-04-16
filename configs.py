@@ -26,6 +26,7 @@ async def is_chat(_, bot, message: Message):
     chat = message.sender_chat
     if chat:
         await message.reply_text("channel detected")
+        return True
     user_id = chat.id if chat else message.from_user.id 
     if not get['auto_delete']:
         return False
