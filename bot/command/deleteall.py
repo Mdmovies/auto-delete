@@ -6,6 +6,7 @@ from configs import temp
 from pyrogram import filters 
 from bot.main import User, Bot
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
+from pyrogram.errors.exceptions.forbidden_403 import MessageDeleteForbidden
 
 TG_MAX_SEL_MESG = 99
 TG_MIN_SEL_MESG = 0
@@ -68,11 +69,15 @@ async def mass_delete_messages(
     chat_id: int,
     message_ids: List[int]
 ):
-    return await client.delete_messages(
-        chat_id=chat_id,
-        message_ids=message_ids,
-        revoke=True
-    )
+    try:
+      await client.delete_messages(
+         chat_id=chat_id,
+         message_ids=message_ids,
+         revoke=True)
+    except MessageDeleteForbidden:
+      await client.send_message(chat_id, "please give me admin permission **Delete messages** to delete messages")
+    return
+
 @Bot.on_message(filters.command(["deleteall", "delete"]) & filters.group)
 async def delete_all(bot, message):
    msg = await message.reply_text("please wait it take some time to finish")
