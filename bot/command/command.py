@@ -7,7 +7,7 @@ from bot.main import User, Bot
 from .deleteall import delete_all
 from configs import temp, is_chat, buttons, next_buttons, list_to_str, buttons as back_buttons
 from pyrogram.errors import UserAlreadyParticipant, UserNotParticipant, ChatAdminInviteRequired
-from pyrogram.errors.exceptions.forbidden_403 import ChatAdminRequired 
+from pyrogram.errors.exceptions.forbidden_403 import ChatAdminRequired, Message_Delete_Forbidden
 from pyrogram.errors.exceptions.bad_request_400 import PeerIdInvalid, UserNotParticipant as UserNotMember
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
 
@@ -72,13 +72,16 @@ async def delete(bot, message):
        time= data["time"]
        await asyncio.sleep(int(time))
        await Bot.delete_messages(chat, message.message_id)
+    except Message_Delete_Forbidden:
+       return await Bot.send_message(chat, "please give me **Delete messages** permission to delete messages", parse_mode="md", reply_to_message_id=message.message_id)
     except Exception as e:
        logger.warning(e)
         
 @Bot.on_message(filters.command("refresh") & filters.group)
 async def refresh_db(bot, message):
-   st = await bot.get_chat_member(message.chat.id, message.from_user.id)
-   if not (st.status == "creator") or (st.status == "administrator") or (str(message.from_user.id) == str(temp.user_id)):
+   user_id = message.from_user.id if message.from_user else 0
+   st = await bot.get_chat_member(message.chat.id, user_id)
+   if not (st.status == "creator") or (st.status == "administrator") or (str(user_id) in [temp.user_id]):
       k=await message.reply_text("your not group owner or admin")
       await asyncio.sleep(7)
       return await k.delete(True)
@@ -88,10 +91,10 @@ async def refresh_db(bot, message):
   
 @Bot.on_message(filters.command("settings") & filters.group)
 async def withcmd(bot, message):
+   user_id = message.from_user.id if message.from_user else 0                                                                  
    chat = message.chat.id
-   user = message.from_user.id
-   st = await bot.get_chat_member(chat, user)
-   if not (st.status == "creator") or (st.status == "administrator") or (str(message.from_user.id) == str(temp.user_id)):
+   st = await bot.get_chat_member(chat, user_id)
+   if not (st.status == "creator") or (st.status == "administrator") or (str(user_id) in [temp.user_id]):
       k=await message.reply_text("your not group owner or admin")
       await asyncio.sleep(7)
       return await k.delete(True)
@@ -101,8 +104,9 @@ async def withcmd(bot, message):
 async def settings_query(bot, msg):
    int, type, value, k = msg.data.split('#')
    group = msg.message.chat.id
-   st = await bot.get_chat_member(group, msg.from_user.id)
-   if not (st.status == "creator") or (st.status == "administrator") or (str(message.from_user.id) == str(temp.user_id)):
+   user_id = msg.from_user.id if msg.from_user else 0                                                            
+   st = await bot.get_chat_member(group, user_id)
+   if not (st.status == "creator") or (st.status == "administrator") or (str(user_id) in [temp.user_id]):
       return await msg.answer("your not group owner or admin")
       
    if value=="True":
@@ -121,7 +125,8 @@ async def settings_query(bot, msg):
 async def settings_query2(bot, msg):
    int, type= msg.data.split('#')
    group = msg.message.chat.id
-   st = await bot.get_chat_member(group, msg.from_user.id)
+   user_id = msg.from_user.id if msg.from_user else 0                                                          
+   st = await bot.get_chat_member(group, user_id)
    if not (st.status == "creator") or (st.status == "administrator") or (str(message.from_user.id) == str(temp.user_id)):
       return await msg.answer("your not group owner or admin")
    if type=="1":
@@ -135,7 +140,7 @@ async def settings_query2(bot, msg):
        return await msg.message.delete()
    st = await bot.get_chat_member(group, "me")
    if not (st.status=="administrator"):
-      await msg.answer("i not admin in group ! make me admin with full rights", show_alert=True)
+      return await msg.answer("i not admin in group ! make me admin with full rights", show_alert=True)
    await msg.answer("processing...", show_alert=True)
    await delete_all(bot, msg.message)
    return
@@ -172,8 +177,7 @@ async def new_chat(c: Bot, m):
     else:
         await db.add_served_chat(chat_id)
         await c.send_message(temp.LOG_CHANNEL, f"#New_Serve_Chat :\n**CHAT** - {m.chat.title} [<code>{m.chat.id}</code>]")
-    if temp.user_id in [u.id for u in m.new_chat_members]:
-       await m.reply("checking")
+    if temp.bot_id in [u.id for u in m.new_chat_members]:
        chats = await db.get_served_chats()
        temp.GROUPS = chats 
        await userbot_status(m)
