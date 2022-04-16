@@ -24,9 +24,6 @@ async def is_chat(_, bot, message: Message):
     text = message.text
     get = await db.get_settings(m.chat.id)
     chat = message.sender_chat
-    if chat:
-        await message.reply_text("channel detected")
-       # return True
     user_id = chat.id if chat else message.from_user.id 
     if not get['auto_delete']:
         return False
@@ -41,7 +38,6 @@ async def is_chat(_, bot, message: Message):
           return False
        elif not message.from_user.is_bot and not text is None and text.startswith("/"):
           return False 
-    await message.reply_text("passed")
     if not get["photo"] and m.photo:
        return False 
     elif not get["video"] and m.video:
