@@ -26,7 +26,7 @@ async def is_chat(_, bot, message: Message):
     chat = message.sender_chat
     if chat:
         await message.reply_text("channel detected")
-        return True
+       # return True
     user_id = chat.id if chat else message.from_user.id 
     if not get['auto_delete']:
         return False
@@ -34,12 +34,14 @@ async def is_chat(_, bot, message: Message):
         return False 
     elif get["mode"]=="blacklist" and not (await db.in_blacklist(user_id, m.chat.id)):
         return False 
-    elif not chat and get["mode"]=="bots" and m.from_user.is_bot:
-        return False
-    if user_id == temp.bot_id:
-       return False
-    if not chat and not message.from_user.is_bot and not text is None and text.startswith("/"):
-       return False 
+    if not chat:
+       if get["mode"]=="bots" and m.from_user.is_bot:
+          return False
+       elif user_id == temp.bot_id:
+          return False
+       elif not message.from_user.is_bot and not text is None and text.startswith("/"):
+          return False 
+    await message.reply_text("passed")
     if not get["photo"] and m.photo:
        return False 
     elif not get["video"] and m.video:
