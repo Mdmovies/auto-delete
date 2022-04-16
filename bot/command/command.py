@@ -78,7 +78,7 @@ async def delete(bot, message):
 @Bot.on_message(filters.command("refresh") & filters.group)
 async def refresh_db(bot, message):
    st = await bot.get_chat_member(message.chat.id, message.from_user.id)
-   if not (st.status == "creator") or (st.status == "administrator") or (message.from_user.id == temp.user_id):
+   if not (st.status == "creator") or (st.status == "administrator") or (str(message.from_user.id) == str(temp.user_id)):
       k=await message.reply_text("your not group owner or admin")
       await asyncio.sleep(7)
       return await k.delete(True)
@@ -91,7 +91,7 @@ async def withcmd(bot, message):
    chat = message.chat.id
    user = message.from_user.id
    st = await bot.get_chat_member(chat, user)
-   if not (st.status == "creator") or (st.status == "administrator") or (message.from_user.id == temp.user_id):
+   if not (st.status == "creator") or (st.status == "administrator") or (str(message.from_user.id) == str(temp.user_id)):
       k=await message.reply_text("your not group owner or admin")
       await asyncio.sleep(7)
       return await k.delete(True)
@@ -102,7 +102,7 @@ async def settings_query(bot, msg):
    int, type, value, k = msg.data.split('#')
    group = msg.message.chat.id
    st = await bot.get_chat_member(group, msg.from_user.id)
-   if not (st.status == "creator") or (st.status == "administrator") or (message.from_user.id == temp.user_id):
+   if not (st.status == "creator") or (st.status == "administrator") or (str(message.from_user.id) == str(temp.user_id)):
       return await msg.answer("your not group owner or admin")
       
    if value=="True":
@@ -122,7 +122,7 @@ async def settings_query2(bot, msg):
    int, type= msg.data.split('#')
    group = msg.message.chat.id
    st = await bot.get_chat_member(group, msg.from_user.id)
-   if not (st.status == "creator") or (st.status == "administrator") or (message.from_user.id == temp.user_id):
+   if not (st.status == "creator") or (st.status == "administrator") or (str(message.from_user.id) == str(temp.user_id)):
       return await msg.answer("your not group owner or admin")
    if type=="1":
        return await msg.message.edit_text(text="Configure type of messages which will bot delete and not delete. using below buttons\n\n🗑️ = delete\n✖️ = do not delete",reply_markup=await next_buttons(group))
@@ -172,9 +172,11 @@ async def new_chat(c: Bot, m):
     else:
         await db.add_served_chat(chat_id)
         await c.send_message(temp.LOG_CHANNEL, f"#New_Serve_Chat :\n**CHAT** - {m.chat.title} [<code>{m.chat.id}</code>]")
-        chats = await db.get_served_chats()
-        temp.GROUPS = chats 
-        await userbot_status(m)
+    if temp.user_id in [u.id for u in m.new_chat_members]:
+       await m.reply("checking")
+       chats = await db.get_served_chats()
+       temp.GROUPS = chats 
+       await userbot_status(m)
     if await db.add_chat(m.chat.id, m.chat.title):
         total=await c.get_chat_members_count(m.chat.id)
         await c.send_message(temp.LOG_CHANNEL, "#New_Group :\n**Title** - {} [<code>{}</code>]\n**Total members** - {}\n**Added by** - {}".format(m.chat.title, m.chat.id, total, "Unknown"))
