@@ -10,7 +10,7 @@ from pyrogram.errors.exceptions.bad_request_400 import PeerIdInvalid
 async def whitelist(client, message):
   chat_type = message.chat.type
   if chat_type == "private":
-     chat_id = await db.get_user_connection(message.from_user.id)
+     chat_id = await db.get_user_connection(str(message.from_user.id))
      if not chat_id:
         return await message.reply_text("I'm not connected to any groups!", quote=True)
   else:
@@ -40,7 +40,7 @@ async def whitelist(client, message):
 async def rwhitelist(client, message):
   chat_type = message.chat.type
   if chat_type == "private":
-     chat_id = await db.get_user_connection(message.from_user.id)
+     chat_id = await db.get_user_connection(str(message.from_user.id))
      if not chat_id:
         return await message.reply_text("I'm not connected to any groups!", quote=True)
   else:
@@ -70,7 +70,7 @@ async def rwhitelist(client, message):
 async def get_all_whitelist(client, message):
   chat_type = message.chat.type
   if chat_type == "private":
-     chat_id = await db.get_user_connection(message.from_user.id)
+     chat_id = await db.get_user_connection(str(message.from_user.id))
      if not chat_id:
         return await message.reply_text("I'm not connected to any groups!", quote=True)
   else:
@@ -93,7 +93,7 @@ async def get_all_whitelist(client, message):
 async def blacklist(client, message):
   chat_type = message.chat.type
   if chat_type == "private":
-     chat_id = await db.get_user_connection(message.from_user.id)
+     chat_id = await db.get_user_connection(str(message.from_user.id))
      if not chat_id:
         return await message.reply_text("I'm not connected to any groups!", quote=True)
   else:
@@ -123,7 +123,7 @@ async def blacklist(client, message):
 async def rblacklist(client, message):
   chat_type = message.chat.type
   if chat_type == "private":
-     chat_id = await db.get_user_connection(message.from_user.id)
+     chat_id = await db.get_user_connection(str(message.from_user.id))
      if not chat_id:
         return await message.reply_text("I'm not connected to any groups!", quote=True)
   else:
@@ -153,7 +153,7 @@ async def rblacklist(client, message):
 async def get_all_blacklist(client, message):
   chat_type = message.chat.type
   if chat_type == "private":
-     chat_id = await db.get_user_connection(message.from_user.id)
+     chat_id = await db.get_user_connection(str(message.from_user.id))
      if not chat_id:
         return await message.reply_text("I'm not connected to any groups!", quote=True)
   else:
@@ -176,7 +176,7 @@ async def get_all_blacklist(client, message):
 async def time(client, message):
   chat_type = message.chat.type
   if chat_type == "private":
-     chat_id = await db.get_user_connection(message.from_user.id)
+     chat_id = await db.get_user_connection(str(message.from_user.id))
      if not chat_id:
         return await message.reply_text("I'm not connected to any groups!", quote=True)
   else:
