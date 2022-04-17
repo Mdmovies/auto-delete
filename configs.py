@@ -128,8 +128,7 @@ async def save_settings(group, key, value):
   current[key] = value 
   temp.SETTINGS[group] = current
   await db.update_settings(group, current)
-  return
-
+  
 async def verify_users(_,__, m: Message):
    if m.chat.type != "private":
      user = m.from_user.id if m.from_user else None
