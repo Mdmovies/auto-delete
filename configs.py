@@ -117,16 +117,16 @@ async def next_buttons(chat):
    return InlineKeyboardMarkup(button)
 
 async def get_settings(group):
-  settings = temp.SETTINGS.get(group)
+  settings = temp.SETTINGS.get(int(group))
   if not settings:
      settings = await db.get_settings(group)
-     temp.SETTINGS[group] = settings 
+     temp.SETTINGS[int(group)] = settings 
   return settings
 
 async def save_settings(group, key, value):
-  current = await get_settings(group)
+  current = await get_settings(int(group))
   current[key] = value 
-  temp.SETTINGS[group] = current
+  temp.SETTINGS[int(group)] = current
   await db.update_settings(group, current)
   
 async def verify_users(_,__, m: Message):
