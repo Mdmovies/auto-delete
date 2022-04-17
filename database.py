@@ -13,6 +13,7 @@ class Database:
         self.srv = self.db.chats
         self.wht = self.db.whitelist
         self.blk = self.db.blacklist
+        self.con = self.db.connection
         
     def new_user(self, id, name):
         return dict(
@@ -117,9 +118,7 @@ class Database:
     
     async def in_whitelist(self, user: int, chat: int) -> bool:
        chat = await self.wht.find_one({"chat_id": chat, "user_id": user})
-       if not chat:
-           return False
-       return True 
+       return bool(chat)
     
     async def add_whitelist(self, user:int, chat_id: int):
        is_served = await self.in_whitelist(user, chat_id)
@@ -138,9 +137,7 @@ class Database:
     
     async def in_blacklist(self, user: int, chat: int) -> bool:
        chat = await self.blk.find_one({"chat_id": chat, "user_id": user})
-       if not chat:
-           return False
-       return True 
+       return bool(chat)
     
     async def add_blacklist(self, user:int, chat_id: int):
        is_served = await self.in_blacklist(user, chat_id)
@@ -155,6 +152,25 @@ class Database:
        return await self.blk.delete_one({"chat_id": chat_id, "user_id": user})
     
     async def get_chat_blacklists(self, chat_id: int):
-        return self.blk.find({"chat_id": chat_id})
+       return self.blk.find({"chat_id": chat_id})
+    
+    async def in_connection(self, user: int, chat: int) -> bool:
+       chat = await self.con.find_one({"chat_id": chat, "user_id": user})
+       return bool(chat)
+    
+    async def add_connection(self, user:int, chat_id: int):
+       is_served = await self.in_connection(user, chat_id)
+       if is_served:
+         return False
+       return await self.con.insert_one({"chat_id": chat_id, "user_id": user})
+    
+    async def remove_connection(self, user:int, chat_id: int):
+       is_served = await self.in_connection(user, chat_id)
+       if not is_served:
+         return False
+       return await self.con.delete_one({"chat_id": chat_id, "user_id": user})
+    
+    async def get_user_connection(self, user_id: int):
+       return self.con.find_one({"user_id": user_id})
     
 db= Database(DATABASE, "auto-delete-bot")
