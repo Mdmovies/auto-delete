@@ -1,7 +1,6 @@
 from os import environ
 import motor.motor_asyncio
 
-SETTINGS = {}
 DATABASE = environ.get("DATABASE")
 
 class Database:
@@ -66,32 +65,28 @@ class Database:
         
     
     async def get_settings(self, id):
-        default = SETTINGS.get(id)
-        if not default:
-           default = {
-             "auto_delete": True,
-             "delete": True,
-             "admins": True,
-             "files": False,
-             "link": False,
-             "time": 300,
-             "mode": "delete",
-             "bots": True,
-             "gifs": True,
-             "photo": True,
-             "video": True,
-             "emoji": True,
-             "polls": True,
-             "voice": True,
-             "audio": True,
-             "files": True,
-             "sticker": True
-           }
-           chat = await self.grp.find_one({'id':int(id)})
-           if chat:
-              SETTINGS[id] = chat.get('config', default)
-              return SETTINGS[id]
-           SETTINGS[id] = default
+        default = {
+            "auto_delete": True,
+            "delete": True,
+            "admins": True,
+            "files": False,
+            "link": False,
+            "time": 300,
+            "mode": "delete",
+            "bots": True,
+            "gifs": True,
+            "photo": True,
+            "video": True,
+            "emoji": True,
+            "polls": True,
+            "voice": True,
+            "audio": True,
+            "files": True,
+            "sticker": True
+        }
+        chat = await self.grp.find_one({'id':int(id)})
+        if chat:
+           returnchat.get('config', default)
         return default 
     
     async def get_served_chats(self):
