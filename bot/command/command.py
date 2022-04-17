@@ -114,7 +114,7 @@ async def withcmd(bot, message):
 async def settings_query(bot, msg):
    int, type, value, group, k = msg.data.split('#')
    user_id = msg.from_user.id if msg.from_user else 0    
-   if msg.chat.type != "private":
+   if msg.message.chat.type != "private":
       st = await bot.get_chat_member(group, user_id)
       if not (st.status == "creator" or st.status == "administrator" or str(user_id) in [temp.user_id]):
         return await msg.answer("you are not group owner or admin")
@@ -134,7 +134,7 @@ async def settings_query(bot, msg):
 async def settings_query2(bot, msg):
    int, type, group = msg.data.split('#')
    user_id = msg.from_user.id if msg.from_user else 0  
-   if msg.chat.type != "private":
+   if msg.message.chat.type != "private":
       st = await bot.get_chat_member(group, user_id)
       if not (st.status == "creator" or st.status == "administrator" or str(msg.from_user.id) in [temp.user_id]):
          return await msg.answer("you are not group owner or admin")
@@ -147,7 +147,7 @@ async def settings_query2(bot, msg):
        return await msg.message.edit_text(text="**🗑️ Delete all messages**\n\n**press confirm** to Delete all messages in group or **press cancel** to cancel process", reply_markup=InlineKeyboardMarkup(buttons))
    elif type=="4":
        return await msg.message.delete()
-   if msg.chat.type == "private":
+   if msg.message.chat.type == "private":
       return await msg.answer("you can only use this button in group")
    st = await bot.get_chat_member(group, "me")
    if not (st.status=="administrator"):
