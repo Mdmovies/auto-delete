@@ -101,14 +101,17 @@ async def withcmd(bot, message):
       chat = await db.get_user_connection(str(user_id))
       if not chat:
          return await message.reply_text("I'm not connected to any groups!", quote=True)
+      ttl = await bot.get_chat(chat)
+      title = ttl.title
    else:
       chat = message.chat.id
+      title = message.chat.title
       st = await bot.get_chat_member(chat, user_id)
       if not (st.status == "creator" or st.status == "administrator" or str(user_id) in [temp.user_id]):
          k=await message.reply_text("you are not group owner or admin")
          await asyncio.sleep(7)
          return await k.delete(True)
-   await message.reply_text("<b>Configure your group deletion setting using below buttons</b>", reply_markup=await buttons(chat))
+   await message.reply_text(f"<b><u>⚙️ Settings</b></u>\n\n<b>Configure your group <code>{title}</code> deletion setting using below buttons</b>", reply_markup=await buttons(chat))
   
 @Bot.on_callback_query(filters.regex(r"^done"))
 async def settings_query(bot, msg):
@@ -135,15 +138,19 @@ async def settings_query2(bot, msg):
    int, type, group = msg.data.split('#')
    user_id = msg.from_user.id if msg.from_user else 0  
    if msg.message.chat.type != "private":
+      title = msg.message.chat.title
       st = await bot.get_chat_member(group, user_id)
       if not (st.status == "creator" or st.status == "administrator" or str(msg.from_user.id) in [temp.user_id]):
          return await msg.answer("you are not group owner or admin")
+   else:
+      ttl = await bot.get_chat(group)
+      title = ttl.title
    if type=="1":
        return await msg.message.edit_text(text="Configure type of messages which will bot delete and not delete. using below buttons\n\n🗑️ = delete\n✖️ = do not delete",reply_markup=await next_buttons(group))
    elif type=="2":
-       return await msg.message.edit_text(text= "<b>Configure your group deletion setting using below buttons</b>", reply_markup= await back_buttons(group))
+       return await msg.message.edit_text(text= f"<b><u>⚙️ Settings</b></u>\n\n<b>Configure your group <code>{title}</code> deletion setting using below buttons</b>", reply_markup= await back_buttons(group))
    elif type=="3":
-       buttons = [[InlineKeyboardButton('✅ Confirm', callback_data="others#5")],[InlineKeyboardButton('❌ Cancel', callback_data="others#4")]]
+       buttons = [[InlineKeyboardButton('✅ Confirm', callback_data=f"others#5#{group}")],[InlineKeyboardButton('❌ Cancel', callback_data=f"others#4#{group}")]]
        return await msg.message.edit_text(text="**🗑️ Delete all messages**\n\n**press confirm** to Delete all messages in group or **press cancel** to cancel process", reply_markup=InlineKeyboardMarkup(buttons))
    elif type=="4":
        return await msg.message.delete()
