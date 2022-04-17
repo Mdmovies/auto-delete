@@ -21,20 +21,26 @@ async def whitelist(client, message):
       return await message.reply_text("give me a user id")
     user_id = message.command[1]
   else:
-    user_id = reply.sender_chat.id if reply.sender_chat else reply.from_user.id
-  try:
-     user = await client.get_users(user_id)
-  except PeerIdInvalid:
-     return await message.reply("This is an invalid user")
-  except IndexError:
-     pass
-  except Exception as e:
-     return await message.reply(f'Error - {e}')
+    if reply.sender.chat:
+       user_id = reply.sender.chat.id
+       user_name = reply.sender.chat.title
+    else:
+       user_id = reply.from_user.id
+  if not reply.sender.chat:
+     try:
+       user = await client.get_users(user_id)
+       user_name = user.mention
+     except PeerIdInvalid:
+       return await message.reply("This is an invalid user")
+     except IndexError:
+       return await message.reply("The given id is a channel ! please reply to channel message to add")
+     except Exception as e:
+       return await message.reply(f'Error - {e}')
   add = await db.add_whitelist(user_id, chat_id)
   if not add:
-    await message.reply_text(f"{reply.sender_chat.title if reply.sender_chat else user.mention} already in whitelist")
+    await message.reply_text(f"{user_name} already in whitelist")
   else:
-    await message.reply_text(f"Successfully Added {reply.sender_chat.title if reply.sender_chat else user.mention} to whitelist")
+    await message.reply_text(f"Successfully Added {user_name} to whitelist")
     
 @Client.on_message(filters.command('rwhitelist') & verify)
 async def rwhitelist(client, message):
