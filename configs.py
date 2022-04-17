@@ -118,7 +118,9 @@ async def next_buttons(chat):
 
 async def verify_users(_,__, m: Message):
    if m.chat.type != "private":
-     user = m.from_user.id if m.from_user else 0
+     user = m.from_user.id if m.from_user else None
+     if not user:
+        return
      st = await m.chat.get_member(user)
      if not (st.status == "creator" or st.status == "administrator"):
         return False 
