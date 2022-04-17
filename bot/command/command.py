@@ -5,12 +5,11 @@ from database import db
 from pyrogram import filters
 from bot.main import User, Bot 
 from .deleteall import delete_all
-from .utils import get_settings, save_settings
-from configs import temp, is_chat, buttons, next_buttons, list_to_str, buttons as back_buttons
 from pyrogram.errors import UserAlreadyParticipant, UserNotParticipant, ChatAdminInviteRequired
 from pyrogram.errors.exceptions.forbidden_403 import ChatAdminRequired, MessageDeleteForbidden
 from pyrogram.errors.exceptions.bad_request_400 import PeerIdInvalid, UserNotParticipant as UserNotMember
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
+from configs import temp, is_chat, buttons, next_buttons, list_to_str, buttons as back_buttons, get_settings, save_settings
 
 logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -94,6 +93,7 @@ async def refresh_db(bot, message):
          return await k.delete(True)
    default = await get_settings("01")
    await message.reply_text("✅ refreshed")
+   temp.SETTINGS[chat] = default
    return await db.update_settings(int(chat), default)  
   
 @Bot.on_message(filters.command("settings"))
