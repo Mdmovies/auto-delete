@@ -1,9 +1,8 @@
 import asyncio 
 from database import db
-from configs import verify 
 from pyrogram import filters 
-from .utils import save_settings
 from bot.main import Bot as Client 
+from configs import verify save_settings
 from pyrogram.errors.exceptions.bad_request_400 import PeerIdInvalid 
 
 @Client.on_message(filters.command('whitelist') & verify)
@@ -151,5 +150,4 @@ async def informations(client, message):
      except Exception as e:
        await message.reply(f'Error - {e}')
        return False
-  return (chat_id, user_id, user_name)
-      
+  return (chat_id, user_id, user_name) 
