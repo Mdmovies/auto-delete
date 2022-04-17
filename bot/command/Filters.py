@@ -26,7 +26,8 @@ async def whitelist(client, message):
        user_name = reply.sender.chat.title
     else:
        user_id = reply.from_user.id
-  if not reply.sender.chat:
+       user_name = reply.from_user.mention
+  if not reply:
      try:
        user = await client.get_users(user_id)
        user_name = user.mention
