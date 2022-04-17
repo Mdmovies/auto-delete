@@ -1,9 +1,9 @@
 import asyncio 
 import logging
 from os import environ 
+from database import db
 from pyrogram import filters
 from bot.main import User, Bot 
-from database import db, SETTINGS
 from .deleteall import delete_all
 from .utils import get_settings, save_settings
 from configs import temp, is_chat, buttons, next_buttons, list_to_str, buttons as back_buttons
