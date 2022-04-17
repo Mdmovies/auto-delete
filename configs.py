@@ -15,7 +15,8 @@ class temp(object):
    API_ID = int(environ.get("API_ID"))
    API_HASH = environ.get("API_HASH")
    BOT_TOKEN = environ.get("BOT_TOKEN")
-   SESSION = environ.get("SESSION")
+   SESSION = environ.get("SESSION") 
+   ADMINS = [environ.get("ADMINS", "0")]
    PASSWORD = environ.get("PASSWORD", None)
    LOG_CHANNEL = int(environ.get("LOG_CHANNEL"))
 
@@ -117,7 +118,8 @@ async def next_buttons(chat):
 
 async def verify_users(_,__, m: Message):
    if m.chat.type != "private":
-     st = await m.chat.get_member(m.from_user.id)
+     user = m.from_user.id if m.from_user else 0
+     st = await m.chat.get_member(user)
      if not (st.status == "creator" or st.status == "administrator"):
         return False 
    return True 
