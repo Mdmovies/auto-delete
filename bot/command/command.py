@@ -77,7 +77,7 @@ async def delete(bot, message):
     except Exception as e:
        logger.warning(e)
         
-@Bot.on_message(filters.command("refresh") & filters.group)
+@Bot.on_message(filters.command("refresh"))
 async def refresh_db(bot, message):
    user_id = message.from_user.id if message.from_user else 0
    if message.chat.type == "private":
@@ -85,7 +85,8 @@ async def refresh_db(bot, message):
       if not chat:
          return await message.reply_text("I'm not connected to any groups!", quote=True)
    else:
-      st = await bot.get_chat_member(message.chat.id, user_id)
+      chat = message.chat.id
+      st = await bot.get_chat_member(chat, user_id)
       if not (st.status == "creator" or st.status == "administrator" or str(user_id) in [temp.user_id]):
          k=await message.reply_text("you are not group owner or admin")
          await asyncio.sleep(7)
