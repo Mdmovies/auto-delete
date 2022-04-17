@@ -8,35 +8,10 @@ from pyrogram.errors.exceptions.bad_request_400 import PeerIdInvalid
 
 @Client.on_message(filters.command('whitelist') & verify)
 async def whitelist(client, message):
-  chat_type = message.chat.type
-  if chat_type == "private":
-     chat_id = await db.get_user_connection(str(message.from_user.id))
-     if not chat_id:
-        return await message.reply_text("I'm not connected to any groups!", quote=True)
-  else:
-     chat_id = message.chat.id
-  reply = message.reply_to_message
-  if not reply:
-    if len(message.command) == 1:
-      return await message.reply_text("give me a user id")
-    user_id = message.command[1]
-  else:
-    if reply.sender.chat:
-       user_id = reply.sender.chat.id
-       user_name = reply.sender.chat.title
-    else:
-       user_id = reply.from_user.id
-       user_name = reply.from_user.mention
-  if not reply:
-     try:
-       user = await client.get_users(user_id)
-       user_name = user.mention
-     except PeerIdInvalid:
-       return await message.reply("This is an invalid user")
-     except IndexError:
-       return await message.reply("The given id is a channel ! please reply to channel message to add")
-     except Exception as e:
-       return await message.reply(f'Error - {e}')
+  data = await informations(client, message)
+  if not data: 
+     return
+  chat_id, user_id, user_name = data
   add = await db.add_whitelist(user_id, int(chat_id))
   if not add:
     await message.reply_text(f"{user_name} already in whitelist")
@@ -193,4 +168,42 @@ async def time(client, message):
   time = message.command[1]
   await save_settings(chat_id, "time", time)
   await message.reply_text(f"Successfully Time changed to **{time}s**")
-  return
+  return 
+
+async def informations(client, message):
+  chat_type = message.chat.type
+  if chat_type == "private":
+     chat_id = await db.get_user_connection(str(message.from_user.id))
+     if not chat_id:
+        await message.reply_text("I'm not connected to any groups!", quote=True)
+        return False
+  else:
+     chat_id = message.chat.id
+  reply = message.reply_to_message
+  if not reply:
+    if len(message.command) == 1:
+      await message.reply_text("give me a user id")
+      return False
+    user_id = message.command[1]
+  else:
+    if reply.sender.chat:
+       user_id = reply.sender.chat.id
+       user_name = reply.sender.chat.title
+    else:
+       user_id = reply.from_user.id
+       user_name = reply.from_user.mention
+  if not reply:
+     try:
+       user = await client.get_users(user_id)
+       user_name = user.mention
+     except PeerIdInvalid:
+       await message.reply("This is an invalid user")
+       return False
+     except IndexError:
+       await message.reply("The given id is a channel ! please reply to channel message to add")
+       return False
+     except Exception as e:
+       await message.reply(f'Error - {e}')
+       return False
+  return (chat_id, user_id, user_name)
+      
