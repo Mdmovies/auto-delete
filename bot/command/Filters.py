@@ -37,7 +37,7 @@ async def whitelist(client, message):
        return await message.reply("The given id is a channel ! please reply to channel message to add")
      except Exception as e:
        return await message.reply(f'Error - {e}')
-  add = await db.add_whitelist(user_id, chat_id)
+  add = await db.add_whitelist(user_id, int(chat_id))
   if not add:
     await message.reply_text(f"{user_name} already in whitelist")
   else:
