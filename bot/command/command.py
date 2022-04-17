@@ -1,9 +1,9 @@
 import asyncio 
 import logging
 from os import environ 
-from database import db 
 from pyrogram import filters
-from bot.main import User, Bot
+from bot.main import User, Bot 
+from database import db, SETTINGS
 from .deleteall import delete_all
 from configs import temp, is_chat, buttons, next_buttons, list_to_str, buttons as back_buttons
 from pyrogram.errors import UserAlreadyParticipant, UserNotParticipant, ChatAdminInviteRequired
@@ -167,7 +167,7 @@ async def settings_query2(bot, msg):
 async def save_settings(group, key, value):
   current = await db.get_settings(int(group))
   current[key] = value 
-  temp.SETTINGS[group] = current
+  SETTINGS[group] = current
   await db.update_settings(group, current)
   return
 
