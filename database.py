@@ -168,7 +168,7 @@ class Database:
        is_served = await self.in_connection(user, chat_id)
        if not is_served:
          return False
-       return await self.con.delete_one({"chat_id": chat_id, "user_id": user})
+       return await self.con.delete_many({"chat_id": chat_id, "user_id": user})
     
     async def get_user_connection(self, user_id: int):
        chat = await self.con.find_one({"user_id": user_id})
