@@ -33,23 +33,26 @@ async def whitelist(client, message):
 @Client.on_message(filters.command('rwhitelist') & verify)
 async def rwhitelist(client, message):
   chat = message.chat.id
-  if not message.reply_to_message:
+  reply = message.reply_to_message
+  if not reply:
     if len(message.command) == 1:
       return await message.reply_text("give me a user id")
     user_id = message.command[1]
   else:
-    user_id = message.reply_to_message.from_user.id
+    user_id = reply.sender_chat.id if reply.sender_chat else reply.from_user.id
   try:
      user = await client.get_users(user_id)
   except PeerIdInvalid:
-        return await message.reply("This is an invalid user")
+     return await message.reply("This is an invalid user")
+  except IndexError:
+     pass
   except Exception as e:
-        return await message.reply(f'Error - {e}')
+     return await message.reply(f'Error - {e}')
   add = await db.remove_whitelist(user_id, chat)
   if not add:
-    await message.reply_text(f"{user.mention} not in whitelist")
+    await message.reply_text(f"{reply.sender_chat.title if reply.sender_chat else user.mention} not in whitelist")
   else:
-    await message.reply_text(f"Successfully {user.mention} removed from whitelist")
+    await message.reply_text(f"Successfully {reply.sender_chat.title if reply.sender_chat else user.mention} removed from whitelist")
 
 @Client.on_message(filters.command('gwhitelist') & verify)
 async def get_all_whitelist(client, message):
@@ -59,8 +62,11 @@ async def get_all_whitelist(client, message):
    txt = "**whitelisted users are :-**\n\n"
    if users is not None:
       async for user in users:
-         k = await client.get_users(user['user_id'])
-         txt+= f"<a href=tg://user?id={k.id}>{k.first_name}</a>\n"
+        try:
+          k = await client.get_users(user['user_id'])
+          txt+= f"<a href=tg://user?id={k.id}>{k.first_name}</a>\n"
+        except IndexError:
+          txt+= f"CHANNEL ({user['user_id']})"
    else:
       txt = "**No Whitelisted users in this Group**"
    return await msg.edit(txt)
@@ -68,44 +74,50 @@ async def get_all_whitelist(client, message):
 @Client.on_message(filters.command('blacklist') & verify)
 async def blacklist(client, message):
   chat = message.chat.id
-  if not message.reply_to_message:
+  reply = message.reply_to_message
+  if not reply:
     if len(message.command) == 1:
       return await message.reply_text("give me a user id")
     user_id = message.command[1]
   else:
-    user_id = message.reply_to_message.from_user.id
+    user_id = reply.sender_chat.id if reply.sender_chat else reply.from_user.id
   try:
      user = await client.get_users(user_id)
   except PeerIdInvalid:
-        return await message.reply("This is an invalid user")
+     return await message.reply("This is an invalid user")
+  except IndexError:
+     pass
   except Exception as e:
-        return await message.reply(f'Error - {e}')
+     return await message.reply(f'Error - {e}')
   add = await db.add_blacklist(user_id, chat)
   if not add:
-    await message.reply_text(f"{user.mention} already in blacklist")
+    await message.reply_text(f"{reply.sender_chat.title if reply.sender_chat else user.mention} already in blacklist")
   else:
-    await message.reply_text(f"Successfully {user.mention} Added to blacklist")
+    await message.reply_text(f"Successfully {reply.sender_chat.title if reply.sender_chat else user.mention} Added to blacklist")
     
 @Client.on_message(filters.command('rblacklist') & verify)
 async def rblacklist(client, message):
   chat = message.chat.id
-  if not message.reply_to_message:
+  reply = message.reply_to_message
+  if not reply:
     if len(message.command) == 1:
       return await message.reply_text("give me a user id")
     user_id = message.command[1]
   else:
-    user_id = message.reply_to_message.from_user.id
+    user_id = reply.sender_chat.id if reply.sender_chat else reply.from_user.id
   try:
      user = await client.get_users(user_id)
   except PeerIdInvalid:
-        return await message.reply("This is an invalid user")
+     return await message.reply("This is an invalid user")
+  except IndexError:
+     pass
   except Exception as e:
-        return await message.reply(f'Error - {e}')
+     return await message.reply(f'Error - {e}')
   add = await db.remove_blacklist(user_id, chat)
   if not add:
-    await message.reply_text(f"{user.mention} not in blacklist")
+    await message.reply_text(f"{reply.sender_chat.title if reply.sender_chat else user.mention} not in blacklist")
   else:
-    await message.reply_text(f"Successfully {user.mention} removed from blacklist") 
+    await message.reply_text(f"Successfully {reply.sender_chat.title if reply.sender_chat else user.mention} removed from blacklist") 
 
 @Client.on_message(filters.command('gblacklist') & verify)
 async def get_all_blacklist(client, message):
@@ -115,8 +127,11 @@ async def get_all_blacklist(client, message):
    txt = "**blacklisted users are :-**\n\n"
    if users is not None:
       async for user in users:
-         k = await client.get_users(user['user_id'])
-         txt+= f"<a href=tg://user?id={k.id}>{k.first_name}</a>\n"
+        try:
+          k = await client.get_users(user['user_id'])
+          txt+= f"<a href=tg://user?id={k.id}>{k.first_name}</a>\n"
+        except IndexError:
+          txt+= f"CHANNEL ({user['user_id']})"
    else:
       txt = "**No Blacklisted users in this Group**"
    return await msg.edit(txt)
