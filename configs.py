@@ -1,7 +1,6 @@
 from os import environ 
 from database import db
 from pyrogram import filters 
-from bot.command.utils import get_settings
 from pyrogram.types import Message, InlineKeyboardButton, InlineKeyboardMarkup
 
 class temp(object):
@@ -12,6 +11,7 @@ class temp(object):
    bot_id = 0
    user_id = 0
    GROUPS = []
+   SETTINGS = {}
    API_ID = int(environ.get("API_ID"))
    API_HASH = environ.get("API_HASH")
    BOT_TOKEN = environ.get("BOT_TOKEN")
@@ -115,6 +115,20 @@ async def next_buttons(chat):
          InlineKeyboardButton(f'◀️ back', callback_data =f"others#2#{chat}")
        ]]
    return InlineKeyboardMarkup(button)
+
+async def get_settings(group):
+  settings = temp.SETTINGS.get(group)
+  if not settings:
+     settings = await db.get_settings(group)
+     temp.SETTINGS[group] = settings 
+  return settings
+
+async def save_settings(group, key, value):
+  current = await get_settings(group)
+  current[key] = value 
+  temp.SETTINGS[group] = current
+  await db.update_settings(group, current)
+  return
 
 async def verify_users(_,__, m: Message):
    if m.chat.type != "private":
