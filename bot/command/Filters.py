@@ -75,19 +75,18 @@ async def get_all_whitelist(client, message):
         return await message.reply_text("I'm not connected to any groups!", quote=True)
   else:
      chat_id = message.chat.id
-   msg = await message.reply_text("Processing.....")
-   users = await db.get_chat_whitelists(chat_id)
-   txt = "**whitelisted users are :-**\n\n"
-   if users is not None:
-      async for user in users:
-        try:
-          k = await client.get_users(user['user_id'])
-          txt+= f"<a href=tg://user?id={k.id}>{k.first_name}</a>\n"
-        except IndexError:
-          txt+= f"CHANNEL ({user['user_id']})"
-   else:
-      txt = "**No Whitelisted users in this Group**"
-   return await msg.edit(txt)
+  msg = await message.reply_text("Processing.....")
+  users = await db.get_chat_whitelists(chat_id)   txt = "**whitelisted users are :-**\n\n"
+  if users is not None:
+     async for user in users:
+       try:
+         k = await client.get_users(user['user_id'])
+         txt+= f"<a href=tg://user?id={k.id}>{k.first_name}</a>\n"
+       except IndexError:
+         txt+= f"CHANNEL ({user['user_id']})"
+  else:
+     txt = "**No Whitelisted users in this Group**"
+  return await msg.edit(txt)
   
 @Client.on_message(filters.command('blacklist') & verify)
 async def blacklist(client, message):
@@ -158,19 +157,19 @@ async def get_all_blacklist(client, message):
         return await message.reply_text("I'm not connected to any groups!", quote=True)
   else:
      chat_id = message.chat.id
-   msg = await message.reply_text("Processing.....")
-   users = await db.get_chat_blacklists(chat_id)
-   txt = "**blacklisted users are :-**\n\n"
-   if users is not None:
-      async for user in users:
-        try:
-          k = await client.get_users(user['user_id'])
-          txt+= f"<a href=tg://user?id={k.id}>{k.first_name}</a>\n"
-        except IndexError:
-          txt+= f"CHANNEL ({user['user_id']})"
-   else:
-      txt = "**No Blacklisted users in this Group**"
-   return await msg.edit(txt)
+  msg = await message.reply_text("Processing.....")
+  users = await db.get_chat_blacklists(chat_id)
+  txt = "**blacklisted users are :-**\n\n"
+  if users is not None:
+     async for user in users:
+       try:
+         k = await client.get_users(user['user_id'])
+         txt+= f"<a href=tg://user?id={k.id}>{k.first_name}</a>\n"
+       except IndexError:
+         txt+= f"CHANNEL ({user['user_id']})"
+  else:
+     txt = "**No Blacklisted users in this Group**"
+  return await msg.edit(txt)
 
 @Client.on_message(filters.command('time') & verify)
 async def time(client, message):
