@@ -2,7 +2,7 @@ import asyncio
 from database import db
 from pyrogram import filters 
 from bot.main import Bot as Client 
-from configs import verify save_settings
+from configs import verify, save_settings
 from pyrogram.errors.exceptions.bad_request_400 import PeerIdInvalid 
 
 @Client.on_message(filters.command('whitelist') & verify)
