@@ -84,10 +84,11 @@ async def deleteconnection(client, message):
     chat_type = message.chat.type
 
     if chat_type == "private":
-        group_ids = await db.get_user_connection(str(user_id))
+        group_ids = await db.get_user_connection(str(userid))
         if group_ids is None:
            return await message.reply_text("There are no chat connected to me!\nDo /connect to connect.", quote=True)
-        group_id = group_ids['chat_id']
+        for groupid in group_ids:
+            group_id = groupid['chat_id']
         
     elif chat_type in ["group", "supergroup"]:
         group_id = message.chat.id
@@ -106,14 +107,15 @@ async def deleteconnection(client, message):
 @Bot.on_message(filters.private & filters.command(["connections"]))
 async def connections(client, message):
     userid = message.from_user.id
-    groupid = await db.get_user_connection(str(userid))
-    if groupid is None:
+    groupids = await db.get_user_connection(str(userid))
+    if groupids is None:
         await message.reply_text(
             "There are no active connections!! Connect to some groups first.",
             quote=True
         )
-        return
-    ttl = await client.get_chat(int(groupid['chat_id']))
-    title = ttl.title
+        return 
+    for groupid in groupids:
+        ttl = await client.get_chat(int(groupid['chat_id']))
+        title = ttl.title
     await message.reply_text(f"Your current connected Group is\n\n{title} ({ttl.id})")
     return
