@@ -5,6 +5,7 @@ from pyrogram import filters
 from bot.main import User, Bot 
 from database import db, SETTINGS
 from .deleteall import delete_all
+from .utils import get_settings, save_settings
 from configs import temp, is_chat, buttons, next_buttons, list_to_str, buttons as back_buttons
 from pyrogram.errors import UserAlreadyParticipant, UserNotParticipant, ChatAdminInviteRequired
 from pyrogram.errors.exceptions.forbidden_403 import ChatAdminRequired, MessageDeleteForbidden
@@ -63,7 +64,7 @@ async def bot_client(bot, message):
     
 async def delete(bot, message):
     chat = message.chat.id
-    data = await db.get_settings(chat)
+    data = await get_settings(chat)
     if not data["admins"]:
        st = await Bot.get_chat_member(chat, message.from_user.id)
        if (st.status=="administrator" or st.status=="creator"):
@@ -91,7 +92,7 @@ async def refresh_db(bot, message):
          k=await message.reply_text("you are not group owner or admin")
          await asyncio.sleep(7)
          return await k.delete(True)
-   default = await db.get_settings("01")
+   default = await get_settings("01")
    await message.reply_text("✅ refreshed")
    return await db.update_settings(int(chat), default)  
   
@@ -163,14 +164,7 @@ async def settings_query2(bot, msg):
    await msg.answer("processing...", show_alert=True)
    await delete_all(bot, msg.message)
    return
-   
-async def save_settings(group, key, value):
-  current = await db.get_settings(int(group))
-  current[key] = value 
-  SETTINGS[group] = current
-  await db.update_settings(group, current)
-  return
-
+    
 @Bot.on_message(filters.left_chat_member)
 async def bot_kicked(c: Bot, m: Message):
     chat_id = m.chat.id
