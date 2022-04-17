@@ -41,7 +41,8 @@ async def get_all_whitelist(client, message):
      chat_id = message.chat.id
   msg = await message.reply_text("Processing.....")
   users = await db.get_chat_whitelists(int(chat_id))
-  txt = "**whitelisted users are :-**\n\n"
+  txt = "<b><u>whitelisted users are :-</b></u>\n\n"
+  txt+= users
   if users is not None:
      async for user in users:
        try:
@@ -88,7 +89,7 @@ async def get_all_blacklist(client, message):
      chat_id = message.chat.id
   msg = await message.reply_text("Processing.....")
   users = await db.get_chat_blacklists(int(chat_id))
-  txt = "**blacklisted users are :-**\n\n"
+  txt = "<b><u>blacklisted users are :-</b></u>\n\n"
   if users is not None:
      async for user in users:
        try:
@@ -142,11 +143,11 @@ async def informations(client, message):
      try:
        user = await client.get_users(user_id)
        user_name = user.mention
-     except PeerIdInvalid:
-       await message.reply("This is an invalid user")
-       return False
      except IndexError:
        await message.reply("The given id is a channel ! please reply to channel message to add")
+       return False 
+     except PeerIdInvalid:
+       await message.reply("This is an invalid user")
        return False
      except Exception as e:
        await message.reply(f'Error - {e}')
