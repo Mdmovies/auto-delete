@@ -1,8 +1,12 @@
 import asyncio 
+import logging
 from database import db
 from bot.main import Bot 
 from configs import temp
 from pyrogram import filters 
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.ERROR)
 
 @Bot.on_message((filters.private | filters.group) & filters.command('connect'))
 async def addconnection(client, message):
@@ -44,7 +48,7 @@ async def addconnection(client, message):
             ttl = await client.get_chat(group_id)
             title = ttl.title
             
-            conn = await db.add_connection(str(user_id), str(group_id))
+            conn = await db.add_connection(str(userid), str(group_id))
             if conn:
                 await message.reply_text(
                     f"Successfully connected to **{title}**\nNow manage your group from my pm !",
@@ -102,7 +106,7 @@ async def deleteconnection(client, message):
 @Bot.on_message(filters.private & filters.command(["connections"]))
 async def connections(client, message):
     userid = message.from_user.id
-    groupid = await get_user_connection(str(userid))
+    groupid = await db.get_user_connection(str(userid))
     if groupid is None:
         await message.reply_text(
             "There are no active connections!! Connect to some groups first.",
