@@ -20,33 +20,15 @@ async def whitelist(client, message):
     
 @Client.on_message(filters.command('rwhitelist') & verify)
 async def rwhitelist(client, message):
-  chat_type = message.chat.type
-  if chat_type == "private":
-     chat_id = await db.get_user_connection(str(message.from_user.id))
-     if not chat_id:
-        return await message.reply_text("I'm not connected to any groups!", quote=True)
-  else:
-     chat_id = message.chat.id
-  reply = message.reply_to_message
-  if not reply:
-    if len(message.command) == 1:
-      return await message.reply_text("give me a user id")
-    user_id = message.command[1]
-  else:
-    user_id = reply.sender_chat.id if reply.sender_chat else reply.from_user.id
-  try:
-     user = await client.get_users(user_id)
-  except PeerIdInvalid:
-     return await message.reply("This is an invalid user")
-  except IndexError:
-     pass
-  except Exception as e:
-     return await message.reply(f'Error - {e}')
-  add = await db.remove_whitelist(user_id, chat_id)
+  data = await informations(client, message)
+  if not data: 
+     return
+  chat_id, user_id, user_name = data
+  add = await db.remove_whitelist(user_id, int(chat_id))
   if not add:
-    await message.reply_text(f"{reply.sender_chat.title if reply.sender_chat else user.mention} not in whitelist")
+    await message.reply_text(f"{user_name} not in whitelist")
   else:
-    await message.reply_text(f"Successfully {reply.sender_chat.title if reply.sender_chat else user.mention} removed from whitelist")
+    await message.reply_text(f"Successfully {user_name} removed from whitelist")
 
 @Client.on_message(filters.command('gwhitelist') & verify)
 async def get_all_whitelist(client, message):
@@ -58,7 +40,7 @@ async def get_all_whitelist(client, message):
   else:
      chat_id = message.chat.id
   msg = await message.reply_text("Processing.....")
-  users = await db.get_chat_whitelists(chat_id)   
+  users = await db.get_chat_whitelists(int(chat_id))
   txt = "**whitelisted users are :-**\n\n"
   if users is not None:
      async for user in users:
@@ -73,63 +55,27 @@ async def get_all_whitelist(client, message):
   
 @Client.on_message(filters.command('blacklist') & verify)
 async def blacklist(client, message):
-  chat_type = message.chat.type
-  if chat_type == "private":
-     chat_id = await db.get_user_connection(str(message.from_user.id))
-     if not chat_id:
-        return await message.reply_text("I'm not connected to any groups!", quote=True)
-  else:
-     chat_id = message.chat.id
-  reply = message.reply_to_message
-  if not reply:
-    if len(message.command) == 1:
-      return await message.reply_text("give me a user id")
-    user_id = message.command[1]
-  else:
-    user_id = reply.sender_chat.id if reply.sender_chat else reply.from_user.id
-  try:
-     user = await client.get_users(user_id)
-  except PeerIdInvalid:
-     return await message.reply("This is an invalid user")
-  except IndexError:
-     pass
-  except Exception as e:
-     return await message.reply(f'Error - {e}')
-  add = await db.add_blacklist(user_id, chat_id)
+  data = await informations(client, message)
+  if not data: 
+     return
+  chat_id, user_id, user_name = data
+  add = await db.add_blacklist(user_id, int(chat_id))
   if not add:
-    await message.reply_text(f"{reply.sender_chat.title if reply.sender_chat else user.mention} already in blacklist")
+    await message.reply_text(f"{user_name} already in blacklist")
   else:
-    await message.reply_text(f"Successfully {reply.sender_chat.title if reply.sender_chat else user.mention} Added to blacklist")
+    await message.reply_text(f"Successfully {user_name} Added to blacklist")
     
 @Client.on_message(filters.command('rblacklist') & verify)
 async def rblacklist(client, message):
-  chat_type = message.chat.type
-  if chat_type == "private":
-     chat_id = await db.get_user_connection(str(message.from_user.id))
-     if not chat_id:
-        return await message.reply_text("I'm not connected to any groups!", quote=True)
-  else:
-     chat_id = message.chat.id
-  reply = message.reply_to_message
-  if not reply:
-    if len(message.command) == 1:
-      return await message.reply_text("give me a user id")
-    user_id = message.command[1]
-  else:
-    user_id = reply.sender_chat.id if reply.sender_chat else reply.from_user.id
-  try:
-     user = await client.get_users(user_id)
-  except PeerIdInvalid:
-     return await message.reply("This is an invalid user")
-  except IndexError:
-     pass
-  except Exception as e:
-     return await message.reply(f'Error - {e}')
-  add = await db.remove_blacklist(user_id, chat_id)
+  data = await informations(client, message)
+  if not data: 
+     return
+  chat_id, user_id, user_name = data
+  add = await db.remove_blacklist(user_id, int(chat_id))
   if not add:
-    await message.reply_text(f"{reply.sender_chat.title if reply.sender_chat else user.mention} not in blacklist")
+    await message.reply_text(f"{user_name} not in blacklist")
   else:
-    await message.reply_text(f"Successfully {reply.sender_chat.title if reply.sender_chat else user.mention} removed from blacklist") 
+    await message.reply_text(f"Successfully {user_name} removed from blacklist") 
 
 @Client.on_message(filters.command('gblacklist') & verify)
 async def get_all_blacklist(client, message):
@@ -141,7 +87,7 @@ async def get_all_blacklist(client, message):
   else:
      chat_id = message.chat.id
   msg = await message.reply_text("Processing.....")
-  users = await db.get_chat_blacklists(chat_id)
+  users = await db.get_chat_blacklists(int(chat_id))
   txt = "**blacklisted users are :-**\n\n"
   if users is not None:
      async for user in users:
@@ -186,9 +132,9 @@ async def informations(client, message):
       return False
     user_id = message.command[1]
   else:
-    if reply.sender.chat:
-       user_id = reply.sender.chat.id
-       user_name = reply.sender.chat.title
+    if reply.sender_chat:
+       user_id = reply.sender_chat.id
+       user_name = reply.sender_chat.title
     else:
        user_id = reply.from_user.id
        user_name = reply.from_user.mention
