@@ -124,7 +124,7 @@ async def settings_query(bot, msg):
    if value=="True":
       await save_settings(group, type, False)
    elif type=="time":
-      return await msg.answer("To change deletion time use /time <time in seconds>\neg:- /time 100" show_alert=True)
+      return await msg.answer("To change deletion time use /time <time in seconds>\neg:- /time 100", show_alert=True)
    elif value=="False":
       await save_settings(group, type, True)
    else:
