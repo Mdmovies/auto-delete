@@ -1,6 +1,7 @@
 from os import environ 
 from database import db
-from pyrogram import filters
+from pyrogram import filters 
+from bot.command.utils import get_settings
 from pyrogram.types import Message, InlineKeyboardButton, InlineKeyboardMarkup
 
 class temp(object):
@@ -11,7 +12,6 @@ class temp(object):
    bot_id = 0
    user_id = 0
    GROUPS = []
-   SETTINGS = {}
    API_ID = int(environ.get("API_ID"))
    API_HASH = environ.get("API_HASH")
    BOT_TOKEN = environ.get("BOT_TOKEN")
@@ -23,7 +23,7 @@ class temp(object):
 async def is_chat(_, bot, message: Message):
     m = message
     text = message.text
-    get = await db.get_settings(m.chat.id)
+    get = await get_settings(m.chat.id)
     chat = message.sender_chat
     user_id = chat.id if chat else message.from_user.id 
     if not get['auto_delete']:
@@ -56,7 +56,7 @@ async def is_chat(_, bot, message: Message):
     return True
     
 async def buttons(chat):
-   settings = await db.get_settings(chat)
+   settings = await get_settings(chat)
    if settings["mode"] =="whitelist":
       mode, text = "blacklist", "blacklisted users"
    elif settings["mode"] =="bots":
@@ -82,7 +82,7 @@ async def buttons(chat):
    return InlineKeyboardMarkup(button)
  
 async def next_buttons(chat):
-   settings = await db.get_settings(chat)
+   settings = await get_settings(chat)
    if settings is not None:
       button=[[
          InlineKeyboardButton(f'📷 photo', callback_data =f"done#photo#{settings['photo']}#{chat}#2"),
