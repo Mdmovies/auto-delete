@@ -92,7 +92,8 @@ async def deleteconnection(client, message):
            return await message.reply_text("There are no chat connected to me!\nDo /connect to connect.", quote=True)
     elif chat_type in ["group", "supergroup"]:
         group_id = message.chat.id
-
+    ttl = await client.get_chat(int(group_id))
+    title = ttl.title
     st = await client.get_chat_member(group_id, userid)
     if (
         st.status != "administrator"
@@ -102,7 +103,7 @@ async def deleteconnection(client, message):
         return
 
     delcon = await db.remove_connection(str(userid), str(group_id))
-    return await message.reply_text("Successfully disconnected from this chat", quote=True)
+    return await message.reply_text(f"Successfully disconnected <code>{title}</code>", quote=True)
      
 @Bot.on_message(filters.private & filters.command(["connections"]))
 async def connections(client, message):
@@ -116,5 +117,5 @@ async def connections(client, message):
         return 
     ttl = await client.get_chat(int(groupid))
     title = ttl.title
-    await message.reply_text(f"Your current connected Group is\n\n{title} ({ttl.id})")
+    await message.reply_text(f"<b><u>Your current connected Group</b></u>\n\n• {title} (<code>{ttl.id}</code>)")
     return
