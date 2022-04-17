@@ -76,7 +76,8 @@ async def get_all_whitelist(client, message):
   else:
      chat_id = message.chat.id
   msg = await message.reply_text("Processing.....")
-  users = await db.get_chat_whitelists(chat_id)   txt = "**whitelisted users are :-**\n\n"
+  users = await db.get_chat_whitelists(chat_id)   
+  txt = "**whitelisted users are :-**\n\n"
   if users is not None:
      async for user in users:
        try:
