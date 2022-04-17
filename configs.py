@@ -84,7 +84,7 @@ async def next_buttons(chat):
    settings = await db.get_settings(chat)
    if settings is not None:
       button=[[
-         InlineKeyboardButton(f'📷 photo', callback_data =f"done#photos#{settings['photo']}#{chat}#2"),
+         InlineKeyboardButton(f'📷 photo', callback_data =f"done#photo#{settings['photo']}#{chat}#2"),
          InlineKeyboardButton('✖️' if settings['photo'] else '🗑️', callback_data=f"done_#photo#{settings['photo']}#{chat}#2")
          ],[ 
          InlineKeyboardButton(f'🎞️ video', callback_data =f"done#video#{settings['video']}#{chat}#2"),
@@ -116,11 +116,10 @@ async def next_buttons(chat):
    return InlineKeyboardMarkup(button)
 
 async def verify_users(_,__, m: Message):
-   st = await m.chat.get_member(m.from_user.id)
-   if m.chat.type == "private":
-      return False
-   if not (st.status == "creator") or (st.status == "administrator"):
-      return False 
+   if m.chat.type != "private":
+     st = await m.chat.get_member(m.from_user.id)
+     if not (st.status == "creator" or st.status == "administrator"):
+        return False 
    return True 
 
 verify = filters.create(verify_users)
