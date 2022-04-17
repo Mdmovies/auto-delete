@@ -113,11 +113,11 @@ async def withcmd(bot, message):
 @Bot.on_callback_query(filters.regex(r"^done"))
 async def settings_query(bot, msg):
    int, type, value, group, k = msg.data.split('#')
-   user_id = msg.from_user.id if msg.from_user else 0                                                            
-   st = await bot.get_chat_member(group, user_id)
-   if not (st.status == "creator" or st.status == "administrator" or str(user_id) in [temp.user_id]):
-      return await msg.answer("you are not group owner or admin")
-      
+   user_id = msg.from_user.id if msg.from_user else 0    
+   if msg.chat.type != "private":
+      st = await bot.get_chat_member(group, user_id)
+      if not (st.status == "creator" or st.status == "administrator" or str(user_id) in [temp.user_id]):
+        return await msg.answer("you are not group owner or admin")
    if value=="True":
       await save_settings(group, type, False)
    elif type=="time":
@@ -134,9 +134,10 @@ async def settings_query(bot, msg):
 async def settings_query2(bot, msg):
    int, type, group = msg.data.split('#')
    user_id = msg.from_user.id if msg.from_user else 0  
-   st = await bot.get_chat_member(group, user_id)
-   if not (st.status == "creator" or st.status == "administrator" or str(msg.from_user.id) in [temp.user_id]):
-      return await msg.answer("you are not group owner or admin")
+   if msg.chat.type != "private":
+      st = await bot.get_chat_member(group, user_id)
+      if not (st.status == "creator" or st.status == "administrator" or str(msg.from_user.id) in [temp.user_id]):
+         return await msg.answer("you are not group owner or admin")
    if type=="1":
        return await msg.message.edit_text(text="Configure type of messages which will bot delete and not delete. using below buttons\n\n🗑️ = delete\n✖️ = do not delete",reply_markup=await next_buttons(group))
    elif type=="2":
@@ -146,6 +147,8 @@ async def settings_query2(bot, msg):
        return await msg.message.edit_text(text="**🗑️ Delete all messages**\n\n**press confirm** to Delete all messages in group or **press cancel** to cancel process", reply_markup=InlineKeyboardMarkup(buttons))
    elif type=="4":
        return await msg.message.delete()
+   if msg.chat.type == "private":
+      return await msg.answer("you can only use this button in group")
    st = await bot.get_chat_member(group, "me")
    if not (st.status=="administrator"):
       return await msg.answer("i not admin in group ! make me admin with full rights", show_alert=True)
