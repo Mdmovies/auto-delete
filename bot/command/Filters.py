@@ -42,8 +42,7 @@ async def get_all_whitelist(client, message):
   msg = await message.reply_text("Processing.....")
   users = await db.get_chat_whitelists(int(chat_id))
   txt = "<b><u>whitelisted users are :-</b></u>\n\n"
-  txt+= f"m :-\n{users}"
-  if users is not None:
+  if users:
      async for user in users:
        try:
          k = await client.get_users(user['user_id'])
@@ -90,7 +89,7 @@ async def get_all_blacklist(client, message):
   msg = await message.reply_text("Processing.....")
   users = await db.get_chat_blacklists(int(chat_id))
   txt = "<b><u>blacklisted users are :-</b></u>\n\n"
-  if users is not None:
+  if users:
      async for user in users:
        try:
          k = await client.get_users(user['user_id'])
