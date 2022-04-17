@@ -171,6 +171,7 @@ class Database:
        return await self.con.delete_one({"chat_id": chat_id, "user_id": user})
     
     async def get_user_connection(self, user_id: int):
-       return self.con.find_one({"user_id": user_id})
+       chat = await self.con.find_one({"user_id": user_id})
+       return False if not chat else chat.get("chat_id")
     
 db= Database(DATABASE, "auto-delete-bot")
