@@ -8,7 +8,13 @@ from pyrogram.errors.exceptions.bad_request_400 import PeerIdInvalid
 
 @Client.on_message(filters.command('whitelist') & verify)
 async def whitelist(client, message):
-  chat = message.chat.id
+  chat_type = message.chat.type
+  if chat_type == "private":
+     chat_id = await db.get_user_connection(message.from_user.id)
+     if not chat_id:
+        return await message.reply_text("I'm not connected to any groups!", quote=True)
+  else:
+     chat_id = message.chat.id
   reply = message.reply_to_message
   if not reply:
     if len(message.command) == 1:
@@ -24,7 +30,7 @@ async def whitelist(client, message):
      pass
   except Exception as e:
      return await message.reply(f'Error - {e}')
-  add = await db.add_whitelist(user_id, chat)
+  add = await db.add_whitelist(user_id, chat_id)
   if not add:
     await message.reply_text(f"{reply.sender_chat.title if reply.sender_chat else user.mention} already in whitelist")
   else:
@@ -32,7 +38,13 @@ async def whitelist(client, message):
     
 @Client.on_message(filters.command('rwhitelist') & verify)
 async def rwhitelist(client, message):
-  chat = message.chat.id
+  chat_type = message.chat.type
+  if chat_type == "private":
+     chat_id = await db.get_user_connection(message.from_user.id)
+     if not chat_id:
+        return await message.reply_text("I'm not connected to any groups!", quote=True)
+  else:
+     chat_id = message.chat.id
   reply = message.reply_to_message
   if not reply:
     if len(message.command) == 1:
@@ -48,7 +60,7 @@ async def rwhitelist(client, message):
      pass
   except Exception as e:
      return await message.reply(f'Error - {e}')
-  add = await db.remove_whitelist(user_id, chat)
+  add = await db.remove_whitelist(user_id, chat_id)
   if not add:
     await message.reply_text(f"{reply.sender_chat.title if reply.sender_chat else user.mention} not in whitelist")
   else:
@@ -56,9 +68,15 @@ async def rwhitelist(client, message):
 
 @Client.on_message(filters.command('gwhitelist') & verify)
 async def get_all_whitelist(client, message):
-   chat = message.chat.id
+  chat_type = message.chat.type
+  if chat_type == "private":
+     chat_id = await db.get_user_connection(message.from_user.id)
+     if not chat_id:
+        return await message.reply_text("I'm not connected to any groups!", quote=True)
+  else:
+     chat_id = message.chat.id
    msg = await message.reply_text("Processing.....")
-   users = await db.get_chat_whitelists(chat)
+   users = await db.get_chat_whitelists(chat_id)
    txt = "**whitelisted users are :-**\n\n"
    if users is not None:
       async for user in users:
@@ -73,7 +91,13 @@ async def get_all_whitelist(client, message):
   
 @Client.on_message(filters.command('blacklist') & verify)
 async def blacklist(client, message):
-  chat = message.chat.id
+  chat_type = message.chat.type
+  if chat_type == "private":
+     chat_id = await db.get_user_connection(message.from_user.id)
+     if not chat_id:
+        return await message.reply_text("I'm not connected to any groups!", quote=True)
+  else:
+     chat_id = message.chat.id
   reply = message.reply_to_message
   if not reply:
     if len(message.command) == 1:
@@ -89,7 +113,7 @@ async def blacklist(client, message):
      pass
   except Exception as e:
      return await message.reply(f'Error - {e}')
-  add = await db.add_blacklist(user_id, chat)
+  add = await db.add_blacklist(user_id, chat_id)
   if not add:
     await message.reply_text(f"{reply.sender_chat.title if reply.sender_chat else user.mention} already in blacklist")
   else:
@@ -97,7 +121,13 @@ async def blacklist(client, message):
     
 @Client.on_message(filters.command('rblacklist') & verify)
 async def rblacklist(client, message):
-  chat = message.chat.id
+  chat_type = message.chat.type
+  if chat_type == "private":
+     chat_id = await db.get_user_connection(message.from_user.id)
+     if not chat_id:
+        return await message.reply_text("I'm not connected to any groups!", quote=True)
+  else:
+     chat_id = message.chat.id
   reply = message.reply_to_message
   if not reply:
     if len(message.command) == 1:
@@ -113,7 +143,7 @@ async def rblacklist(client, message):
      pass
   except Exception as e:
      return await message.reply(f'Error - {e}')
-  add = await db.remove_blacklist(user_id, chat)
+  add = await db.remove_blacklist(user_id, chat_id)
   if not add:
     await message.reply_text(f"{reply.sender_chat.title if reply.sender_chat else user.mention} not in blacklist")
   else:
@@ -121,9 +151,15 @@ async def rblacklist(client, message):
 
 @Client.on_message(filters.command('gblacklist') & verify)
 async def get_all_blacklist(client, message):
-   chat = message.chat.id
+  chat_type = message.chat.type
+  if chat_type == "private":
+     chat_id = await db.get_user_connection(message.from_user.id)
+     if not chat_id:
+        return await message.reply_text("I'm not connected to any groups!", quote=True)
+  else:
+     chat_id = message.chat.id
    msg = await message.reply_text("Processing.....")
-   users = await db.get_chat_blacklists(chat)
+   users = await db.get_chat_blacklists(chat_id)
    txt = "**blacklisted users are :-**\n\n"
    if users is not None:
       async for user in users:
@@ -138,10 +174,16 @@ async def get_all_blacklist(client, message):
 
 @Client.on_message(filters.command('time') & verify)
 async def time(client, message):
-  chat = message.chat.id
+  chat_type = message.chat.type
+  if chat_type == "private":
+     chat_id = await db.get_user_connection(message.from_user.id)
+     if not chat_id:
+        return await message.reply_text("I'm not connected to any groups!", quote=True)
+  else:
+     chat_id = message.chat.id
   if len(message.command) == 1:
       return await message.reply_text("give me a time in seconds ! eg: /time 100")
   time = message.command[1]
-  await save_settings(chat, "time", time)
+  await save_settings(chat_id, "time", time)
   await message.reply_text(f"Successfully Time changed to **{time}s**")
   return
