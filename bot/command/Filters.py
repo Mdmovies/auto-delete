@@ -11,7 +11,7 @@ async def whitelist(client, message):
   if not data: 
      return
   chat_id, user_id, user_name = data
-  add = await db.add_whitelist(user_id, int(chat_id))
+  add = await db.add_whitelist(int(user_id), int(chat_id))
   if not add:
     await message.reply_text(f"{user_name} already in whitelist")
   else:
@@ -23,7 +23,7 @@ async def rwhitelist(client, message):
   if not data: 
      return
   chat_id, user_id, user_name = data
-  add = await db.remove_whitelist(user_id, int(chat_id))
+  add = await db.remove_whitelist(int(user_id), int(chat_id))
   if not add:
     await message.reply_text(f"{user_name} not in whitelist")
   else:
@@ -47,7 +47,7 @@ async def get_all_whitelist(client, message):
          k = await client.get_users(user['user_id'])
          txt+= f"<a href=tg://user?id={k.id}>{k.first_name}</a>\n"
        except IndexError:
-         txt+= f"CHANNEL ({user['user_id']})"
+         txt+= f"CHANNEL ({user['user_id']})\n"
   else:
      txt = "**No Whitelisted users in this Group**"
   return await msg.edit(txt)
@@ -58,7 +58,7 @@ async def blacklist(client, message):
   if not data: 
      return
   chat_id, user_id, user_name = data
-  add = await db.add_blacklist(user_id, int(chat_id))
+  add = await db.add_blacklist(int(user_id), int(chat_id))
   if not add:
     await message.reply_text(f"{user_name} already in blacklist")
   else:
@@ -70,7 +70,7 @@ async def rblacklist(client, message):
   if not data: 
      return
   chat_id, user_id, user_name = data
-  add = await db.remove_blacklist(user_id, int(chat_id))
+  add = await db.remove_blacklist(int(user_id), int(chat_id))
   if not add:
     await message.reply_text(f"{user_name} not in blacklist")
   else:
@@ -94,7 +94,7 @@ async def get_all_blacklist(client, message):
          k = await client.get_users(user['user_id'])
          txt+= f"<a href=tg://user?id={k.id}>{k.first_name}</a>\n"
        except IndexError:
-         txt+= f"CHANNEL ({user['user_id']})"
+         txt+= f"CHANNEL ({user['user_id']})\n"
   else:
      txt = "**No Blacklisted users in this Group**"
   return await msg.edit(txt)
