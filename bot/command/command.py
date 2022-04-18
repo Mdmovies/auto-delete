@@ -1,15 +1,15 @@
 import asyncio 
 import logging
 from os import environ 
-from database import db 
+from database import db
 from pyrogram import filters
-from bot.main import User, Bot
+from bot.main import User, Bot 
 from .deleteall import delete_all
-from configs import temp, is_chat, buttons, next_buttons, list_to_str, buttons as back_buttons
 from pyrogram.errors import UserAlreadyParticipant, UserNotParticipant, ChatAdminInviteRequired
 from pyrogram.errors.exceptions.forbidden_403 import ChatAdminRequired, MessageDeleteForbidden
 from pyrogram.errors.exceptions.bad_request_400 import PeerIdInvalid, UserNotParticipant as UserNotMember
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
+from configs import temp, is_chat, buttons, next_buttons, list_to_str, buttons as back_buttons, get_settings, save_settings
 
 logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -63,7 +63,7 @@ async def bot_client(bot, message):
     
 async def delete(bot, message):
     chat = message.chat.id
-    data = await db.get_settings(chat)
+    data = await get_settings(chat)
     if not data["admins"]:
        st = await Bot.get_chat_member(chat, message.from_user.id)
        if (st.status=="administrator" or st.status=="creator"):
@@ -77,42 +77,56 @@ async def delete(bot, message):
     except Exception as e:
        logger.warning(e)
         
-@Bot.on_message(filters.command("refresh") & filters.group)
+@Bot.on_message(filters.command("refresh"))
 async def refresh_db(bot, message):
    user_id = message.from_user.id if message.from_user else 0
-   st = await bot.get_chat_member(message.chat.id, user_id)
-   if not (st.status == "creator") or (st.status == "administrator") or (str(user_id) in [temp.user_id]):
-      k=await message.reply_text("you are not group owner or admin")
-      await asyncio.sleep(7)
-      return await k.delete(True)
-   default = await db.get_settings("01")
+   if message.chat.type == "private":
+      chat = await db.get_user_connection(str(user_id))
+      if not chat:
+         return await message.reply_text("I'm not connected to any groups!", quote=True)
+   else:
+      chat = message.chat.id
+      st = await bot.get_chat_member(chat, user_id)
+      if not (st.status == "creator" or st.status == "administrator" or str(user_id) in [temp.user_id]):
+         k=await message.reply_text("you are not group owner or admin")
+         await asyncio.sleep(7)
+         return await k.delete(True)
+   default = await get_settings("01")
    await message.reply_text("✅ refreshed")
-   return await db.update_settings(message.chat.id, default)  
+   temp.SETTINGS[chat] = default
+   return await db.update_settings(int(chat), default)  
   
-@Bot.on_message(filters.command("settings") & filters.group)
+@Bot.on_message(filters.command("settings"))
 async def withcmd(bot, message):
-   user_id = message.from_user.id if message.from_user else 0                                                                  
-   chat = message.chat.id
-   st = await bot.get_chat_member(chat, user_id)
-   if not (st.status == "creator") or (st.status == "administrator") or (str(user_id) in [temp.user_id]):
-      k=await message.reply_text("you are not group owner or admin")
-      await asyncio.sleep(7)
-      return await k.delete(True)
-   await message.reply_text("<b>Configure your group deletion setting using below buttons</b>", reply_markup=await buttons(chat))
+   user_id = message.from_user.id if message.from_user else 0  
+   if message.chat.type == "private":
+      chat = await db.get_user_connection(str(user_id))
+      if not chat:
+         return await message.reply_text("I'm not connected to any groups!", quote=True)
+      ttl = await bot.get_chat(chat)
+      title = ttl.title
+   else:
+      chat = message.chat.id
+      title = message.chat.title
+      st = await bot.get_chat_member(chat, user_id)
+      if not (st.status == "creator" or st.status == "administrator" or str(user_id) in [temp.user_id]):
+         k=await message.reply_text("you are not group owner or admin")
+         await asyncio.sleep(7)
+         return await k.delete(True)
+   await message.reply_text(f"<b><u>⚙️ SETTINGS</b></u>\n\n<b>Configure your group <code>{title}</code> deletion setting using below buttons</b>", reply_markup=await buttons(chat))
   
 @Bot.on_callback_query(filters.regex(r"^done"))
 async def settings_query(bot, msg):
-   int, type, value, k = msg.data.split('#')
-   group = msg.message.chat.id
-   user_id = msg.from_user.id if msg.from_user else 0                                                            
-   st = await bot.get_chat_member(group, user_id)
-   if not (st.status == "creator") or (st.status == "administrator") or (str(user_id) in [temp.user_id]):
-      return await msg.answer("you are not group owner or admin")
-      
+   int, type, value, group, k = msg.data.split('#')
+   user_id = msg.from_user.id if msg.from_user else 0    
+   if msg.message.chat.type != "private":
+      st = await bot.get_chat_member(group, user_id)
+      if not (st.status == "creator" or st.status == "administrator" or str(user_id) in [temp.user_id]):
+        return await msg.answer("you are not group owner or admin")
    if value=="True":
       await save_settings(group, type, False)
    elif type=="time":
-      return await msg.answer("To change deletion time use /time <time in seconds>\neg:- /time 100")
+      return await msg.answer("To change deletion time use /time <time in seconds>\neg:- /time 100", show_alert=True)
    elif value=="False":
       await save_settings(group, type, True)
    else:
@@ -123,35 +137,34 @@ async def settings_query(bot, msg):
     
 @Bot.on_callback_query(filters.regex(r"^others"))
 async def settings_query2(bot, msg):
-   int, type= msg.data.split('#')
-   group = msg.message.chat.id
-   user_id = msg.from_user.id if msg.from_user else 0                                                          
-   st = await bot.get_chat_member(group, user_id)
-   if not (st.status == "creator") or (st.status == "administrator") or (str(msg.from_user.id) == [temp.user_id]):
-      return await msg.answer("you are not group owner or admin")
+   int, type, group = msg.data.split('#')
+   user_id = msg.from_user.id if msg.from_user else 0  
+   if msg.message.chat.type != "private":
+      title = msg.message.chat.title
+      st = await bot.get_chat_member(group, user_id)
+      if not (st.status == "creator" or st.status == "administrator" or str(msg.from_user.id) in [temp.user_id]):
+         return await msg.answer("you are not group owner or admin")
+   else:
+      ttl = await bot.get_chat(group)
+      title = ttl.title
    if type=="1":
        return await msg.message.edit_text(text="Configure type of messages which will bot delete and not delete. using below buttons\n\n🗑️ = delete\n✖️ = do not delete",reply_markup=await next_buttons(group))
    elif type=="2":
-       return await msg.message.edit_text(text= "<b>Configure your group deletion setting using below buttons</b>", reply_markup= await back_buttons(group))
+       return await msg.message.edit_text(text= f"<b><u>⚙️ SETTINGS</b></u>\n\n<b>Configure your group <code>{title}</code> deletion setting using below buttons</b>", reply_markup= await back_buttons(group))
    elif type=="3":
-       buttons = [[InlineKeyboardButton('✅ Confirm', callback_data="others#5")],[InlineKeyboardButton('❌ Cancel', callback_data="others#4")]]
+       buttons = [[InlineKeyboardButton('✅ Confirm', callback_data=f"others#5#{group}")],[InlineKeyboardButton('❌ Cancel', callback_data=f"others#4#{group}")]]
        return await msg.message.edit_text(text="**🗑️ Delete all messages**\n\n**press confirm** to Delete all messages in group or **press cancel** to cancel process", reply_markup=InlineKeyboardMarkup(buttons))
    elif type=="4":
        return await msg.message.delete()
+   if msg.message.chat.type == "private":
+      return await msg.answer("you can only use this button in group", show_alert=True)
    st = await bot.get_chat_member(group, "me")
    if not (st.status=="administrator"):
       return await msg.answer("i not admin in group ! make me admin with full rights", show_alert=True)
    await msg.answer("processing...", show_alert=True)
    await delete_all(bot, msg.message)
    return
-   
-async def save_settings(group, key, value):
-  current = await db.get_settings(int(group))
-  current[key] = value 
-  temp.SETTINGS[group] = current
-  await db.update_settings(group, current)
-  return
-
+    
 @Bot.on_message(filters.left_chat_member)
 async def bot_kicked(c: Bot, m: Message):
     chat_id = m.chat.id

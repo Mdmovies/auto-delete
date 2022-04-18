@@ -10,7 +10,7 @@ start_time = time.time()
 BUTTON = [[InlineKeyboardButton("◀ back", callback_data="back")]]
 START_MSG = "Hi {},\nI am a **auto delete bot** to delete messages from **bot and users** in your group after a specific time **(default 5 min)**. just add me to your group and make me admin with full permissions.\nconfigure me in group using /settings\n\n**For know more press help button**"
 ABOUT_TXT = """
-╔════❰ ᴍᴅ ғɪʟᴇ sᴛᴏʀᴇ ʙᴏᴛ ❱═❍⊱❁۪۪
+╔════❰ ᴍᴅ ᴀᴜᴛᴏ ᴅᴇʟᴇᴛᴇ ʙᴏᴛ ❱═❍⊱❁۪۪
 ║╭━━━━━━━━━━━━━━━➣
 ║┣⪼📃ʙᴏᴛ : [ᴀᴜᴛᴏ ᴅᴇʟᴇᴛᴇ ʙᴏᴛ](https://t.me/{})
 ║┣⪼👦ᴄʀᴇᴀᴛᴏʀ : [ᴍᴅᴀᴅᴍɪɴ](https://t.me/mdadmin2)
@@ -32,7 +32,7 @@ async def start(bot, cmd):
 
 @Bot.on_callback_query(filters.regex(r"^help"))
 async def help(bot, query):
-    HELP = "Add me to your group and make me admin with full permissions. use /settings to configure me in group\n\n**🗣️ Available commands :-**\n<code>/deleteall - To delete all messages in chat\n/Time - set deletion time\n/whitelist - To add users to whitelist\n/rwhitelist - To remove users from whitelist\n/blacklist - To add users to blacklist\n/rblacklist - to remove users from blacklist</code>\n\n**Four Deletion Mode Available.**\n**1. All messages** - delete all message after specific time\n**2. Except whitelist** - All messages except those messages from whitelisted users will be deleted.\n**3. blacklisted users** - only delete messages from blacklisted users\n**4. Except Bots** - All messages except those messages from bot will be deleted \n\n/createownbot - To create your own bot (paid 300₹)"
+    HELP = "Add me to your group and make me admin with full permissions. use /settings to configure me in group\n\n<b><u>🗣️ Available commands:</b></u>\n<i>• /deleteall - To delete all messages in chat.\n• /Time - set deletion time.\n• /whitelist - To add a users to whitelist.\n• /rwhitelist - To remove a users from whitelist.\n• /blacklist - To add a users to blacklist.\n• /rblacklist - To remove a users from blacklist.\n• /connect - connect a chat to your PM.\n• /disconnect - disconnect connected chat from PM.\n• /connections - get connected chat informations.</i>\n\n<b><u>Four Deletion Mode Available.</b></u>\n**1. All messages** - delete all message after specific time\n**2. Except whitelist** - All messages except those messages from whitelisted users will be deleted.\n**3. blacklisted users** - only delete messages from blacklisted users\n**4. Except Bots** - All messages except those messages from bot will be deleted \n\n/createownbot - To create your own bot (paid 300₹)"
     await query.message.edit_text(text=HELP, reply_markup = InlineKeyboardMarkup(BUTTON))
  
 @Bot.on_callback_query(filters.regex(r"^back"))
