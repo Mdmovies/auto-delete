@@ -28,9 +28,9 @@ async def is_chat(_, bot, message: Message):
     user_id = chat.id if chat else message.from_user.id 
     if not get['auto_delete']:
         return False
-    if get["mode"]=="whitelist" and await db.in_whitelist(user_id, m.chat.id):
+    if get["mode"]=="whitelist" and await db.in_whitelist(int(user_id), int(m.chat.id)):
         return False 
-    elif get["mode"]=="blacklist" and not (await db.in_blacklist(user_id, m.chat.id)):
+    elif get["mode"]=="blacklist" and not (await db.in_blacklist(int(user_id), int(m.chat.id))):
         return False 
     if not chat:
        if get["mode"]=="bots" and m.from_user.is_bot:
