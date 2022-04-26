@@ -1,5 +1,5 @@
 git+https://github.com/hockbhmv/Mdthings  
-pyrogram
+pyrogram==1.4.16
 Tgcrypto
 pymongo[srv]==3.12.3
 motor==2.5.1
