@@ -25,7 +25,7 @@ async def is_chat(_, bot, message: Message):
     text = message.text
     get = await get_settings(m.chat.id)
     chat = message.sender_chat
-    user_id = chat.id if chat else message.from_user.id 
+    user_id = chat.id if chat else message.from_user.id
     if not get['auto_delete']:
         return False
     if get["mode"]=="whitelist" and await db.in_whitelist(int(user_id), int(m.chat.id)):
@@ -39,32 +39,19 @@ async def is_chat(_, bot, message: Message):
           return False
        elif not message.from_user.is_bot and not text is None and text.startswith("/"):
           return False 
-    if not get["photo"] and m.photo:
-       return False 
-    elif not get["video"] and m.video:
-       return False 
-    elif not get["files"] and m.document:
-       return False
-    elif not get["audio"] and m.audio:
-       return False
-    elif not get["sticker"] and m.sticker:
-       return False
-    elif not get["polls"] and m.poll:
-       return False 
-    elif not get["emoji"] and m.animation:
-       return False
+    msg = [[get["photo"], m.photo], [get["video"], m.video], [get["files"], m.document], [get["audio"], m.audio], [get["sticker"], m.sticker], [get["polls"], m.poll], [get["emoji"], m.animation]]
+    for msg_type in msg:
+       if not msg_typs[0] and msg_type[1]:
+          return False 
     return True
     
 async def buttons(chat):
    settings = await get_settings(chat)
-   if settings["mode"] =="whitelist":
-      mode, text = "blacklist", "blacklisted users"
-   elif settings["mode"] =="bots":
-      mode, text = "delete", "All messages"
-   elif settings["mode"] =="delete":
-      mode, text = "whitelist", "Except whitelisted"
-   elif settings["mode"] =="blacklist":
-      mode, text = "bots", "Except Bots 🤖"
+   modes = settings["mode"]
+   for x in [["whitelist", "blacklist", "blacklisted users"], ["bots", "delete", "All messages"], ["delete", "whitelist", "Except whitelisted"], ["blacklist", "bots", "Except Bots 🤖"]]
+      if modes == x[0]:
+        mode, text = x[1], x[2]
+        break
    if settings is not None:
       button=[[
          InlineKeyboardButton(f'Auto delete 🗑️', callback_data =f"done#auto_delete#{settings['auto_delete']}#{chat}#1"), InlineKeyboardButton('OFF ❌' if settings['auto_delete'] else 'ON ✅', callback_data=f"done_#auto_delete#{settings['auto_delete']}#{chat}#1")
