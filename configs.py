@@ -135,7 +135,7 @@ async def verify_users(_,__, m: Message):
      if not user:
         return
      st = await m.chat.get_member(user)
-     if not (st.status == "creator" or st.status == "administrator"):
+     if not st.status in ["creator", "administrator"]:
         return False 
    return True 
 
