@@ -66,7 +66,7 @@ async def delete(bot, message):
     data = await get_settings(chat)
     if not data["admins"]:
        st = await Bot.get_chat_member(chat, message.from_user.id)
-       if (st.status=="administrator" or st.status=="creator"):
+       if st.status in ["administrator", "creator"]:
           return False
     try:
        time= data["time"]
@@ -171,7 +171,7 @@ async def bot_kicked(c: Bot, m: Message):
     left_member = m.left_chat_member
     if left_member.id == temp.bot_id:
         await db.remove_served_chat(chat_id)
-        await c.send_message(temp.LOG_CHANNEL, f"#Removed_Serve_Chat :\n**CHAT** - {m.chat.title} [<code>{m.chat.id}</code>]")
+        await c.send_message(temp.LOG_CHANNEL, f"#removed_serve_chat :\n**CHAT** - {m.chat.title} [<code>{m.chat.id}</code>]")
         try:
           await User.leave_chat(chat_id)
         except (UserNotParticipant, PeerIdInvalid):
@@ -189,7 +189,7 @@ async def new_chat(c: Bot, m):
         pass
     else:
         await db.add_served_chat(chat_id)
-        await c.send_message(temp.LOG_CHANNEL, f"#New_Serve_Chat :\n**CHAT** - {m.chat.title} [<code>{m.chat.id}</code>]")
+        await c.send_message(temp.LOG_CHANNEL, f"#new_serve_chat :\n**CHAT** - {m.chat.title} [<code>{m.chat.id}</code>]")
     if temp.bot_id in [u.id for u in m.new_chat_members]:
        chats = await db.get_served_chats()
        temp.GROUPS = chats 
@@ -212,31 +212,13 @@ async def userbot_status(m):
       except ChatAdminRequired:
          await m.reply("My User bot is banned 🚫 in this Group.\ngive me admin permission **'Ban Users'** to unban")
       except BaseException:
-         pass
-      invitelink = (await c.get_chat(chat_id)).invite_link
-      if not invitelink:
-          await c.export_chat_invite_link(chat_id)
-          invitelink = (await c.get_chat(chat_id)).invite_link
-          if invitelink.startswith("https://t.me/+"):
-             invitelink = invitelink.replace(
-                    "https://t.me/+", "https://t.me/joinchat/"
-                )
-          await user.join_chat(invitelink)
-  #except UserNotMember:
- #   pass
+         pass 
+      invitelink = (await c.create_chat_invite_link(chat_id)).invite_link
+      await user.join_chat(invitelink)
   except UserNotParticipant:
         try:
-            invitelink = (await c.get_chat(chat_id)).invite_link
-            if not invitelink:
-                await c.export_chat_invite_link(chat_id)
-                invitelink = (await c.get_chat(chat_id)).invite_link
-            if invitelink.startswith("https://t.me/+"):
-                invitelink = invitelink.replace(
-                    "https://t.me/+", "https://t.me/joinchat/"
-                )
+            invitelink = (await c.create_chat_invite_link(chat_id)).invite_link
             await user.join_chat(invitelink)
-        except UserAlreadyParticipant:
-            pass 
         except PeerIdInvalid as e:
             return False
         except (ChatAdminInviteRequired, ChatAdminRequired):
