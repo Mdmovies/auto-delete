@@ -87,7 +87,7 @@ async def refresh_db(bot, message):
    else:
       chat = message.chat.id
       st = await bot.get_chat_member(chat, user_id)
-      if not (st.status == "creator" or st.status == "administrator" or str(user_id) in [temp.user_id]):
+      if not (st.status in ["creator", "administrator"] or str(user_id) in [temp.user_id]):
          k=await message.reply_text("you are not group owner or admin")
          await asyncio.sleep(7)
          return await k.delete(True)
@@ -109,7 +109,7 @@ async def withcmd(bot, message):
       chat = message.chat.id
       title = message.chat.title
       st = await bot.get_chat_member(chat, user_id)
-      if not (st.status == "creator" or st.status == "administrator" or str(user_id) in [temp.user_id]):
+      if not (st.status in ["creator", "administrator"] or str(user_id) in [temp.user_id]):
          k=await message.reply_text("you are not group owner or admin")
          await asyncio.sleep(7)
          return await k.delete(True)
