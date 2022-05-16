@@ -2,7 +2,7 @@ import asyncio
 import logging 
 from database import db
 from configs import temp
-from .main import Bot, User
+from bot.main import Bot, User
 from pyrogram.raw.all import layer
 from pyrogram import Client, __version__, idle
 
