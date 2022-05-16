@@ -16,7 +16,7 @@ async def create_clone(bot, message):
   source_blob = {}
   overrides = {"env": {}}
   user = message.from_user
-  heroku_api = await bot.ask(chat_id=user.id, text="Please give your heroku api key")
+  heroku_api = await Bot.ask(user.id, text="Please give your heroku api key")
   if heroku_api.text == "/cancel":
       return await message.reply('**process cancelled**')
   api_key = heroku_api
