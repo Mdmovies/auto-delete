@@ -28,9 +28,10 @@ async def create_clone(bot, message):
   #source_blob["url"] = "https://api.github.com/repos/example/{0}/tarball/master?access_token={1}".format(
       #  app_name, TOKEN
  # )
-  url = "https://github.com/Mdmovies/auto-delete"
+  url = "https://github.com/hockbhmv/Frwdit-V2/tree/Develop"
   heroku_app = heroku_conn.create_app(name=app_name, region_id_or_name="eu")
   buid = heroku_app.create_build(url=url)
+  return
   source_blob["url"] = url
   data = {
         "app": app,
