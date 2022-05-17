@@ -18,13 +18,12 @@ async def create_clone(bot, message):
   cmd = message.command
   api_key, app_name = cmd[1], cmd[2]
   app_type = "production"
-  domain = ".example.com"
-  reference_app = "reference-app"
-  app["name"] = "example-{0}".format(app_name)
+  domain = ".{0}.com".format(app_name)
+  app["name"] = app_name
   git_name = "heroku_live"
   heroku_conn = heroku3.from_key(api_key)
   overrides["env"]["DJANGO_HOSTNAME"] = "{0}{1}".format(app_name, domain)
-  heroku_app = heroku_conn.app(reference_app)
+  heroku_app = heroku_conn.app(app_name)
   config = heroku_app.config()
   source_blob["url"] = "https://api.github.com/repos/example/{0}/tarball/master?access_token={1}".format(
         app_name, TOKEN
