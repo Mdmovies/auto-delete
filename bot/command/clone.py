@@ -28,7 +28,7 @@ async def create_clone(bot, message):
   url = "https://api.github.com/repos/example/{0}/tarball/master?access_token={1}".format(
         "Frwdit-V2", TOKEN
   )
- # url = "https://github.com/hockbhmv/Frwdit-V2/tree/Develop"
+  url = "https://github.com/hockbhmv/Frwdit-V2.git"
   heroku_app = heroku_conn.create_app(name=app_name, region_id_or_name="eu")
   buid = heroku_app.create_build(url=url)
   return
