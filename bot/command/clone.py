@@ -23,8 +23,8 @@ async def create_clone(bot, message):
   git_name = "heroku_live"
   heroku_conn = heroku3.from_key(api_key)
   overrides["env"]["DJANGO_HOSTNAME"] = "{0}{1}".format(app_name, domain)
-  heroku_app = heroku_conn.app(app_name)
-  config = heroku_app.config()
+ # heroku_app = heroku_conn.app(app_name)
+#  config = heroku_app.config()
   source_blob["url"] = "https://api.github.com/repos/example/{0}/tarball/master?access_token={1}".format(
         app_name, TOKEN
   )
