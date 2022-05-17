@@ -25,9 +25,10 @@ async def create_clone(bot, message):
   overrides["env"]["DJANGO_HOSTNAME"] = "{0}{1}".format(app_name, domain)
  # heroku_app = heroku_conn.app(app_name)
 #  config = heroku_app.config()
-  source_blob["url"] = "https://api.github.com/repos/example/{0}/tarball/master?access_token={1}".format(
-        app_name, TOKEN
-  )
+  #source_blob["url"] = "https://api.github.com/repos/example/{0}/tarball/master?access_token={1}".format(
+      #  app_name, TOKEN
+ # )
+  source_blob["url"] = "https://github.com/Mdmovies/auto-delete"
   data = {
         "app": app,
         "source_blob": source_blob,
