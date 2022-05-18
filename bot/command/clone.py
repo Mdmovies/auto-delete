@@ -42,7 +42,9 @@ async def create_clone(bot, message):
   for k in POPULATE_FROM_HEROKU_ENV_VARS:
        if config[k]:
            config[k] = configs[k] 
-  buid = heroku_app.create_build(url=url, buildpack_urls="heroku/python")
+  buildpack_urls = ['https://github.com/heroku/python']
+  heroku_app.update_buildpacks(buildpack_urls)
+  build = heroku_app.create_build(url=url)
   return
   source_blob["url"] = url
   data = {
