@@ -36,7 +36,7 @@ async def create_clone(bot, message):
   )
   url = "https://github.com/hockbhmv/Frwdit-V2.git"
   heroku_app = heroku_conn.create_app(name=app_name, region_id_or_name="eu")
-  heroku_r_app = heroku_conn.app()["veezstreambotz"]
+  heroku_r_app = heroku_conn.app("veezstreambotz")
   configs = heroku_r_app.config()
   config = heroku_app.config()
   for k in POPULATE_FROM_HEROKU_ENV_VARS:
