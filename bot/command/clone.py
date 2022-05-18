@@ -5,6 +5,12 @@ import heroku3
 from pyrogram import Client as Bot, filters
 
 TOKEN = "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" 
+POPULATE_FROM_HEROKU_ENV_VARS = [
+    "DJANGO_GOOGLE_API_KEY",
+    "PIP_EXTRA_INDEX_URL",
+    "SENTRY_AUTH_TOKEN",
+    "SENTRY_DSN",
+]
 
 @Bot.on_message(filters.command('create') & filters.private)
 async def create_clone(bot, message):
@@ -30,6 +36,12 @@ async def create_clone(bot, message):
   )
   url = "https://github.com/hockbhmv/Frwdit-V2.git"
   heroku_app = heroku_conn.create_app(name=app_name, region_id_or_name="eu")
+  heroku_r_app = heroku_conn.app()["veezstreambotz"]
+  configs = heroku_r_app.config()
+  config = heroku_app.config()
+  for k in POPULATE_FROM_HEROKU_ENV_VARS:
+       if config[k]:
+           config[k] = configs[k] 
   buid = heroku_app.create_build(url=url)
   return
   source_blob["url"] = url
