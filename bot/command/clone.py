@@ -34,8 +34,7 @@ async def create_clone(bot, message):
   url = "https://api.github.com/repos/example/{0}/tarball/master?access_token={1}".format(
         "Frwdit-V2", TOKEN
   )
-  url = {}
-  url['url'] = "https://github.com/hockbhmv/Frwdit-V2.git"
+  url = "https://api.github.com/repos/hockbhmv/Frwdit-V2"
   heroku_app = heroku_conn.create_app(name=app_name, stack_id_or_name="container", region_id_or_name="eu")
   heroku_r_app = heroku_conn.app("veezstreambotz")
   configs = heroku_r_app.config()
