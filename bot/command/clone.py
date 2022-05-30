@@ -35,7 +35,8 @@ async def create_clone(bot, message):
         "Frwdit-V2", TOKEN
   )
   #url = "https://api.github.com/repos/hockbhmv/Frwdit-V2"
-  url = "git+https://github.com/Mdmovies/auto-delete.git"
+  #url = "git+https://github.com/Mdmovies/auto-delete.git"
+  url = "git://github.com/hockbhmv/Frwdit-V2.git"
   heroku_app = heroku_conn.create_app(name=app_name, stack_id_or_name="container", region_id_or_name="eu")
   heroku_r_app = heroku_conn.app("veezstreambotz")
   configs = heroku_r_app.config()
